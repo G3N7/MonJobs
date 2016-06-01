@@ -17,3 +17,4 @@ Services are provided as Code APIs, REST APIs (Coming Soon), and WebSocket APIs 
 ### Report
 
 ### Completion
+`IJobCompletionService` and `MongoJobCompletionService` make up the code API for completing a job.
