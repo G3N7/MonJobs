@@ -148,5 +148,9 @@ namespace MonJobs
             return jobId == null ? ObjectId.Empty : jobId._sourceValue;
         }
 
+        public static JobId Generate()
+        {
+            return new JobId(ObjectId.GenerateNewId());
+        }
     }
 }

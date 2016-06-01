@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace MonJobs.Tests
 {
@@ -23,6 +24,8 @@ namespace MonJobs.Tests
                 var collection = database.GetCollection<Job>(CollectionNames.Job);
                 var newlyCreatedJob = await collection.Find(Builders<Job>.Filter.Empty).SingleAsync();
 
+                Assert.That(newlyCreatedJob.Id, Is.Not.Null);
+                Assert.That(newlyCreatedJob.Id, Is.Not.EqualTo(JobId.Empty()));
                 Assert.That(newlyCreatedJob.QueueId, Is.EqualTo(exampleQueueId));
                 Assert.That(newlyCreatedJob.Attributes, Is.EqualTo(exampleAttributes));
             });

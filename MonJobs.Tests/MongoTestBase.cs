@@ -11,7 +11,7 @@ namespace MonJobs.Tests
 {
     public class MongoTestBase
     {
-        private bool _hasRegistered;
+        private static bool _hasRegistered;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
