@@ -29,7 +29,7 @@ namespace MonJobs.Tests
 
         public static async Task RunInMongoLand(Func<IMongoDatabase, Task> mongoWork)
         {
-            using (var runner = MongoDbRunner.Start())
+            using (var runner = MongoDbRunner.Start(System.IO.Path.GetTempPath()))
             {
                 var server = new MongoClient(runner.ConnectionString);
                 var database = server.GetDatabase("IntegrationTest");
