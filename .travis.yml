@@ -2,8 +2,7 @@ language: csharp
 solution: MonJobs.sln
 install:
   - nuget restore MonJobs.sln
-  - nuget install NUnit.Runners -Version 3.2.1 -OutputDirectory testrunner
-  - cp ./packages/Mongo2Go*/tools/mongodb-win32-i386*/bin tools/mongodb-win32-i386*/bin
+  - nuget install NUnit.Runners -Version 3.2.1 -OutputDirectory testrunner  
 script:
   - xbuild /p:Configuration=Release /p:TargetFrameworkVersion="v4.5" MonJobs.sln
   - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./MonJobs.Tests/bin/Release/MonJobs.Tests.dll
