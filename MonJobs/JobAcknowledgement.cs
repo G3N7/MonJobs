@@ -1,8 +1,16 @@
-﻿namespace MonJobs
+﻿using System.Collections.Generic;
+
+namespace MonJobs
 {
     // mitch: documentation
-    public class JobAcknowledgement
+    public class JobAcknowledgement : Dictionary<string, object>
     {
-        //mitch: need to have a value type here
+        public JobAcknowledgement()
+        {
+        }
+
+        public JobAcknowledgement(IDictionary<string, object> dictionary) : base(dictionary)
+        {
+        }
     }
 }
