@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CollectionNames.cs" />
+    <Compile Include="DynamicExtensions.cs" />
     <Compile Include="IConvertible.cs" />
     <Compile Include="IJobAcknowledgementService.cs" />
     <Compile Include="IJobCompletionSerivce.cs" />

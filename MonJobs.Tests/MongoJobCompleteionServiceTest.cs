@@ -12,7 +12,9 @@ namespace MonJobs.Tests
         {
             var exampleQueueId = QueueId.Parse(Guid.NewGuid().ToString("N"));
             var exampleJobId = JobId.Generate();
-            var exampleResult = new JobResult();
+            JobResult exampleResult = new { Datacenter = "PEN" }.ToJobResult();
+
+            Assert.That(exampleResult, Is.Not.Null);
 
             await RunInMongoLand(async database =>
             {

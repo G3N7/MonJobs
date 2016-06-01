@@ -1,10 +1,16 @@
-﻿using System.Dynamic;
+﻿using System.Collections.Generic;
 
 namespace MonJobs
 {
     // mitch: documentation
-    public class JobReport : DynamicObject
+    public class JobReport : Dictionary<string, object>
     {
-        //mitch: need to have a value type here
+        public JobReport()
+        {
+        }
+
+        public JobReport(IDictionary<string, object> dictionary) : base(dictionary)
+        {
+        }
     }
 }

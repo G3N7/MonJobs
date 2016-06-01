@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace MonJobs
 {
     // mitch: documentation
-
-    // mitch: documentation
     public class JobAttributes : Dictionary<string, object>
     {
+        public JobAttributes()
+        {
+        }
+
+        public JobAttributes(IDictionary<string, object> dictionary) : base(dictionary)
+        {
+        }
     }
 }
