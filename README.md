@@ -1,6 +1,8 @@
 # MonJobs
 A Mongo based jobs database
 
+[![Build Status](https://travis-ci.org/G3N7/MonJobs.svg?branch=master)](https://travis-ci.org/G3N7/MonJobs)
+
 ## Services
 Services are provided as Code APIs, REST APIs (Coming Soon), and WebSocket APIs (Coming Soon).
 
