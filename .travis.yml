@@ -1,0 +1,8 @@
+language: csharp
+solution: MonJobs.sln
+install:
+  - nuget restore MonJobs.sln
+  - nuget install NUnit.Runners -Version 3.2.1 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release MonJobs.sln
+  - mono ./testrunner/NUnit.Runners.3.2.1/tools/nunit-console.exe ./MonJobs.Tests/bin/Release/MonJobs.Tests.dll
