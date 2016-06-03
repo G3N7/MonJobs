@@ -32,20 +32,12 @@ Types are provided for static typing in C#, and serializable to Bson and Json.
 
 ### JobId
 The unique id for a given job.
-
-#### Bson Representation
-ObjectId
-
-#### Json Representation
-String
+* Bson Representation - ObjectId
+* Json Representation - String
 
 ### JobAttributes
 A dictionary of attributes for this job.
-
-#### Bson Representation
-BsonDocument
-
-#### Json Representation
-Object
+* Bson Representation - BsonDocument
+* Json Representation - Object
 
 ### JobAcknowledgment
