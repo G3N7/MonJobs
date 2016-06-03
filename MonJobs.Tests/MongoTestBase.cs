@@ -29,12 +29,33 @@ namespace MonJobs.Tests
 
         public static async Task RunInMongoLand(Func<IMongoDatabase, Task> mongoWork)
         {
-            using (var runner = MongoDbRunner.Start(System.IO.Path.GetTempPath()))
+            var connectionString = Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION_STRING");
+            if (string.IsNullOrWhiteSpace(connectionString))
             {
-                var server = new MongoClient(runner.ConnectionString);
-                var database = server.GetDatabase("IntegrationTest");
-                await mongoWork(database);
+                using (var runner = MongoDbRunner.Start(System.IO.Path.GetTempPath()))
+                {
+                    await RunAction(runner.ConnectionString, mongoWork);
+                }
             }
+            else
+            {
+                await RunAction(connectionString, mongoWork);
+            }
+        }
+
+        private static async Task RunAction(string connectionString, Func<IMongoDatabase, Task> mongoWork)
+        {
+            var server = new MongoClient(connectionString);
+            var database = server.GetDatabase("IntegrationTest");
+            var collections = await database.ListCollections().ToListAsync();
+            foreach (var collection in collections)
+            {
+                foreach (var name in collection.Names)
+                {
+                    await database.DropCollectionAsync(name);
+                }
+            }
+            await mongoWork(database);
         }
     }
 }

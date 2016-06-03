@@ -1,8 +1,16 @@
 language: csharp
 solution: MonJobs.sln
+
+services:
+  - mongodb
+  
+env:
+  - MONGO_DB_CONNECTION_STRING=mongodb://127.0.0.1
+  
 install:
   - nuget restore MonJobs.sln
-  - nuget install NUnit.Runners -Version 3.2.1 -OutputDirectory testrunner  
+  - nuget install NUnit.Runners -Version 3.2.1 -OutputDirectory testrunner
+  
 script:
   - xbuild /p:Configuration=Release /p:TargetFrameworkVersion="v4.5" MonJobs.sln
   - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./MonJobs.Tests/bin/Release/MonJobs.Tests.dll
