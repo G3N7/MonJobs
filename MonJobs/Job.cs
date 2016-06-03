@@ -12,7 +12,7 @@ namespace MonJobs
         public JobId Id { get; set; }
         public QueueId QueueId { get; set; }
         public JobAttributes Attributes { get; set; }
-        public JobAcknowledgement[] Acknowlegement { get; set; }
+        public JobAcknowledgment[] Acknowledgment { get; set; }
         public JobReport[] Reports { get; set; }
         public JobResult Result { get; set; }
     }

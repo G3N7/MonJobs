@@ -59,7 +59,7 @@
     <Compile Include="CollectionNames.cs" />
     <Compile Include="DynamicExtensions.cs" />
     <Compile Include="IConvertible.cs" />
-    <Compile Include="IJobAcknowledgementService.cs" />
+    <Compile Include="IJobAcknowledgmentService.cs" />
     <Compile Include="IJobCompletionSerivce.cs" />
     <Compile Include="IJobPeekNextService.cs" />
     <Compile Include="IJobReportSerivce.cs" />
@@ -68,7 +68,7 @@
     <Compile Include="QueueId.cs" />
     <Compile Include="IJobCreationService.cs" />
     <Compile Include="Job.cs" />
-    <Compile Include="JobAcknowledgement.cs" />
+    <Compile Include="JobAcknowledgment.cs" />
     <Compile Include="JobAttributes.cs" />
     <Compile Include="JobId.cs" />
     <Compile Include="JobReport.cs" />
