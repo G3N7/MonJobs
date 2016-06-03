@@ -46,16 +46,11 @@ namespace MonJobs.Tests
         private static async Task RunAction(string connectionString, Func<IMongoDatabase, Task> mongoWork)
         {
             var server = new MongoClient(connectionString);
-            var database = server.GetDatabase("IntegrationTest");
-            var collections = await database.ListCollections().ToListAsync();
-            foreach (var collection in collections)
-            {
-                foreach (var name in collection.Names)
-                {
-                    await database.DropCollectionAsync(name);
-                }
-            }
+            const string databaseName = "IntegrationTest";
+            var database = server.GetDatabase(databaseName);
+            await database.Client.DropDatabaseAsync(databaseName);
             await mongoWork(database);
+            await database.Client.DropDatabaseAsync(databaseName);
         }
     }
 }
