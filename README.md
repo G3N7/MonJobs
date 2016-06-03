@@ -26,3 +26,26 @@ You can update the job with reports about the progress.
 ### Completion
 One you have completed a job you can call this to report a final result.
 `IJobCompletionService` and `MongoJobCompletionService` make up the code API for completing a job.
+
+## Types
+Types are provided for static typing in C#, and serializable to Bson and Json.
+
+### JobId
+The unique id for a given job.
+
+#### Bson Representation
+ObjectId
+
+#### Json Representation
+String
+
+### JobAttributes
+A dictionary of attributes for this job.
+
+#### Bson Representation
+BsonDocument
+
+#### Json Representation
+Object
+
+### JobAcknowledgment
