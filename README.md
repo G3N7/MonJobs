@@ -41,3 +41,30 @@ A dictionary of attributes for this job.
 * Json Representation - Object
 
 ### JobAcknowledgment
+A record of the acknowledgment.
+* Bson Representation - BsonDocument
+* Json Representation - Object
+
+### JobReport
+A message about the progress of a job.
+* Bson Representation - BsonDocument
+* Json Representation - Object
+
+### JobResult
+A record of the final result.
+* Bson Representation - BsonDocument
+* Json Representation - Object
+
+### QueueId
+An identity that provides the ability to segment the queue, this can be leveraged as an Authorization point.
+* Bson Representation - String
+* Json Representation - String
+
+### Job
+The record for the job as a whole, it consists of:
+* Id
+* QueueId
+* Attributes
+* Acknowledgment
+* Reports - An array of Report objects
+* Result
