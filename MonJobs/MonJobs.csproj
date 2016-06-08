@@ -56,11 +56,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcknowledgementResult.cs" />
     <Compile Include="CollectionNames.cs" />
     <Compile Include="DynamicExtensions.cs" />
     <Compile Include="IConvertible.cs" />
     <Compile Include="IJobAcknowledgmentService.cs" />
     <Compile Include="IJobCompletionSerivce.cs" />
+    <Compile Include="MongoJobAcknowledgmentService.cs" />
     <Compile Include="Peek\IJobPeekNextService.cs" />
     <Compile Include="IJobQueryService.cs" />
     <Compile Include="IJobReportSerivce.cs" />

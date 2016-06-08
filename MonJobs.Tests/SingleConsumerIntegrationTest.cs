@@ -1,4 +1,7 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
+using MonJobs.Peek;
 using NUnit.Framework;
 
 namespace MonJobs.Tests
@@ -26,10 +29,22 @@ namespace MonJobs.Tests
                 });
 
                 // todo: query for next available a job for my datacenter
-                Assert.Inconclusive();
+                var peekNextService = new MongoJobPeekNextService(new MongoJobQuerySerivce(database));
+                var peekQuery = new PeekNextQuery
+                {
+                    QueueId = exampleQueueName,
+                    HasAttributes = new JobAttributes { { "DataCenter", "CAL01" } },
+                    Limit = 1
+                };
+                var nextJob = (await peekNextService.PeekFor(peekQuery)).First();
 
                 // todo: acknowledge the job
-                Assert.Inconclusive();
+                var acknowledgementService = new MongoJobAcknowledgmentService(database);
+                var standardAck = new JobAcknowledgment
+                {
+                    {"RunnerId", Guid.NewGuid().ToString("N") }
+                };
+                await acknowledgementService.Ack(exampleQueueName, nextJob.Id, standardAck);
 
                 // todo: send reports
                 Assert.Inconclusive();

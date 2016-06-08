@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace MonJobs
 {
     /// <summary>
@@ -5,6 +7,6 @@ namespace MonJobs
     /// </summary>
     public interface IJobAcknowledgmentService
     {
-        //todo: IJobAcknowledgmentService
+        Task<AcknowledgementResult> Ack(QueueId queue, JobId id, JobAcknowledgment acknowledgment);
     }
 }
