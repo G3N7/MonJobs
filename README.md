@@ -3,6 +3,19 @@ A Mongo based jobs database
 
 [![Build Status](https://travis-ci.org/G3N7/MonJobs.svg?branch=master)](https://travis-ci.org/G3N7/MonJobs)
 
+## Roadmap
+### Milestone Code
+Get all services exposed via code API's functional with usecase based integration tests.
+
+### Milestone REST
+Get all of the services exposed via http resource/verb strategy using a master api key.
+
+### Milestone Docker
+Get the rest api hosted in docker.
+
+### Milestone Authorization Segmentation
+Getting queues to only be available to certain entity/pass combos.
+
 ## Services
 Services are provided as Code APIs, REST APIs (Coming Soon), and WebSocket APIs (Coming Soon).
 
