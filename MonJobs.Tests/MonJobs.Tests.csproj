@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="MongoJobCompleteionServiceTest.cs" />
     <Compile Include="MongoJobCreationServiceTests.cs" />
+    <Compile Include="MongoJobPeekNextServiceTests.cs" />
     <Compile Include="MongoJobQueryServiceTests.cs" />
     <Compile Include="MongoTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
