@@ -14,6 +14,18 @@ Jobs are created with a queue id, allowing for segmentation and a set of attribu
 New Jobs can be viewed without effecting the queue by peeking at the next set of jobs that matching a given attribute query.  If one you chose to start a job you must first attempt an acknowledgment in order to ensure that it has not already been picked up.
 `IJobPeekNextService` and `MongoJobPeekNextService` make up the code API for seeing what jobs are next.
 
+#### PeekNextQuery
+An object that holds the query parameters.
+
+##### QueueId
+Type: `QueueId`
+
+##### HasAttributes
+Type: `JobAttributes` _Optional_
+
+##### Limit
+Type: `int?` _Optional_
+
 ### TakeNext
 If you want to take the next job matching a given attribute query, this action will acknowledge the next available job and return its data.
 
