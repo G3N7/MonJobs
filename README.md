@@ -28,6 +28,19 @@ Type: `int?` _Optional_
 
 ### TakeNext
 If you want to take the next job matching a given attribute query, this action will acknowledge the next available job and return its data.
+`IJobTakeNextService` and `MongoJobTakeNextService` make up the code API for seeing what jobs are next.
+
+#### TakeNextOptions
+An object that holds the options for the take feature.
+
+##### QueueId
+Type: `QueueId`
+
+##### Acknowledgement
+Type: `JobAcknowledgement`
+
+##### HasAttributes
+Type: `JobAttributes` _Optional_
 
 ### Query
 `IJobQueryService` and `MongoJobQueryService` make up the code API for seeing what jobs exist.
