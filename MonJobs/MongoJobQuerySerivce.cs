@@ -26,6 +26,13 @@ namespace MonJobs
                 filters.Add(hasAttribute);
             }
 
+            if (query.HasBeenAcknowledged.HasValue)
+            {
+                var hasBeenAcknowledged = builder.Not(builder.Eq(x => x.Acknowledgment, null));
+                var hasNotBeenAcknowledged = builder.Eq(x => x.Acknowledgment, null);
+                filters.Add(query.HasBeenAcknowledged.Value ? hasBeenAcknowledged : hasNotBeenAcknowledged);
+            }
+
             var matchesAllFilters = Builders<Job>.Filter.And(filters);
 
             var mongoQuery = _jobs.Find(matchesAllFilters);
