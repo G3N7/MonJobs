@@ -62,9 +62,12 @@
     <Compile Include="IJobAcknowledgmentService.cs" />
     <Compile Include="IJobCompletionSerivce.cs" />
     <Compile Include="IJobPeekNextService.cs" />
+    <Compile Include="IJobQueryService.cs" />
     <Compile Include="IJobReportSerivce.cs" />
+    <Compile Include="JobQuery.cs" />
     <Compile Include="MongoJobCompletionService.cs" />
     <Compile Include="MongoJobCreationService.cs" />
+    <Compile Include="MongoJobQuerySerivce.cs" />
     <Compile Include="QueueId.cs" />
     <Compile Include="IJobCreationService.cs" />
     <Compile Include="Job.cs" />
