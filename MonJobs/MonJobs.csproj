@@ -65,6 +65,7 @@
     <Compile Include="IJobQueryService.cs" />
     <Compile Include="IJobReportSerivce.cs" />
     <Compile Include="JobQuery.cs" />
+    <Compile Include="JobQueryExtensions.cs" />
     <Compile Include="MongoJobCompletionService.cs" />
     <Compile Include="MongoJobCreationService.cs" />
     <Compile Include="MongoJobQuerySerivce.cs" />
