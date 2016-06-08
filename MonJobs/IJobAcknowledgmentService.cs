@@ -5,5 +5,6 @@ namespace MonJobs
     /// </summary>
     public interface IJobAcknowledgmentService
     {
+        //todo: IJobAcknowledgmentService
     }
 }

@@ -440,6 +440,5 @@ namespace MonJobs.Tests
                 Assert.That(foundIds, Contains.Item(matchingJob2));
             });
         }
-
     }
 }
