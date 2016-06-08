@@ -17,6 +17,26 @@ New Jobs can be viewed without effecting the queue by peeking at the next set of
 ### TakeNext
 If you want to take the next job matching a given attribute query, this action will acknowledge the next available job and return its data.
 
+### Query
+`IJobQueryService` and `MongoJobQueryService` make up the code API for seeing what jobs exist.
+
+#### JobQuery - An object that holds the query parameters.
+
+##### QueueId
+Type: QueueId
+
+##### HasAttributes
+Type: JobAttributes _Optional_
+
+##### Limit
+Type: int? _Optional_
+
+##### HasBeenAcknowledged
+Type: bool? _Optional_
+
+##### HasResult
+Type: bool? _Optional_
+
 ### Acknowledgment
 If you have seen a job that you want to start working, you can post an acknowledgment which will return true if still available, or false if the job is already acknowledged.
 
