@@ -12,7 +12,7 @@ namespace MonJobs.Tests
         public async Task Create_ValidInitialData_Persists()
         {
             var exampleQueueId = QueueId.Parse(Guid.NewGuid().ToString("N"));
-            var exampleAttributes = new { name = "Thing ToDo" }.ToJobAttributes();
+            var exampleAttributes = new { name = "Thing ToDo" }.ToExpando().ToJobAttributes();
 
             await RunInMongoLand(async database =>
             {

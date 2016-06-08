@@ -12,7 +12,7 @@ namespace MonJobs.Tests
         {
             var exampleQueueId = QueueId.Parse(Guid.NewGuid().ToString("N"));
             var exampleJobId = JobId.Generate();
-            JobResult exampleResult = new { Datacenter = "PEN" }.ToJobResult();
+            var exampleResult = new { Datacenter = "PEN" }.ToExpando().ToJobResult();
 
             Assert.That(exampleResult, Is.Not.Null);
 

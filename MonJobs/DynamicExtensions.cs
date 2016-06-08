@@ -23,17 +23,17 @@ namespace MonJobs
             return expando as ExpandoObject;
         }
 
-        public static JobResult ToJobResult(this object value)
+        public static JobResult ToJobResult<TKey, TValue>(this IDictionary<TKey, TValue> value)
         {
             return new JobResult(value.ToExpando().ToDictionary(x => x.Key, x => x.Value));
         }
 
-        public static JobAttributes ToJobAttributes(this object value)
+        public static JobAttributes ToJobAttributes<TKey, TValue>(this IDictionary<TKey, TValue> value)
         {
             return new JobAttributes(value.ToExpando().ToDictionary(x => x.Key, x => x.Value));
         }
 
-        public static JobReport ToJobReport(this object value)
+        public static JobReport ToJobReport<TKey, TValue>(this IDictionary<TKey, TValue> value)
         {
             return new JobReport(value.ToExpando().ToDictionary(x => x.Key, x => x.Value));
         }
