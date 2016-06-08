@@ -20,22 +20,23 @@ If you want to take the next job matching a given attribute query, this action w
 ### Query
 `IJobQueryService` and `MongoJobQueryService` make up the code API for seeing what jobs exist.
 
-#### JobQuery - An object that holds the query parameters.
+#### JobQuery
+An object that holds the query parameters.
 
 ##### QueueId
-Type: QueueId
+Type: `QueueId`
 
 ##### HasAttributes
-Type: JobAttributes _Optional_
+Type: `JobAttributes` _Optional_
 
 ##### Limit
-Type: int? _Optional_
+Type: `int?` _Optional_
 
 ##### HasBeenAcknowledged
-Type: bool? _Optional_
+Type: `bool?` _Optional_
 
 ##### HasResult
-Type: bool? _Optional_
+Type: `bool?` _Optional_
 
 ### Acknowledgment
 If you have seen a job that you want to start working, you can post an acknowledgment which will return true if still available, or false if the job is already acknowledged.
