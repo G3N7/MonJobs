@@ -61,16 +61,17 @@
     <Compile Include="IConvertible.cs" />
     <Compile Include="IJobAcknowledgmentService.cs" />
     <Compile Include="IJobCompletionSerivce.cs" />
-    <Compile Include="IJobPeekNextService.cs" />
+    <Compile Include="Peek\IJobPeekNextService.cs" />
     <Compile Include="IJobQueryService.cs" />
     <Compile Include="IJobReportSerivce.cs" />
     <Compile Include="JobQuery.cs" />
-    <Compile Include="MongoJobPeekNextService.cs" />
+    <Compile Include="Peek\MongoJobPeekNextService.cs" />
+    <Compile Include="Take\TakeNextOptions.cs" />
     <Compile Include="QueryExtensions.cs" />
     <Compile Include="MongoJobCompletionService.cs" />
     <Compile Include="MongoJobCreationService.cs" />
     <Compile Include="MongoJobQuerySerivce.cs" />
-    <Compile Include="PeekNextQuery.cs" />
+    <Compile Include="Peek\PeekNextQuery.cs" />
     <Compile Include="QueueId.cs" />
     <Compile Include="IJobCreationService.cs" />
     <Compile Include="Job.cs" />
@@ -88,6 +89,8 @@
     <Compile Include="Serialization\ToObjectIdBsonSerializer.cs" />
     <Compile Include="Serialization\ToStringBsonSerializer.cs" />
     <Compile Include="Serialization\ToStringJsonSerializer.cs" />
+    <Compile Include="Take\IJobTakeNextService.cs" />
+    <Compile Include="Take\MongoJobTakeNextService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

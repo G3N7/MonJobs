@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MonJobs
+namespace MonJobs.Peek
 {
     /// <summary>
     /// Allows you to peek at the next N jobs for a given queue.

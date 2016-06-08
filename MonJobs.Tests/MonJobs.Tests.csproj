@@ -76,6 +76,7 @@
     <Compile Include="MongoJobCreationServiceTests.cs" />
     <Compile Include="MongoJobPeekNextServiceTests.cs" />
     <Compile Include="MongoJobQueryServiceTests.cs" />
+    <Compile Include="MongoJobTakeNextServiceTests.cs" />
     <Compile Include="MongoTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleConsumerIntegrationTest.cs" />

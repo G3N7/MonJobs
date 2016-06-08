@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MonJobs
+namespace MonJobs.Peek
 {
     public class MongoJobPeekNextService : IJobPeekNextService
     {
