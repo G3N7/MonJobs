@@ -33,6 +33,13 @@ namespace MonJobs
                 filters.Add(query.HasBeenAcknowledged.Value ? hasBeenAcknowledged : hasNotBeenAcknowledged);
             }
 
+            if (query.HasResult.HasValue)
+            {
+                var hasFinished = builder.Not(builder.Eq(x => x.Result, null));
+                var hasNoResults = builder.Eq(x => x.Result, null);
+                filters.Add(query.HasResult.Value ? hasFinished : hasNoResults);
+            }
+
             var matchesAllFilters = Builders<Job>.Filter.And(filters);
 
             var mongoQuery = _jobs.Find(matchesAllFilters);
