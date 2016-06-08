@@ -3,7 +3,7 @@ using MongoDB.Driver;
 
 namespace MonJobs
 {
-    internal static class JobQueryExtensions
+    internal static class QueryExtensions
     {
         public static FilterDefinition<Job> BuildFilters(this JobQuery query)
         {
@@ -34,5 +34,6 @@ namespace MonJobs
             var matchesAllFilters = Builders<Job>.Filter.And(filters);
             return matchesAllFilters;
         }
+        
     }
 }
