@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -63,6 +64,7 @@
     <Compile Include="IJobAcknowledgmentService.cs" />
     <Compile Include="IJobCompletionSerivce.cs" />
     <Compile Include="MongoJobAcknowledgmentService.cs" />
+    <Compile Include="MongoJobReportSerivce.cs" />
     <Compile Include="Peek\IJobPeekNextService.cs" />
     <Compile Include="IJobQueryService.cs" />
     <Compile Include="IJobReportSerivce.cs" />

@@ -32,7 +32,8 @@ namespace MonJobs.Tests
             var connectionString = Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION_STRING");
             if (string.IsNullOrWhiteSpace(connectionString))
             {
-                using (var runner = MongoDbRunner.Start(System.IO.Path.GetTempPath()))
+
+                using (var runner = MongoDbRunner.Start(System.IO.Path.GetTempPath() + Guid.NewGuid().ToString("N")))
                 {
                     await RunAction(runner.ConnectionString, mongoWork);
                 }
