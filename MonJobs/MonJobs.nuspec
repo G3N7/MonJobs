@@ -1,0 +1,16 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Mitch Ferrer</authors>
+    <owners>Mitch Ferrer</owners>
+    <licenseUrl>https://raw.githubusercontent.com/G3N7/MonJobs/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/G3N7/MonJobs/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A Mongo based jobs database</description>
+    <copyright>Copyright 2016</copyright>
+    <tags>MongoDB Mongo Jobs Queue</tags>    
+  </metadata>
+</package>
