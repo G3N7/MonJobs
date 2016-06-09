@@ -4,7 +4,7 @@ A Mongo based jobs database
 [![Build Status](https://travis-ci.org/G3N7/MonJobs.svg?branch=master)](https://travis-ci.org/G3N7/MonJobs)
 
 ## Roadmap
-### Milestone Code
+### Milestone Code (*Achieved 6/8*)
 Get all services exposed via code API's functional with usecase based integration tests.
 
 ### Milestone REST
