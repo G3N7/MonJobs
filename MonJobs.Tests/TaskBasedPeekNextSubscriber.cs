@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MonJobs.Subscriptions;
+using MonJobs.Subscriptions.Take;
 using MonJobs.Take;
 using Moq;
 using NUnit.Framework;

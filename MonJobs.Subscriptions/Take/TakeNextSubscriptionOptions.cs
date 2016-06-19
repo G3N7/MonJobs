@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MonJobs.Take;
 
-namespace MonJobs.Subscriptions
+namespace MonJobs.Subscriptions.Take
 {
     public class TakeNextSubscriptionOptions : SubscriptionOptionsBase
     {

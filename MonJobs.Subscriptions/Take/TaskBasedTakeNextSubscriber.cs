@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MonJobs.Take;
 
-namespace MonJobs.Subscriptions
+namespace MonJobs.Subscriptions.Take
 {
     public class TaskBasedTakeNextSubscriber : ITakeNextSubscriber
     {

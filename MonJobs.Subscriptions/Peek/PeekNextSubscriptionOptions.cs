@@ -1,6 +1,6 @@
 ﻿using MonJobs.Peek;
 
-namespace MonJobs.Subscriptions
+namespace MonJobs.Subscriptions.Peek
 {
     public class PeekNextSubscriptionOptions : SubscriptionOptionsBase
     {

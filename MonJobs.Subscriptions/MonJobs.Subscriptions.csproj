@@ -40,13 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ITakeNextSubscriber.cs" />
-    <Compile Include="IPeekNextSubscriber.cs" />
-    <Compile Include="PeekNextSubscriptionOptions.cs" />
+    <Compile Include="Take\ITakeNextSubscriber.cs" />
+    <Compile Include="Peek\IPeekNextSubscriber.cs" />
+    <Compile Include="Peek\PeekNextSubscriptionOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubscriptionOptionsBase.cs" />
-    <Compile Include="TakeNextSubscriptionOptions.cs" />
-    <Compile Include="TaskBasedTakeNextSubscriber.cs" />
+    <Compile Include="Take\TakeNextSubscriptionOptions.cs" />
+    <Compile Include="Take\TaskBasedTakeNextSubscriber.cs" />
     <Compile Include="TaskBasedSubscriberBase.cs" />
   </ItemGroup>
   <ItemGroup>

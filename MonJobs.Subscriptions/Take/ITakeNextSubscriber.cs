@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace MonJobs.Subscriptions
+namespace MonJobs.Subscriptions.Take
 {
     public interface ITakeNextSubscriber
     {

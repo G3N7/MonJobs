@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace MonJobs.Subscriptions
+namespace MonJobs.Subscriptions.Peek
 {
     public interface IPeekNextSubscriber
     {
