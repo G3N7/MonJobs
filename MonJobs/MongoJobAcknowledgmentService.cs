@@ -22,12 +22,12 @@ namespace MonJobs
 
             var filter = builder.And(matchesQueue, matchesId, hasNotBeenAcknowledged);
             var update = Builders<Job>.Update.Set(x => x.Acknowledgment, acknowledgment);
-
-            var result = await _jobs.FindOneAndUpdateAsync(filter, update);
             
+            var modifiedJob = await _jobs.FindOneAndUpdateAsync(filter, update);
+
             return new AcknowledgementResult
             {
-                Success = result != null
+                Success = modifiedJob != null
             };
         }
     }
