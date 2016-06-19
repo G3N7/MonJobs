@@ -4,6 +4,8 @@
     {
         public QueueId QueueId { get; set; }
 
+        public JobId[] JobIds { get; set; }
+
         private JobAttributes _hasAttributes;
         public JobAttributes HasAttributes
         {

@@ -440,5 +440,59 @@ namespace MonJobs.Tests
                 Assert.That(foundIds, Contains.Item(matchingJob2));
             });
         }
+
+
+
+        [Test]
+        public async Task QueryFor_JobIds_YieldsOnlyJobsWithThoseIds()
+        {
+
+            var matchingJob1 = JobId.Generate();
+            var matchingJob2 = JobId.Generate();
+            var unmatchedJob1 = JobId.Generate();
+
+            var exampleQueueId = QueueId.Parse("ExampleQueue");
+            var exampleQuery = new JobQuery
+            {
+                QueueId = exampleQueueId,
+                JobIds = new[] { matchingJob1, matchingJob2 }
+            };
+            
+            var existingJobs = new[] { new Job
+                {
+                    Id = matchingJob1,
+                    QueueId = exampleQueueId
+                }, new Job
+                {
+                    Id = matchingJob2,
+                    QueueId = exampleQueueId
+                }, new Job
+                {
+                    Id = unmatchedJob1,
+                    QueueId = exampleQueueId,
+                }
+            };
+
+            await RunInMongoLand(async database =>
+            {
+                var jobs = database.GetJobCollection();
+
+                await jobs.InsertManyAsync(existingJobs);
+
+                var sut = new MongoJobQuerySerivce(database);
+
+                var results = (await sut.QueryFor(exampleQuery))?.ToList();
+
+                Assert.That(results, Is.Not.Null);
+                Assert.That(results, Has.Count.EqualTo(2));
+
+                // ReSharper disable once AssignNullToNotNullAttribute
+                var foundIds = results.Select(x => x.Id).ToList();
+
+                Assert.That(foundIds, Contains.Item(matchingJob1));
+                Assert.That(foundIds, Contains.Item(matchingJob2));
+            });
+        }
+
     }
 }

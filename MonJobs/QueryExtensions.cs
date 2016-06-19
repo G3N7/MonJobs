@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using MongoDB.Driver;
 
 namespace MonJobs
@@ -10,6 +11,11 @@ namespace MonJobs
             var filters = new List<FilterDefinition<Job>>();
             var builder = Builders<Job>.Filter;
             filters.Add(builder.Eq(x => x.QueueId, query.QueueId));
+
+            if (query.JobIds != null && query.JobIds.Any())
+            {
+                filters.Add(builder.In(x => x.Id, query.JobIds));
+            }
 
             foreach (var attribute in query.HasAttributes)
             {
@@ -34,6 +40,6 @@ namespace MonJobs
             var matchesAllFilters = Builders<Job>.Filter.And(filters);
             return matchesAllFilters;
         }
-        
+
     }
 }
