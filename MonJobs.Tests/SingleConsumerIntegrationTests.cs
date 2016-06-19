@@ -1,4 +1,10 @@
+using System;
+using System.Collections;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using MongoDB.Driver;
+using MonJobs.Take;
 using NUnit.Framework;
 
 namespace MonJobs.Tests
@@ -25,9 +31,9 @@ namespace MonJobs.Tests
                     { "DataCenter", "CAL01" }
                 });
 
-                var finished1 = await TryProcessOneJobUsingPeekThanAck(database, exampleQueueName);
-                var finished2 = await TryProcessOneJobUsingPeekThanAck(database, exampleQueueName);
-                var finished3 = await TryProcessOneJobUsingPeekThanAck(database, exampleQueueName);
+                var finished1 = await TryProcessOneJobUsingPeekThanAck(database, exampleQueueName, new JobAttributes { { "DataCenter", "CAL01" } });
+                var finished2 = await TryProcessOneJobUsingPeekThanAck(database, exampleQueueName, new JobAttributes { { "DataCenter", "CAL01" } });
+                var finished3 = await TryProcessOneJobUsingPeekThanAck(database, exampleQueueName, new JobAttributes { { "DataCenter", "CAL01" } });
 
                 Assert.That(finished1, Is.Not.Null);
                 Assert.That(finished2, Is.Not.Null);
@@ -55,9 +61,11 @@ namespace MonJobs.Tests
                     { "DataCenter", "CAL01" }
                 });
 
-                var finished1 = await TryProcessOneJobUsingTakeNext(database, exampleQueueName);
-                var finished2 = await TryProcessOneJobUsingTakeNext(database, exampleQueueName);
-                var finished3 = await TryProcessOneJobUsingTakeNext(database, exampleQueueName);
+                var myDataCenter = new JobAttributes { { "DataCenter", "CAL01" } };
+
+                var finished1 = await TryProcessOneJobUsingTakeNext(database, exampleQueueName, myDataCenter);
+                var finished2 = await TryProcessOneJobUsingTakeNext(database, exampleQueueName, myDataCenter);
+                var finished3 = await TryProcessOneJobUsingTakeNext(database, exampleQueueName, myDataCenter);
 
                 Assert.That(finished1, Is.Not.Null);
                 Assert.That(finished2, Is.Not.Null);

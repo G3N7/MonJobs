@@ -10,14 +10,14 @@ namespace MonJobs.Tests
 {
     public class MongoUsecaseIntegrationTestBase : MongoTestBase
     {
-        protected static async Task<Job> TryProcessOneJobUsingPeekThanAck(IMongoDatabase database, QueueId exampleQueueName)
+        protected static async Task<Job> TryProcessOneJobUsingPeekThanAck(IMongoDatabase database, QueueId exampleQueueName, JobAttributes attributesThatShouldWork)
         {
             // Query for next available a job for my datacenter
             var peekNextService = new MongoJobPeekNextService(new MongoJobQuerySerivce(database));
             var peekQuery = new PeekNextQuery
             {
                 QueueId = exampleQueueName,
-                HasAttributes = new JobAttributes { { "DataCenter", "CAL01" } },
+                HasAttributes = attributesThatShouldWork,
                 Limit = 5
             };
             var jobs = (await peekNextService.PeekFor(peekQuery)).ToList();
@@ -74,7 +74,7 @@ namespace MonJobs.Tests
             return null;
         }
 
-        protected static async Task<Job> TryProcessOneJobUsingTakeNext(IMongoDatabase database, QueueId exampleQueueName)
+        protected static async Task<Job> TryProcessOneJobUsingTakeNext(IMongoDatabase database, QueueId exampleQueueName, JobAttributes attributesThatShouldWork)
         {
             // Take Next available job
             var takeNextService = new MongoJobTakeNextService(database);
@@ -85,7 +85,7 @@ namespace MonJobs.Tests
             var peekQuery = new TakeNextOptions
             {
                 QueueId = exampleQueueName,
-                HasAttributes = new JobAttributes { { "DataCenter", "CAL01" } },
+                HasAttributes = attributesThatShouldWork,
                 Acknowledgment = standardAck
             };
             var nextJob = await takeNextService.TakeFor(peekQuery);
