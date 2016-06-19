@@ -75,7 +75,7 @@
     <Compile Include="MongoJobCompletionService.cs" />
     <Compile Include="MongoJobCreationService.cs" />
     <Compile Include="MongoJobQuerySerivce.cs" />
-    <Compile Include="Peek\PeekNextQuery.cs" />
+    <Compile Include="Peek\PeekNextOptions.cs" />
     <Compile Include="QueueId.cs" />
     <Compile Include="IJobCreationService.cs" />
     <Compile Include="Job.cs" />

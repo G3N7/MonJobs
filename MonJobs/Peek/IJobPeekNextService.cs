@@ -8,6 +8,6 @@ namespace MonJobs.Peek
     /// </summary>
     public interface IJobPeekNextService
     {
-        Task<IEnumerable<Job>> PeekFor(PeekNextQuery query);
+        Task<IEnumerable<Job>> PeekFor(PeekNextOptions options);
     }
 }

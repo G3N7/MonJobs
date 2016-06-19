@@ -14,7 +14,7 @@ namespace MonJobs.Tests
         {
             // Query for next available a job for my datacenter
             var peekNextService = new MongoJobPeekNextService(new MongoJobQuerySerivce(database));
-            var peekQuery = new PeekNextQuery
+            var peekQuery = new PeekNextOptions
             {
                 QueueId = exampleQueueName,
                 HasAttributes = attributesThatShouldWork,

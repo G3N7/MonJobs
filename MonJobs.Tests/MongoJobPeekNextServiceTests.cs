@@ -12,7 +12,7 @@ namespace MonJobs.Tests
         public async Task PeekFor_NewJobs_ReturnsAvailableJobs()
         {
             var exampleQueueId = QueueId.Parse("ExampleQueue");
-            var exampleQuery = new PeekNextQuery
+            var exampleQuery = new PeekNextOptions
             {
                 QueueId = exampleQueueId
             };

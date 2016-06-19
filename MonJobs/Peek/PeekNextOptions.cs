@@ -1,6 +1,6 @@
 ﻿namespace MonJobs.Peek
 {
-    public class PeekNextQuery
+    public class PeekNextOptions
     {
         public QueueId QueueId { get; set; }
 
