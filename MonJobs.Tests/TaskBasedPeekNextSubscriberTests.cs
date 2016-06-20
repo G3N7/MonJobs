@@ -28,6 +28,10 @@ namespace MonJobs.Tests
             var hasBeenCalled = false;
             await sut.Subscribe(exampleQueueId, job => Task.FromResult(hasBeenCalled = true), exampleOptions);
 
+            Thread.Sleep(10);
+            
+            cancel.Cancel();
+
             Assert.That(hasBeenCalled, Is.False);
             mockPeekNextService.Verify(x => x.TakeFor(exampleOptions.TakeNextOptions), Times.AtLeast(2));
         }
