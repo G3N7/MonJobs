@@ -10,6 +10,8 @@ env:
 install:
   - nuget restore MonJobs.sln
   - nuget install NUnit.Runners -Version 3.2.1 -OutputDirectory testrunner
+  - bash patch_assembly_file_with_build_id.sh MonJobs/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
+  - bash patch_assembly_file_with_build_id.sh MonJobs.Subscriptions/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
   
 script:
   - xbuild /p:Configuration=Release /p:TargetFrameworkVersion="v4.5" MonJobs.sln
