@@ -12,10 +12,11 @@ install:
   - nuget install NUnit.Runners -Version 3.2.1 -OutputDirectory testrunner
   - bash patch_assembly_file_with_build_id.sh MonJobs/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
   - bash patch_assembly_file_with_build_id.sh MonJobs.Subscriptions/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
+  - cat MonJobs/Properties/AssemblyInfo.cs
   
 script:
   - xbuild /p:Configuration=Release /p:TargetFrameworkVersion="v4.5" MonJobs.sln
   - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./MonJobs.Tests/bin/Release/MonJobs.Tests.dll
-  - nuget pack MonJobs.sln -IncludeReferencedProjects -ExcludeEmptyDirectories -Symbols
+  #- nuget pack MonJobs.sln -IncludeReferencedProjects -ExcludeEmptyDirectories -Symbols
 
 after_success:
