@@ -97,6 +97,7 @@
     <Compile Include="Take\MongoJobTakeNextService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MonJobs.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
