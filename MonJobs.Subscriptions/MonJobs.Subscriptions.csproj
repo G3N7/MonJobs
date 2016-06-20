@@ -47,7 +47,6 @@
     <Compile Include="SubscriptionOptionsBase.cs" />
     <Compile Include="Take\TakeNextSubscriptionOptions.cs" />
     <Compile Include="Take\TaskBasedTakeNextSubscriber.cs" />
-    <Compile Include="TaskBasedSubscriberBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonJobs\MonJobs.csproj">
