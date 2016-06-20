@@ -64,6 +64,8 @@ namespace MonJobs.Tests
                 // wait for us to have processed the jobs, or for the max time to be over.
             } while (numberOfTimesOurDelegateIsInvoked < numberOfJobs && !cancel.IsCancellationRequested);
 
+            cancel.Cancel();
+
             Assert.That(numberOfTimesOurDelegateIsInvoked, Is.EqualTo(numberOfJobs));
             mockPeekNextService.Verify(x => x.TakeFor(exampleOptions.TakeNextOptions), Times.AtLeast(numberOfJobsTaken));
         }
