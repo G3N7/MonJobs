@@ -85,7 +85,7 @@
     <Compile Include="MultiConsumerIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleConsumerIntegrationTests.cs" />
-    <Compile Include="TaskBasedPeekNextSubscriber.cs" />
+    <Compile Include="TaskBasedPeekNextSubscriberTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
