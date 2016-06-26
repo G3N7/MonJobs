@@ -5,7 +5,7 @@ A Mongo based jobs database
 
 ## Roadmap
 ### Milestone Code (*Achieved 6/8*)
-Get all services exposed via code API's functional with usecase based integration tests.
+Get all services exposed via code API's functional with use-case based integration tests.
 
 ### Milestone REST
 Get all of the services exposed via http resource/verb strategy using a master api key.
@@ -61,20 +61,11 @@ Type: `JobAttributes` _Optional_
 #### JobQuery
 An object that holds the query parameters.
 
-##### QueueId
-Type: `QueueId`
-
-##### HasAttributes
-Type: `JobAttributes` _Optional_
-
-##### Limit
-Type: `int?` _Optional_
-
-##### HasBeenAcknowledged
-Type: `bool?` _Optional_
-
-##### HasResult
-Type: `bool?` _Optional_
+* *QueueId*:`QueueId` _(Optional)_
+* *HasAttributes*:`JobAttributes` _(Optional)_
+* *Limit*:`int?` _(Optional)_
+* *HasBeenAcknowledged*:`bool?` _(Optional)_
+* *HasResult*:`bool?` _(Optional)_
 
 ### Acknowledgment
 If you have seen a job that you want to start working, you can post an acknowledgment which will return true if still available, or false if the job is already acknowledged.
@@ -87,7 +78,7 @@ One you have completed a job you can call this to report a final result.
 `IJobCompletionService` and `MongoJobCompletionService` make up the code API for completing a job.
 
 ## Types
-Types are provided for static typing in C#, and serializable to Bson and Json.
+Types are provided for static typing in C#, and serialize to Bson and Json.
 
 ### JobId
 The unique id for a given job.
