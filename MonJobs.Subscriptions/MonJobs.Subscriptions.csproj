@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Peek\TaskBasedPeekNextSubscriber.cs" />
     <Compile Include="Take\ITakeNextSubscriber.cs" />
     <Compile Include="Peek\IPeekNextSubscriber.cs" />
     <Compile Include="Peek\PeekNextSubscriptionOptions.cs" />

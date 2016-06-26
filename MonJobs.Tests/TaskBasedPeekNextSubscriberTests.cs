@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MonJobs.Subscriptions.Take;
-using MonJobs.Take;
+using MonJobs.Peek;
+using MonJobs.Subscriptions.Peek;
 using Moq;
 using NUnit.Framework;
 
@@ -15,25 +17,54 @@ namespace MonJobs.Tests
         {
             var exampleQueueId = QueueId.Parse("ExampleQueue");
             var cancel = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-            var exampleOptions = new TakeNextSubscriptionOptions
+            var exampleOptions = new PeekNextSubscriptionOptions
             {
                 Token = cancel.Token,
                 PollingInterval = TimeSpan.FromMilliseconds(1),
-                TakeNextOptions = new TakeNextOptions()
+                PeekNextOptions = new PeekNextOptions()
             };
-            var mockPeekNextService = new Mock<IJobTakeNextService>();
+            var mockPeekNextService = new Mock<IJobPeekNextService>();
 
-            var sut = new TaskBasedTakeNextSubscriber(mockPeekNextService.Object);
+            var sut = new TaskBasedPeekNextSubscriber(mockPeekNextService.Object);
 
             var hasBeenCalled = false;
             await sut.Subscribe(exampleQueueId, job => Task.FromResult(hasBeenCalled = true), exampleOptions);
 
             Thread.Sleep(10);
-            
+
             cancel.Cancel();
 
             Assert.That(hasBeenCalled, Is.False);
-            mockPeekNextService.Verify(x => x.TakeFor(exampleOptions.TakeNextOptions), Times.AtLeast(2));
+            mockPeekNextService.Verify(x => x.PeekFor(exampleOptions.PeekNextOptions), Times.AtLeast(2));
+        }
+
+        [Test]
+        public async Task Subscribe_WillNotCallWorkFuncIfNothingMetTheCriteria()
+        {
+            var exampleQueueId = QueueId.Parse("ExampleQueue");
+            var cancel = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            var exampleOptions = new PeekNextSubscriptionOptions
+            {
+                Token = cancel.Token,
+                PollingInterval = TimeSpan.FromMilliseconds(1),
+                PeekNextOptions = new PeekNextOptions()
+            };
+            var mockPeekNextService = new Mock<IJobPeekNextService>();
+            mockPeekNextService
+                .Setup(x => x.PeekFor(exampleOptions.PeekNextOptions))
+                .ReturnsAsync(Enumerable.Empty<Job>());
+
+            var sut = new TaskBasedPeekNextSubscriber(mockPeekNextService.Object);
+
+            var numberOfTimesOurDelegateIsInvoked = 0;
+            await sut.Subscribe(exampleQueueId, job => Task.FromResult(numberOfTimesOurDelegateIsInvoked += 1), exampleOptions);
+
+            Thread.Sleep(10);
+
+            cancel.Cancel();
+
+            Assert.That(numberOfTimesOurDelegateIsInvoked, Is.EqualTo(0));
+            mockPeekNextService.Verify(x => x.PeekFor(exampleOptions.PeekNextOptions), Times.AtLeastOnce);
         }
 
         [TestCase(1)]
@@ -43,21 +74,21 @@ namespace MonJobs.Tests
         {
             var exampleQueueId = QueueId.Parse("ExampleQueue");
             var cancel = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-            var exampleOptions = new TakeNextSubscriptionOptions
+            var exampleOptions = new PeekNextSubscriptionOptions
             {
                 Token = cancel.Token,
                 PollingInterval = TimeSpan.FromMilliseconds(1),
-                TakeNextOptions = new TakeNextOptions()
+                PeekNextOptions = new PeekNextOptions()
             };
-            var mockPeekNextService = new Mock<IJobTakeNextService>();
+            var mockPeekNextService = new Mock<IJobPeekNextService>();
             var numberOfJobsTaken = 0;
-            mockPeekNextService.Setup(x => x.TakeFor(exampleOptions.TakeNextOptions)).Returns(() =>
+            mockPeekNextService.Setup(x => x.PeekFor(exampleOptions.PeekNextOptions)).Returns(() =>
             {
                 numberOfJobsTaken += 1;
-                return numberOfJobsTaken <= numberOfJobs ? Task.FromResult(new Job()) : Task.FromResult(default(Job));
+                return numberOfJobsTaken <= numberOfJobs ? Task.FromResult(new[] { new Job() }.AsEnumerable()) : Task.FromResult(Enumerable.Empty<Job>());
             });
 
-            var sut = new TaskBasedTakeNextSubscriber(mockPeekNextService.Object);
+            var sut = new TaskBasedPeekNextSubscriber(mockPeekNextService.Object);
 
             var numberOfTimesOurDelegateIsInvoked = 0;
             await sut.Subscribe(exampleQueueId, job => Task.FromResult(numberOfTimesOurDelegateIsInvoked += 1), exampleOptions);
@@ -71,7 +102,7 @@ namespace MonJobs.Tests
             cancel.Cancel();
 
             Assert.That(numberOfTimesOurDelegateIsInvoked, Is.EqualTo(numberOfJobs));
-            mockPeekNextService.Verify(x => x.TakeFor(exampleOptions.TakeNextOptions), Times.AtLeast(numberOfJobsTaken));
+            mockPeekNextService.Verify(x => x.PeekFor(exampleOptions.PeekNextOptions), Times.AtLeast(numberOfJobsTaken));
         }
     }
 }

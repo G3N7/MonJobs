@@ -1,9 +1,12 @@
-﻿using MonJobs.Peek;
+﻿using System;
+using System.Threading.Tasks;
+using MonJobs.Peek;
 
 namespace MonJobs.Subscriptions.Peek
 {
     public class PeekNextSubscriptionOptions : SubscriptionOptionsBase
     {
-        public PeekNextOptions OptionsOptions { get; set; }
+        public PeekNextOptions PeekNextOptions { get; set; }
+        public Func<Exception, Task> OnException { get; set; }
     }
 }
