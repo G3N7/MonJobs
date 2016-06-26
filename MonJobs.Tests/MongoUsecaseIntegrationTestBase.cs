@@ -26,12 +26,12 @@ namespace MonJobs.Tests
             foreach (var job in jobs)
             {
                 // Acknowledge the job
-                var acknowledgementService = new MongoJobAcknowledgmentService(database);
+                var acknowledgmentService = new MongoJobAcknowledgmentService(database);
                 var standardAck = new JobAcknowledgment
                 {
                     {"RunnerId", Guid.NewGuid().ToString("N")}
                 };
-                var ackResult = await acknowledgementService.Ack(exampleQueueName, job.Id, standardAck);
+                var ackResult = await acknowledgmentService.Ack(exampleQueueName, job.Id, standardAck);
                 if (!ackResult.Success) continue;
 
                 var exampleReportMessage1 = "FooBar";
@@ -39,7 +39,7 @@ namespace MonJobs.Tests
                 var exampleReportMessage3 = "PowPop";
 
                 // Send Reports
-                var reportService = new MongoJobReportSerivce(database);
+                var reportService = new MongoJobReportService(database);
                 await
                     reportService.AddReport(exampleQueueName, job.Id,
                         new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage1 } });
@@ -96,7 +96,7 @@ namespace MonJobs.Tests
             var exampleReportMessage3 = "PowPop";
 
             // Send Reports
-            var reportService = new MongoJobReportSerivce(database);
+            var reportService = new MongoJobReportService(database);
             await
                 reportService.AddReport(exampleQueueName, nextJob.Id,
                     new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage1 } });

@@ -30,7 +30,7 @@ namespace MonJobs.Tests
                 await jobs.InsertManyAsync(existingJobs);
 
 
-                var sut = new MongoJobReportSerivce(database);
+                var sut = new MongoJobReportService(database);
                 await sut.AddReport(exampleQueue, myJobId, new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", "FooBar" } });
 
                 var myJob = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, myJobId)).FirstAsync();
@@ -64,7 +64,7 @@ namespace MonJobs.Tests
                 await jobs.InsertManyAsync(existingJobs);
 
 
-                var sut = new MongoJobReportSerivce(database);
+                var sut = new MongoJobReportService(database);
                 await sut.AddReport(exampleQueue, myJobId, new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", "FooBar" } });
 
                 var myJob = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, myJobId)).FirstAsync();

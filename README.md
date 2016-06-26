@@ -29,7 +29,7 @@ If you want to take the next job matching a given attribute query, this action w
 An object that holds the options for the take feature.
 
 * *QueueId*: `QueueId`
-* *Acknowledgment*: `JobAcknowledgement`
+* *Acknowledgment*: `JobAcknowledgment`
 * *HasAttributes*: `JobAttributes` _(Optional)_
 
 ### Query
@@ -47,9 +47,9 @@ An object that holds the query parameters.
 
 ### Acknowledge
 If you have seen a job that you want to start working, you can post an acknowledgment which will return true if still available, or false if the job is already acknowledged.
-`IJobAcknowledgmentService` and `MongoJobAcknowledgmentService` allows you to apply a `JobAcknowledgment` to a `Job` and returns an `AcknowledgementResult`.
+`IJobAcknowledgmentService` and `MongoJobAcknowledgmentService` allows you to apply a `JobAcknowledgment` to a `Job` and returns an `AcknowledgmentResult`.
 
-#### AcknowledgementResult
+#### AcknowledgmentResult
 The result of trying to acknowledge a job.
 * *Success*: `bool`
 

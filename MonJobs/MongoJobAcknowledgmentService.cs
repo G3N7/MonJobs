@@ -12,7 +12,7 @@ namespace MonJobs
             _jobs = database.GetJobCollection();
         }
 
-        public async Task<AcknowledgementResult> Ack(QueueId queue, JobId id, JobAcknowledgment acknowledgment)
+        public async Task<AcknowledgmentResult> Ack(QueueId queue, JobId id, JobAcknowledgment acknowledgment)
         {
             var builder = Builders<Job>.Filter;
 
@@ -25,7 +25,7 @@ namespace MonJobs
             
             var modifiedJob = await _jobs.FindOneAndUpdateAsync(filter, update);
 
-            return new AcknowledgementResult
+            return new AcknowledgmentResult
             {
                 Success = modifiedJob != null
             };

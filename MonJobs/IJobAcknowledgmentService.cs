@@ -7,6 +7,6 @@ namespace MonJobs
     /// </summary>
     public interface IJobAcknowledgmentService
     {
-        Task<AcknowledgementResult> Ack(QueueId queue, JobId id, JobAcknowledgment acknowledgment);
+        Task<AcknowledgmentResult> Ack(QueueId queue, JobId id, JobAcknowledgment acknowledgment);
     }
 }

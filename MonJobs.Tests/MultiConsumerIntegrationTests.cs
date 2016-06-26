@@ -207,7 +207,7 @@ namespace MonJobs.Tests
                 if (rollingDeployJob == null) Assert.Fail();
 
                 // Send Reports
-                var reportService = new MongoJobReportSerivce(database);
+                var reportService = new MongoJobReportService(database);
                 await
                     reportService.AddReport(exampleQueueName, rollingDeployJob.Id,
                         new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", "Starting Rolling Deploy" } });

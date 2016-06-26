@@ -3,11 +3,11 @@ using MongoDB.Driver;
 
 namespace MonJobs
 {
-    public class MongoJobReportSerivce : IJobReportSerivce
+    public class MongoJobReportService : IJobReportSerivce
     {
         private readonly IMongoCollection<Job> _jobs;
 
-        public MongoJobReportSerivce(IMongoDatabase database)
+        public MongoJobReportService(IMongoDatabase database)
         {
             _jobs = database.GetJobCollection();
         }
@@ -19,9 +19,9 @@ namespace MonJobs
             var matchesQueue = builder.Eq(x => x.QueueId, queue);
             var matchesId = builder.Eq(x => x.Id, id);
 
-            var hasAcknowledgement = builder.Not(builder.Eq(x => x.Acknowledgment, null));
+            var hasAcknowledgment = builder.Not(builder.Eq(x => x.Acknowledgment, null));
 
-            var matchesQueueAndId = builder.And(matchesId, matchesQueue, hasAcknowledgement);
+            var matchesQueueAndId = builder.And(matchesId, matchesQueue, hasAcknowledgment);
 
             var update = Builders<Job>.Update.Push(x => x.Reports, report);
 

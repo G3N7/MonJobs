@@ -1,6 +1,6 @@
 namespace MonJobs
 {
-    public class AcknowledgementResult
+    public class AcknowledgmentResult
     {
         public bool Success { get; set; }
     }
