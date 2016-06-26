@@ -80,22 +80,22 @@ The unique id for a given job.
 
 ### JobAttributes
 A dictionary of attributes for this job.
-* BSON Representation - `BSONDocument`
+* BSON Representation - `BsonDocument`
 * JSON Representation - `object`
 
 ### JobAcknowledgment
 A record of the acknowledgment.
-* BSON Representation - `BSONDocument`
+* BSON Representation - `BsonDocument`
 * JSON Representation - `object`
 
 ### JobReport
 A message about the progress of a job.
-* BSON Representation - `BSONDocument`
+* BSON Representation - `BsonDocument`
 * JSON Representation - `object`
 
 ### JobResult
 A record of the final result.
-* BSON Representation - `BSONDocument`
+* BSON Representation - `BsonDocument`
 * JSON Representation - `object`
 
 ### QueueId
