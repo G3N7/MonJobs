@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Driver;
@@ -19,8 +21,25 @@ namespace MonJobs
 
             foreach (var attribute in query.HasAttributes)
             {
-                var hasAttribute = builder.Eq(x => x.Attributes[attribute.Key], attribute.Value);
-                filters.Add(hasAttribute);
+                var valueType = attribute.Value.GetType();
+                if (typeof(IEnumerable).IsAssignableFrom(valueType) && valueType != typeof(string))
+                {
+                    var values = (IEnumerable)attribute.Value;
+
+                    var orValueFilters = new List<FilterDefinition<Job>>();
+                    foreach (var value in values)
+                    {
+                        var hasAttribute = builder.Eq(x => x.Attributes[attribute.Key], value);
+                        orValueFilters.Add(hasAttribute);
+                    }
+                    var anyOfTheseValuesFilter = builder.Or(orValueFilters);
+                    filters.Add(anyOfTheseValuesFilter);
+                }
+                else
+                {
+                    var hasAttribute = builder.Eq(x => x.Attributes[attribute.Key], attribute.Value);
+                    filters.Add(hasAttribute);
+                }
             }
 
             if (query.HasBeenAcknowledged.HasValue)
