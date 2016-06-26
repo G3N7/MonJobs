@@ -4,7 +4,7 @@ A Mongo based jobs database
 [![Build Status](https://travis-ci.org/G3N7/MonJobs.svg?branch=master)](https://travis-ci.org/G3N7/MonJobs)
 
 ## Services
-Services are provided as Code APIs, REST APIs (Coming Soon), and WebSocket APIs (Coming Soon).
+Services are provided as Code APIs, REST APIs _(Coming Soon)_, and WebSocket APIs _(Coming Soon)_.
 
 ### Create
 Jobs are created with a queue id, allowing for segmentation and a set of attributes.
