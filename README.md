@@ -27,17 +27,12 @@ Jobs are created with a queue id, allowing for segmentation and a set of attribu
 New Jobs can be viewed without effecting the queue by peeking at the next set of jobs that matching a given attribute query.  If one you chose to start a job you must first attempt an acknowledgment in order to ensure that it has not already been picked up.
 `IJobPeekNextService` and `MongoJobPeekNextService` make up the code API for seeing what jobs are next.
 
-#### PeekNextQuery
+#### PeekNextOptions
 An object that holds the query parameters.
 
-##### QueueId
-Type: `QueueId`
-
-##### HasAttributes
-Type: `JobAttributes` _Optional_
-
-##### Limit
-Type: `int?` _Optional_
+* *QueueId*: `QueueId`
+* *HasAttributes*: `JobAttributes` _(Optional)_
+* *Limit*: `int?` _(Optional)_
 
 ### TakeNext
 If you want to take the next job matching a given attribute query, this action will acknowledge the next available job and return its data.
@@ -46,21 +41,21 @@ If you want to take the next job matching a given attribute query, this action w
 #### TakeNextOptions
 An object that holds the options for the take feature.
 
-* *QueueId*:`QueueId`
-* *Acknowledgment*:`JobAcknowledgement`
-* *HasAttributes*`JobAttributes` _(Optional)_
+* *QueueId*: `QueueId`
+* *Acknowledgment*: `JobAcknowledgement`
+* *HasAttributes*: `JobAttributes` _(Optional)_
 
 ### Query
-`IJobQueryService` and `MongoJobQueryService` make up the code API for seeing what jobs exist.
+`IJobQueryService` and `MongoJobQueryService` make up the code API for seeing what jobs exist.  This query is made using the `JobQuery`
 
 #### JobQuery
 An object that holds the query parameters.
 
-* *QueueId*:`QueueId` _(Optional)_
-* *HasAttributes*:`JobAttributes` _(Optional)_
-* *Limit*:`int?` _(Optional)_
-* *HasBeenAcknowledged*:`bool?` _(Optional)_
-* *HasResult*:`bool?` _(Optional)_
+* *QueueId*: `QueueId` _(Optional)_
+* *HasAttributes*: `JobAttributes` _(Optional)_
+* *Limit*: `int?` _(Optional)_
+* *HasBeenAcknowledged*: `bool?` _(Optional)_
+* *HasResult*: `bool?` _(Optional)_
 
 ### Acknowledgment
 If you have seen a job that you want to start working, you can post an acknowledgment which will return true if still available, or false if the job is already acknowledged.
@@ -77,39 +72,39 @@ Types are provided for static typing in _C#_, and serialize to Bson and Json.
 
 ### JobId
 The unique id for a given job.
-* Bson Representation - 'ObjectId'
-* Json Representation - 'String'
+* Bson Representation - `ObjectId`
+* Json Representation - `string`
 
 ### JobAttributes
 A dictionary of attributes for this job.
-* Bson Representation - 'BsonDocument'
-* Json Representation - 'Object'
+* Bson Representation - `BsonDocument`
+* Json Representation - `object`
 
 ### JobAcknowledgment
 A record of the acknowledgment.
-* Bson Representation - 'BsonDocument'
-* Json Representation - 'Object'
+* Bson Representation - `BsonDocument`
+* Json Representation - `object`
 
 ### JobReport
 A message about the progress of a job.
-* Bson Representation - 'BsonDocument'
-* Json Representation - 'Object'
+* Bson Representation - `BsonDocument`
+* Json Representation - `object`
 
 ### JobResult
 A record of the final result.
-* Bson Representation - 'BsonDocument'
-* Json Representation - 'Object'
+* Bson Representation - `BsonDocument`
+* Json Representation - `object`
 
 ### QueueId
 An identity that provides the ability to segment the queue, this can be leveraged as an Authorization point.
-* Bson Representation - 'String'
-* Json Representation - 'String'
+* Bson Representation - `string`
+* Json Representation - `string`
 
 ### Job
 The record for the job as a whole, it consists of:
-* Id
-* QueueId
-* Attributes
-* Acknowledgment
-* Reports - An array of Report objects
-* Result
+* *Id*: `JobId`
+* *QueueId*: `QueueId`
+* *Attributes*: `JobAttributes`
+* *Acknowledgment*: `JobAcknowledgment`
+* *Reports*: `JobReports[]`
+* *Result*: `JobResult`
