@@ -18,8 +18,8 @@ New Jobs can be viewed without effecting the queue by peeking at the next set of
 An object that holds the query parameters.
 
 * *QueueId*: `QueueId`
-* *HasAttributes*: `JobAttributes` _(Optional)_
-* *Limit*: `int?` _(Optional)_
+* *HasAttributes*: `JobAttributes` _([Optional](https://github.com/G3N7/monjobs#roadmap))_
+* *Limit*: `int?` _([Optional](https://github.com/G3N7/monjobs#roadmap))_
 
 ### TakeNext
 If you want to take the next job matching a given attribute query, this action will acknowledge the next available job and return its data.
