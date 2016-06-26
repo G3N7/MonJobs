@@ -1,5 +1,5 @@
 # MonJobs
-A Mongo based jobs database
+A [MongoDB](https://www.mongodb.com/) based jobs database
 
 [![Build Status](https://travis-ci.org/G3N7/MonJobs.svg?branch=master)](https://travis-ci.org/G3N7/MonJobs)
 
