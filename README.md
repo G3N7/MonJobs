@@ -46,14 +46,9 @@ If you want to take the next job matching a given attribute query, this action w
 #### TakeNextOptions
 An object that holds the options for the take feature.
 
-##### QueueId
-Type: `QueueId`
-
-##### Acknowledgement
-Type: `JobAcknowledgement`
-
-##### HasAttributes
-Type: `JobAttributes` _Optional_
+* *QueueId*:`QueueId`
+* *Acknowledgment*:`JobAcknowledgement`
+* *HasAttributes*`JobAttributes` _(Optional)_
 
 ### Query
 `IJobQueryService` and `MongoJobQueryService` make up the code API for seeing what jobs exist.
@@ -78,37 +73,37 @@ One you have completed a job you can call this to report a final result.
 `IJobCompletionService` and `MongoJobCompletionService` make up the code API for completing a job.
 
 ## Types
-Types are provided for static typing in C#, and serialize to Bson and Json.
+Types are provided for static typing in _C#_, and serialize to Bson and Json.
 
 ### JobId
 The unique id for a given job.
-* Bson Representation - ObjectId
-* Json Representation - String
+* Bson Representation - 'ObjectId'
+* Json Representation - 'String'
 
 ### JobAttributes
 A dictionary of attributes for this job.
-* Bson Representation - BsonDocument
-* Json Representation - Object
+* Bson Representation - 'BsonDocument'
+* Json Representation - 'Object'
 
 ### JobAcknowledgment
 A record of the acknowledgment.
-* Bson Representation - BsonDocument
-* Json Representation - Object
+* Bson Representation - 'BsonDocument'
+* Json Representation - 'Object'
 
 ### JobReport
 A message about the progress of a job.
-* Bson Representation - BsonDocument
-* Json Representation - Object
+* Bson Representation - 'BsonDocument'
+* Json Representation - 'Object'
 
 ### JobResult
 A record of the final result.
-* Bson Representation - BsonDocument
-* Json Representation - Object
+* Bson Representation - 'BsonDocument'
+* Json Representation - 'Object'
 
 ### QueueId
 An identity that provides the ability to segment the queue, this can be leveraged as an Authorization point.
-* Bson Representation - String
-* Json Representation - String
+* Bson Representation - 'String'
+* Json Representation - 'String'
 
 ### Job
 The record for the job as a whole, it consists of:
