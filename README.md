@@ -8,11 +8,11 @@ Services are provided as Code APIs, REST APIs (Coming Soon), and WebSocket APIs 
 
 ### Create
 Jobs are created with a queue id, allowing for segmentation and a set of attributes.
-`IJobCreationService` and `MongoJobCreationService` make up the code API for creating a new job.
+`IJobCreationService` and `MongoJobCreationService` allows you to create a new `Job` by providing a `QueueId` and the `JobAttributes`, then returns the new `Job`.
 
 ### PeekNext
 New Jobs can be viewed without effecting the queue by peeking at the next set of jobs that matching a given attribute query.  If one you chose to start a job you must first attempt an acknowledgment in order to ensure that it has not already been picked up.
-`IJobPeekNextService` and `MongoJobPeekNextService` make up the code API for seeing what jobs are next.
+`IJobPeekNextService` and `MongoJobPeekNextService` allows you to peek at the queue using criteria provided in `PeekNextOptions` once you have peeked you can chose to apply a `JobAcknowledgment` a `Job` and then do the work.
 
 #### PeekNextOptions
 An object that holds the query parameters.
@@ -45,7 +45,7 @@ An object that holds the query parameters.
 * *HasBeenAcknowledged*: `bool?` _(Optional)_
 * *HasResult*: `bool?` _(Optional)_
 
-### Acknowledgment
+### Acknowledge
 If you have seen a job that you want to start working, you can post an acknowledgment which will return true if still available, or false if the job is already acknowledged.
 `IJobAcknowledgmentService` and `MongoJobAcknowledgmentService` allows you to apply a `JobAcknowledgment` to a `Job` and returns an `AcknowledgementResult`.
 
@@ -57,7 +57,7 @@ The result of trying to acknowledge a job.
 You can update the job with reports about the progress.
 `IJobReportService` and `MongoJobReportService` allow you to add as many `JobReport` to a `Job` as makes sense for your use-case.
 
-### Completion
+### Complete
 One you have completed a job you can call this to report a final result.
 `IJobCompletionService` and `MongoJobCompletionService` allows you to add `JobResult` to a `Job`.
 
@@ -110,10 +110,10 @@ Obviously this is just high level information about where the project is heading
 Get all services exposed via code API's functional with use-case based integration tests.
 
 ### Milestone REST
-Get all of the services exposed via http resource/verb strategy using a master api key.
+Get all of the services exposed via HTTP resource/verb strategy using a master API key.
 
 ### Milestone Docker
-Get the rest api hosted in docker.
+Get the rest API hosted in docker.
 
 ### Milestone Authorization Segmentation
 Getting queues to only be available to certain entity/pass combos.
