@@ -95,7 +95,7 @@ A message about the progress of a job.
 
 ### JobResult
 A record of the final result.
-* BSON Representation - `BsonDocument`
+* BSON Representation - [BsonDocument](BSON_DOCUMENT)
 * JSON Representation - `object`
 
 ### QueueId
@@ -117,3 +117,5 @@ Get the rest API hosted in docker.
 
 ### Milestone Authorization Segmentation
 Getting queues to only be available to certain entity/pass combos.
+
+[BSON_DOCUMENT]: https://github.com/mongodb/mongo-csharp-driver/blob/master/src/MongoDB.Bson/ObjectModel/BsonDocument.cs
