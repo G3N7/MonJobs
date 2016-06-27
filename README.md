@@ -71,7 +71,7 @@ The record for the job as a whole, it consists of:
 * *Attributes*: `JobAttributes`
 * *Acknowledgment*: `JobAcknowledgment`
 * *Reports*: `JobReports[]`
-* *Result*: `JobResult`
+* *Result*: [JobResult][JOB_RESULT]
 
 ### JobId
 The unique id for a given job.
@@ -124,3 +124,5 @@ Getting queues to only be available to certain entity/pass combos.
 
 [JSON_STRING]: https://tools.ietf.org/html/rfc7159#section-7
 [JSON_OBJECT]: https://tools.ietf.org/html/rfc7159#section-4
+
+[JOB_RESULT]: MonJobs/JobResult.cs
