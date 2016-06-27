@@ -75,33 +75,33 @@ The record for the job as a whole, it consists of:
 
 ### JobId
 The unique id for a given job.
-* BSON Representation - `ObjectId`
-* JSON Representation - `string`
+* BSON Representation - [ObjectId][OBJECT_ID]
+* JSON Representation - [string][JSON_STRING]
 
 ### JobAttributes
 A dictionary of attributes for this job.
-* BSON Representation - `BsonDocument`
-* JSON Representation - `object`
+* BSON Representation - [BsonDocument][BSON_DOCUMENT]
+* JSON Representation - [object][JSON_OBJECT]
 
 ### JobAcknowledgment
 A record of the acknowledgment.
-* BSON Representation - `BsonDocument`
-* JSON Representation - `object`
+* BSON Representation - [BsonDocument][BSON_DOCUMENT]
+* JSON Representation - [object][JSON_OBJECT]
 
 ### JobReport
 A message about the progress of a job.
-* BSON Representation - `BsonDocument`
-* JSON Representation - `object`
+* BSON Representation - [BsonDocument][BSON_DOCUMENT]
+* JSON Representation - [object][JSON_OBJECT]
 
 ### JobResult
 A record of the final result.
-* BSON Representation - [BsonDocument](BSON_DOCUMENT)
-* JSON Representation - `object`
+* BSON Representation - [BsonDocument][BSON_DOCUMENT]
+* JSON Representation - [object][JSON_OBJECT]
 
 ### QueueId
 An identity that provides the ability to segment the queue, this can be leveraged as an Authorization point.
-* BSON Representation - `string`
-* JSON Representation - `string`
+* BSON Representation - [BsonString][BSON_STRING]
+* JSON Representation - [string][JSON_STRING]
 
 ## Roadmap
 Obviously this is just high level information about where the project is heading.
@@ -119,3 +119,8 @@ Get the rest API hosted in docker.
 Getting queues to only be available to certain entity/pass combos.
 
 [BSON_DOCUMENT]: https://github.com/mongodb/mongo-csharp-driver/blob/master/src/MongoDB.Bson/ObjectModel/BsonDocument.cs
+[BSON_STRING]: https://github.com/mongodb/mongo-csharp-driver/blob/master/src/MongoDB.Bson/ObjectModel/BsonString.cs
+[OBJECT_ID]: https://github.com/mongodb/mongo-csharp-driver/blob/master/src/MongoDB.Bson/ObjectModel/ObjectId.cs
+
+[JSON_STRING]: https://tools.ietf.org/html/rfc7159#section-7
+[JSON_OBJECT]: https://tools.ietf.org/html/rfc7159#section-4
