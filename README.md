@@ -8,11 +8,11 @@ Services are provided as Code APIs, REST APIs _(Coming Soon)_, and WebSocket API
 
 ### Create
 Jobs are created with a queue id, allowing for segmentation and a set of attributes.
-[IJobCreationService] and `MongoJobCreationService` allows you to create a new [Job][JOB] by providing a [QueueId][QUEUE_ID] and the [JobAttributes][JOB_ATTRIBUTES], then returns the new [Job][JOB].
+[IJobCreationService] and `MongoJobCreationService` allows you to create a new [Job] by providing a [QueueId][QUEUE_ID] and the [JobAttributes][JOB_ATTRIBUTES], then returns the new [Job].
 
 ### PeekNext
 New Jobs can be viewed without effecting the queue by peeking at the next set of jobs that matching a given attribute query.  If one you chose to start a job you must first attempt an acknowledgment in order to ensure that it has not already been picked up.
-`IJobPeekNextService` and `MongoJobPeekNextService` allows you to peek at the queue using criteria provided in `PeekNextOptions` once you have peeked you can chose to apply a [JobAcknowledgment][JOB_ACKNOWLEDGMENT] a [Job][JOB] and then do the work.
+`IJobPeekNextService` and `MongoJobPeekNextService` allows you to peek at the queue using criteria provided in `PeekNextOptions` once you have peeked you can chose to apply a [JobAcknowledgment][JOB_ACKNOWLEDGMENT] a [Job] and then do the work.
 
 #### PeekNextOptions
 An object that holds the query parameters.
@@ -47,7 +47,7 @@ An object that holds the query parameters.
 
 ### Acknowledge
 If you have seen a job that you want to start working, you can post an acknowledgment which will return true if still available, or false if the job is already acknowledged.
-`IJobAcknowledgmentService` and `MongoJobAcknowledgmentService` allows you to apply a [JobAcknowledgment][JOB_ACKNOWLEDGMENT] to a [Job][JOB] and returns an `AcknowledgmentResult`.
+`IJobAcknowledgmentService` and `MongoJobAcknowledgmentService` allows you to apply a [JobAcknowledgment][JOB_ACKNOWLEDGMENT] to a [Job] and returns an `AcknowledgmentResult`.
 
 #### AcknowledgmentResult
 The result of trying to acknowledge a job.
@@ -55,11 +55,11 @@ The result of trying to acknowledge a job.
 
 ### Report
 You can update the job with reports about the progress.
-`IJobReportService` and `MongoJobReportService` allow you to add as many [JobReport][JOB_REPORT] to a [Job][JOB] as makes sense for your use-case.
+`IJobReportService` and `MongoJobReportService` allow you to add as many [JobReport][JOB_REPORT] to a [Job] as makes sense for your use-case.
 
 ### Complete
 One you have completed a job you can call this to report a final result.
-`IJobCompletionService` and `MongoJobCompletionService` allows you to add [JobResult][JOB_RESULT] to a [Job][JOB].
+`IJobCompletionService` and `MongoJobCompletionService` allows you to add [JobResult][JOB_RESULT] to a [Job].
 
 ## Types
 Types are provided for static typing in _C#_, and serialize to BSON and JSON.
@@ -127,7 +127,7 @@ Getting queues to only be available to certain entity/pass combos.
 
 [JOB_RESULT]: MonJobs/JobResult.cs
 [JOB_ID]: MonJobs/JobId.cs
-[JOB]: MonJobs/Job.cs
+[Job]: MonJobs/Job.cs
 [QUEUE_ID]: MonJobs/QueueId.cs
 [JOB_ACKNOWLEDGMENT]: MonJobs/JobAcknowledgment.cs
 [JOB_ATTRIBUTES]: MonJobs/JobAttributes.cs
