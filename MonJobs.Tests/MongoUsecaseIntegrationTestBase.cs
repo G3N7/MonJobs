@@ -51,8 +51,8 @@ namespace MonJobs.Tests
                         new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage3 } });
 
                 // Send Result
-                var completionSerivce = new MongoJobCompletionService(database);
-                await completionSerivce.Complete(exampleQueueName, job.Id, new JobResult { { "Result", "Success" } });
+                var completionService = new MongoJobCompletionService(database);
+                await completionService.Complete(exampleQueueName, job.Id, new JobResult { { "Result", "Success" } });
 
                 // Finish Job
                 var finishedJobFromDb =
@@ -108,8 +108,8 @@ namespace MonJobs.Tests
                     new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage3 } });
 
             // Send Result
-            var completionSerivce = new MongoJobCompletionService(database);
-            await completionSerivce.Complete(exampleQueueName, nextJob.Id, new JobResult { { "Result", "Success" } });
+            var completionService = new MongoJobCompletionService(database);
+            await completionService.Complete(exampleQueueName, nextJob.Id, new JobResult { { "Result", "Success" } });
 
             // Finish Job
             var finishedJobFromDb =
