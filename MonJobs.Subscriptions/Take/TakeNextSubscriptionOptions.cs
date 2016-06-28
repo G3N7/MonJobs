@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using MonJobs.Take;
+﻿using MonJobs.Take;
 
 namespace MonJobs.Subscriptions.Take
 {

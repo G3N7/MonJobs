@@ -7,6 +7,6 @@ namespace MonJobs.Subscriptions.Peek
     public interface IPeekNextSubscriber
     {
         // doc: IPeekNextSubscriber
-        Task Subscribe(QueueId queue, Func<IEnumerable<Job>, Task> whatToDo, PeekNextSubscriptionOptions options);
+        Task Subscribe(Func<IEnumerable<Job>, Task> whatToDo, PeekNextSubscriptionOptions options);
     }
 }

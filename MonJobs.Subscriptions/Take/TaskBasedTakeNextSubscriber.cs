@@ -13,7 +13,7 @@ namespace MonJobs.Subscriptions.Take
             _jobTakeNextService = jobTakeNextService;
         }
 
-        public Task Subscribe(QueueId queue, Func<Job, Task> whatToDo, TakeNextSubscriptionOptions options)
+        public Task Subscribe(Func<Job, Task> whatToDo, TakeNextSubscriptionOptions options)
         {
             return Subscribe(async () =>
             {

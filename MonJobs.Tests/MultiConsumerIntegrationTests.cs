@@ -1,11 +1,15 @@
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using MonJobs.Peek;
+using MonJobs.Subscriptions.Peek;
+using MonJobs.Subscriptions.Take;
 using MonJobs.Take;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -14,10 +18,13 @@ namespace MonJobs.Tests
 {
     internal class MultiConsumerIntegrationTests : MongoUsecaseIntegrationTestBase
     {
+        private static readonly TimeSpan MaxTestTime = TimeSpan.FromSeconds(10);
+
         [TestCase(10, 2)]
         [TestCase(100, 5)]
         public async Task ProcessJobsForMyDataCenter_XInQueueWithYConsumers_PeekThenAckApproach(int numberOfJobsToQueue, int numberOfConsumers)
         {
+            var testStartTime = DateTime.Now;
             var exampleQueueName = QueueId.Parse("ExampleQueue");
 
             await RunInMongoLand(async database =>
@@ -44,43 +51,37 @@ namespace MonJobs.Tests
                 stopwatch.Stop();
                 Console.WriteLine($"Creating {numberOfJobsToQueue} jobs took: {stopwatch.ElapsedMilliseconds} ms");
 
-                var finishedJobs = new List<Job>();
+                var finishedJobs = new ConcurrentBag<Job>();
 
-                var tokenSource = new CancellationTokenSource();
-                var token = tokenSource.Token;
+                var cancellationSource = new CancellationTokenSource();
+                cancellationSource.CancelAfter(MaxTestTime);
+                var cancellationToken = cancellationSource.Token;
 
                 stopwatch.Reset();
                 stopwatch.Start();
 
+
                 for (int i = 0; i < numberOfConsumers; i++)
                 {
-                    try
-                    {
+                    var myDatacenter = new JobAttributes { { "DataCenter", "CAL01" } };
 
-                        var myDatacenter = new JobAttributes { { "DataCenter", "CAL01" } };
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                        ContinuouslyTryProcessOneJobUsingPeekThanAck(database, exampleQueueName, finishedJobs, myDatacenter, token);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                    }
-                    catch (AssertionException)
-                    {
-                        throw;
-                    }
-                    catch (Exception)
-                    {
-                        // ignored
-                    }
+                    await SetupPeekThenAckWorkerWithSubscription(
+                            database,
+                            exampleQueueName,
+                            finishedJobs,
+                            myDatacenter,
+                            cancellationToken);
                 }
 
                 do
                 {
                     Thread.Sleep(100);
-                } while (finishedJobs.Count < jobsInQueue.Count);
+                } while (finishedJobs.Count < jobsInQueue.Count && DateTime.Now < testStartTime.Add(MaxTestTime));
 
                 stopwatch.Stop();
-                Console.WriteLine($"{numberOfConsumers} consumers processed {numberOfJobsToQueue} jobs in: {stopwatch.ElapsedMilliseconds} ms");
+                Console.WriteLine($"{numberOfConsumers} consumers processed {finishedJobs.Count} jobs in: {stopwatch.ElapsedMilliseconds} ms");
 
-                tokenSource.Cancel();
+                cancellationSource.Cancel();
 
                 var finishedJobIds = finishedJobs.Select(x => x.Id).ToList();
                 foreach (var jobId in jobsInQueue)
@@ -94,6 +95,7 @@ namespace MonJobs.Tests
         [TestCase(100, 5)]
         public async Task ProcessJobsForMyDataCenter_XInQueueWithYConsumers_TakeNextApproach(int numberOfJobsToQueue, int numberOfConsumers)
         {
+            var testStartTime = DateTime.Now;
             var exampleQueueName = QueueId.Parse("ExampleQueue");
 
             await RunInMongoLand(async database =>
@@ -119,43 +121,32 @@ namespace MonJobs.Tests
                 stopwatch.Stop();
                 Console.WriteLine($"Creating {numberOfJobsToQueue} jobs took: {stopwatch.ElapsedMilliseconds} ms");
 
-                var finishedJobs = new List<Job>();
+                var finishedJobs = new ConcurrentBag<Job>();
 
-                var tokenSource = new CancellationTokenSource();
-                var token = tokenSource.Token;
+                var cancellationSource = new CancellationTokenSource();
+                cancellationSource.CancelAfter(MaxTestTime);
+                var cancellationToken = cancellationSource.Token;
 
                 stopwatch.Reset();
                 stopwatch.Start();
 
                 for (int i = 0; i < numberOfConsumers; i++)
                 {
-                    try
-                    {
-                        var myDataCenter = new JobAttributes { { "DataCenter", "CAL01" } };
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                        ContinuouslyTryProcessOneJobUsingTakeNext(database, exampleQueueName, finishedJobs, myDataCenter, token);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                    }
-                    catch (AssertionException)
-                    {
-                        throw;
-                    }
-                    catch (Exception)
-                    {
-                        // ignored
-                    }
+                    var myDataCenter = new JobAttributes { { "DataCenter", "CAL01" } };
+
+                    await SetupTakeNextWorkerWithSubscription(database, exampleQueueName, finishedJobs, myDataCenter, cancellationToken);
                 }
 
                 do
                 {
                     Thread.Sleep(100);
-                } while (finishedJobs.Count < jobsInQueue.Count);
+                } while (finishedJobs.Count < jobsInQueue.Count && DateTime.Now < testStartTime.Add(MaxTestTime));
 
                 stopwatch.Stop();
                 Console.WriteLine($"{numberOfConsumers} consumers processed {numberOfJobsToQueue} jobs in: {stopwatch.ElapsedMilliseconds} ms");
 
-                tokenSource.Cancel();
+                cancellationSource.Cancel();
 
                 var finishedJobIds = finishedJobs.Select(x => x.Id).ToList();
                 foreach (var jobId in jobsInQueue)
@@ -174,14 +165,12 @@ namespace MonJobs.Tests
             {
 
                 var cancellationSource = new CancellationTokenSource();
-
+                cancellationSource.CancelAfter(MaxTestTime);
                 var cancellationToken = cancellationSource.Token;
 
-                var finishedJobs = new List<Job>();
+                var finishedJobs = new ConcurrentBag<Job>();
 
-#pragma warning disable 4014
-                ContinuouslyTryProcessOneJobUsingTakeNext(database, exampleQueueName, finishedJobs, new JobAttributes { { "Name", "DeployServer" }, }, cancellationToken);
-#pragma warning restore 4014
+                await SetupTakeNextWorkerWithSubscription(database, exampleQueueName, finishedJobs, new JobAttributes { { "Name", "DeployServer" }, }, cancellationToken);
 
                 // Create a rolling deploy relevant for my datacenter
                 var creationService = new MongoJobCreationService(database);
@@ -192,7 +181,7 @@ namespace MonJobs.Tests
                 });
 
                 // Take Next available job
-                var takeNextService = new MongoJobTakeNextService(database);
+                var takeNextSubscriber = new TaskBasedTakeNextSubscriber(new MongoJobTakeNextService(database));
                 var standardAck = new JobAcknowledgment
                 {
                     {"RunnerId", Guid.NewGuid().ToString("N")}
@@ -203,80 +192,185 @@ namespace MonJobs.Tests
                     HasAttributes = new JobAttributes { { "Environment", "Prod" } },
                     Acknowledgment = standardAck
                 };
-                var rollingDeployJob = await takeNextService.TakeFor(peekQuery);
-                if (rollingDeployJob == null) Assert.Fail();
+                await takeNextSubscriber.Subscribe(async rollingDeployJob =>
+                {
+                    // Send Reports
+                    var reportService = new MongoJobReportService(database);
+                    await
+                        reportService.AddReport(exampleQueueName, rollingDeployJob.Id,
+                            new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", "Starting Rolling Deploy" } });
+
+                    var queryService = new MongoJobQueryService(database);
+
+                    IEnumerable servers = new[] { "PROD2", "PROD1" };
+                    foreach (var server in servers)
+                    {
+                        var deployServer = new JobAttributes
+                        {
+                            { "Name", "DeployServer" },
+                            { "Server", server }
+                        };
+
+                        await reportService.AddReport(exampleQueueName, rollingDeployJob.Id,
+                            new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", $"Requesting Deploy on server {server}" } });
+                        var deployServerJobId = await creationService.Create(exampleQueueName, deployServer);
+
+                        Job hasResult;
+                        do
+                        {
+                            // replace with detail service
+                            hasResult = (await queryService.QueryFor(new JobQuery { QueueId = exampleQueueName, JobIds = new[] { deployServerJobId }, HasResult = true })).FirstOrDefault();
+                            Thread.Sleep(500);
+                        } while (hasResult == null);
+
+                        await reportService.AddReport(exampleQueueName, rollingDeployJob.Id,
+                            new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", $"Deploy on server {server} Completed, {JsonConvert.SerializeObject(hasResult.Result)}" } });
+                        // inspect result
+                    }
+
+                    // Send Result
+                    var completionService = new MongoJobCompletionService(database);
+                    await completionService.Complete(exampleQueueName, rollingDeployJob.Id, new JobResult { { "Result", "Success" } });
+
+                    var finalizedRollingDeployJob = await queryService.QueryFor(new JobQuery { QueueId = exampleQueueName, JobIds = new[] { rollingDeployJob.Id } });
+
+                    cancellationSource.Cancel();
+
+                    Console.WriteLine($"Finalized Rolling Deploy Job: {JsonConvert.SerializeObject(finalizedRollingDeployJob)}");
+
+                    Assert.That(finalizedRollingDeployJob.First().Result["Result"], Is.EqualTo("Success"));
+                }, new TakeNextSubscriptionOptions
+                {
+                    TakeNextOptions = peekQuery,
+                    Token = cancellationToken,
+                });
+            });
+        }
+
+        private static Task SetupTakeNextWorkerWithSubscription(IMongoDatabase database, QueueId queueName, ConcurrentBag<Job> finishedJobs, JobAttributes attributesThatShouldWork, CancellationToken cancellationToken)
+        {
+            var standardAck = new JobAcknowledgment
+            {
+                {"RunnerId", Guid.NewGuid().ToString("N")}
+            };
+
+            var options = new TakeNextSubscriptionOptions
+            {
+                Token = cancellationToken,
+                TakeNextOptions = new TakeNextOptions
+                {
+                    QueueId = queueName,
+                    Acknowledgment = standardAck,
+                    HasAttributes = attributesThatShouldWork
+                }
+            };
+
+            var subscriber = new TaskBasedTakeNextSubscriber(new MongoJobTakeNextService(database));
+            return subscriber.Subscribe(async nextJob =>
+            {
+                var exampleReportMessage1 = "FooBar";
+                var exampleReportMessage2 = "WizBang";
+                var exampleReportMessage3 = "PowPop";
 
                 // Send Reports
                 var reportService = new MongoJobReportService(database);
                 await
-                    reportService.AddReport(exampleQueueName, rollingDeployJob.Id,
-                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", "Starting Rolling Deploy" } });
-
-                var queryService = new MongoJobQueryService(database);
-
-                IEnumerable servers = new[] { "PROD2", "PROD1" };
-                foreach (var server in servers)
-                {
-                    var deployServer = new JobAttributes
-                    {
-                        { "Name", "DeployServer" },
-                        { "Server", server }
-                    };
-
-                    await reportService.AddReport(exampleQueueName, rollingDeployJob.Id,
-                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", $"Requesting Deploy on server {server}" } });
-                    var deployServerJobId = await creationService.Create(exampleQueueName, deployServer);
-
-                    Job hasResult;
-                    do
-                    {
-                        // replace with detail service
-                        hasResult = (await queryService.QueryFor(new JobQuery { QueueId = exampleQueueName, JobIds = new[] { deployServerJobId }, HasResult = true })).FirstOrDefault();
-                        Thread.Sleep(500);
-                    } while (hasResult == null);
-
-                    await reportService.AddReport(exampleQueueName, rollingDeployJob.Id,
-                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", $"Deploy on server {server} Completed, {JsonConvert.SerializeObject(hasResult.Result)}" } });
-                    // inspect result
-                }
+                    reportService.AddReport(queueName, nextJob.Id,
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage1 } });
+                await
+                    reportService.AddReport(queueName, nextJob.Id,
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage2 } });
+                await
+                    reportService.AddReport(queueName, nextJob.Id,
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage3 } });
 
                 // Send Result
                 var completionService = new MongoJobCompletionService(database);
-                await completionService.Complete(exampleQueueName, rollingDeployJob.Id, new JobResult { { "Result", "Success" } });
+                await completionService.Complete(queueName, nextJob.Id, new JobResult { { "Result", "Success" } });
 
-                var finalizedRollingDeployJob = await queryService.QueryFor(new JobQuery { QueueId = exampleQueueName, JobIds = new[] { rollingDeployJob.Id } });
+                // Finish Job
+                var finishedJobFromDb =
+                    await database.GetJobCollection()
+                    .Find(Builders<Job>.Filter.Eq(x => x.Id, nextJob.Id))
+                    .FirstAsync(cancellationToken);
 
-                cancellationSource.Cancel();
+                Assert.That(finishedJobFromDb, Is.Not.Null);
+                Assert.That(finishedJobFromDb.Acknowledgment, Is.Not.Null);
 
-                Console.WriteLine($"Finalized Rolling Deploy Job: {JsonConvert.SerializeObject(finalizedRollingDeployJob)}");
+                Assert.That(finishedJobFromDb.Reports, Has.Length.EqualTo(3));
+                var valuesOfReports = finishedJobFromDb.Reports.SelectMany(x => x.Values).ToList();
+                Assert.That(valuesOfReports, Contains.Item(exampleReportMessage1));
+                Assert.That(valuesOfReports, Contains.Item(exampleReportMessage2));
+                Assert.That(valuesOfReports, Contains.Item(exampleReportMessage3));
 
-                Assert.That(finalizedRollingDeployJob.First().Result["Result"], Is.EqualTo("Success"));
-            });
+                Assert.That(finishedJobFromDb.Result, Is.Not.Null);
+                finishedJobs.Add(finishedJobFromDb);
+            }, options);
         }
 
-
-        private static Task ContinuouslyTryProcessOneJobUsingPeekThanAck(IMongoDatabase database, QueueId queueName, List<Job> finishedJobs, JobAttributes attributesThatShouldWork, CancellationToken cancellationToken)
+        private static Task SetupPeekThenAckWorkerWithSubscription(IMongoDatabase database, QueueId queueName, ConcurrentBag<Job> finishedJobs, JobAttributes attributesThatShouldWork, CancellationToken cancellationToken)
         {
-            return Task.Factory.StartNew(async () =>
+            var standardAck = new JobAcknowledgment
             {
-                var result = await TryProcessOneJobUsingPeekThanAck(database, queueName, attributesThatShouldWork);
+                {"RunnerId", Guid.NewGuid().ToString("N")}
+            };
 
-                if (result != null) finishedJobs.Add(result);
-
-                return ContinuouslyTryProcessOneJobUsingPeekThanAck(database, queueName, finishedJobs, attributesThatShouldWork, cancellationToken);
-            }, cancellationToken);
-        }
-
-        private static Task ContinuouslyTryProcessOneJobUsingTakeNext(IMongoDatabase database, QueueId queueName, List<Job> finishedJobs, JobAttributes attributesThatShouldWork, CancellationToken cancellationToken)
-        {
-            return Task.Factory.StartNew(async () =>
+            var options = new PeekNextSubscriptionOptions()
             {
-                var result = await TryProcessOneJobUsingPeekThanAck(database, queueName, attributesThatShouldWork);
+                Token = cancellationToken,
+                PeekNextOptions = new PeekNextOptions
+                {
+                    QueueId = queueName,
+                    HasAttributes = attributesThatShouldWork
+                }
+            };
 
-                if (result != null) finishedJobs.Add(result);
+            var subscriber = new TaskBasedPeekNextSubscriber(new MongoJobPeekNextService(new MongoJobQueryService(database)));
+            return subscriber.Subscribe(async nextJobs =>
+            {
+                var nextJob = nextJobs.First();
+                // Acknowledge the job
+                var acknowledgmentService = new MongoJobAcknowledgmentService(database);
 
-                return ContinuouslyTryProcessOneJobUsingTakeNext(database, queueName, finishedJobs, attributesThatShouldWork, cancellationToken);
-            }, cancellationToken);
+                var ackResult = await acknowledgmentService.Ack(queueName, nextJob.Id, standardAck);
+                if (!ackResult.Success) return;
+
+                var exampleReportMessage1 = "FooBar";
+                var exampleReportMessage2 = "WizBang";
+                var exampleReportMessage3 = "PowPop";
+
+                // Send Reports
+                var reportService = new MongoJobReportService(database);
+                await
+                    reportService.AddReport(queueName, nextJob.Id,
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage1 } });
+                await
+                    reportService.AddReport(queueName, nextJob.Id,
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage2 } });
+                await
+                    reportService.AddReport(queueName, nextJob.Id,
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage3 } });
+
+                // Send Result
+                var completionService = new MongoJobCompletionService(database);
+                await completionService.Complete(queueName, nextJob.Id, new JobResult { { "Result", "Success" } });
+
+                // Finish Job
+                var finishedJobFromDb =
+                    await database.GetJobCollection().Find(Builders<Job>.Filter.Eq(x => x.Id, nextJob.Id)).FirstAsync(cancellationToken);
+
+                Assert.That(finishedJobFromDb, Is.Not.Null);
+                Assert.That(finishedJobFromDb.Acknowledgment, Is.Not.Null);
+
+                Assert.That(finishedJobFromDb.Reports, Has.Length.EqualTo(3));
+                var valuesOfReports = finishedJobFromDb.Reports.SelectMany(x => x.Values).ToList();
+                Assert.That(valuesOfReports, Contains.Item(exampleReportMessage1));
+                Assert.That(valuesOfReports, Contains.Item(exampleReportMessage2));
+                Assert.That(valuesOfReports, Contains.Item(exampleReportMessage3));
+
+                Assert.That(finishedJobFromDb.Result, Is.Not.Null);
+                finishedJobs.Add(finishedJobFromDb);
+            }, options);
         }
     }
 }

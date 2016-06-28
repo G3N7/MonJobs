@@ -6,6 +6,6 @@ namespace MonJobs.Subscriptions.Take
     public interface ITakeNextSubscriber
     {
         // doc: ITakeNextSubscriber
-        Task Subscribe(QueueId queue, Func<Job, Task> whatToDo, TakeNextSubscriptionOptions options);
+        Task Subscribe(Func<Job, Task> whatToDo, TakeNextSubscriptionOptions options);
     }
 }

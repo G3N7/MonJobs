@@ -18,7 +18,7 @@ namespace MonJobs.Subscriptions.Peek
             _jobPeekNextService = jobPeekNextService;
         }
 
-        public Task Subscribe(QueueId queue, Func<IEnumerable<Job>, Task> whatToDo, PeekNextSubscriptionOptions options)
+        public Task Subscribe(Func<IEnumerable<Job>, Task> whatToDo, PeekNextSubscriptionOptions options)
         {
             return Subscribe(async () =>
             {
