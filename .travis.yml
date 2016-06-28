@@ -6,15 +6,20 @@ services:
   
 env:
   - MONGO_DB_CONNECTION_STRING=mongodb://127.0.0.1
-  
+
+before_install:
+  - mkdir -p .nuget
+  - wget -O .nuget/nuget.exe "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+  - mono .nuget/nuget.exe
+
 install:
-  - nuget restore MonJobs.sln
-  - nuget install NUnit.Runners -Version 3.2.1 -OutputDirectory testrunner
+  - mono .nuget/nuget.exe restore MonJobs.sln
+  - mono .nuget/nuget.exe install NUnit.Runners -Version 3.2.1 -OutputDirectory testrunner
   - bash build/patch_assembly_file_with_build_id.sh MonJobs/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
   - bash build/patch_assembly_file_with_build_id.sh MonJobs.Subscriptions/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
 
 script:
   - xbuild /p:Configuration=Release /p:TargetFrameworkVersion="v4.5" MonJobs.sln
   - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./MonJobs.Tests/bin/Release/MonJobs.Tests.dll
-  - nuget pack ./MonJobs/MonJobs.csproj
-  - nuget pack ./MonJobs.Subscriptions/MonJobs.Subscriptions.csproj
+  - mono .nuget/nuget.exe pack ./MonJobs/MonJobs.csproj
+  - mono .nuget/nuget.exe pack ./MonJobs.Subscriptions/MonJobs.Subscriptions.csproj
