@@ -17,9 +17,9 @@ New Jobs can be viewed without effecting the queue by peeking at the next set of
 #### PeekNextOptions
 An object that holds the query parameters.
 
-* *QueueId*: [QueueId]
-* *HasAttributes*: [JobAttributes] _(Optional)_
-* *Limit*: `int?` _(Optional)_
+* **QueueId**: [QueueId]
+* **HasAttributes**: [JobAttributes] _(Optional)_
+* **Limit**: `int?` _(Optional)_
 
 ### TakeNext
 If you want to take the next job matching a given attribute query, this action will acknowledge the next available job and return its data.
@@ -28,9 +28,9 @@ If you want to take the next job matching a given attribute query, this action w
 #### TakeNextOptions
 An object that holds the options for the take feature.
 
-* *QueueId*: [QueueId]
-* *Acknowledgment*: [JobAcknowledgment]
-* *HasAttributes*: [JobAttributes] _(Optional)_
+* **QueueId**: [QueueId]
+* **Acknowledgment**: [JobAcknowledgment]
+* **HasAttributes**: [JobAttributes] _(Optional)_
 
 ### Query
 Allows you to query the jobs of a queue by the criteria of a job query.
@@ -39,11 +39,11 @@ Allows you to query the jobs of a queue by the criteria of a job query.
 #### JobQuery
 An object that holds the query parameters.
 
-* *QueueId*: [QueueId] _(Optional)_
-* *HasAttributes*: [JobAttributes] _(Optional)_
-* *Limit*: `int?` _(Optional)_
-* *HasBeenAcknowledged*: `bool?` _(Optional)_
-* *HasResult*: `bool?` _(Optional)_
+* **QueueId**: [QueueId] _(Optional)_
+* **HasAttributes**: [JobAttributes] _(Optional)_
+* **Limit**: `int?` _(Optional)_
+* **HasBeenAcknowledged**: `bool?` _(Optional)_
+* **HasResult**: `bool?` _(Optional)_
 
 ### Acknowledge
 If you have seen a job that you want to start working, you can post an acknowledgment which will return true if still available, or false if the job is already acknowledged.
@@ -51,7 +51,7 @@ If you have seen a job that you want to start working, you can post an acknowled
 
 #### AcknowledgmentResult
 The result of trying to acknowledge a job.
-* *Success*: `bool`
+* **Success**: `bool`
 
 ### Report
 You can update the job with reports about the progress.
@@ -66,12 +66,12 @@ Types are provided for static typing in _C#_, and serialize to BSON and JSON.
 
 ### Job
 The record for the job as a whole, it consists of:
-* *Id*: [JobId]
-* *QueueId*: [QueueId]
-* *Attributes*: [JobAttributes]
-* *Acknowledgment*: [JobAcknowledgment]
-* *Reports*: [JobReport[]][JobReport]
-* *Result*: [JobResult]
+* **Id**: [JobId]
+* **QueueId**: [QueueId]
+* **Attributes**: [JobAttributes]
+* **Acknowledgment**: [JobAcknowledgment]
+* **Reports**: [JobReport[]][JobReport]
+* **Result**: [JobResult]
 
 ### JobId
 The unique id for a given job.
@@ -100,6 +100,7 @@ A record of the final result.
 
 ### QueueId
 An identity that provides the ability to segment the queue, this can be leveraged as an Authorization point.
+
 * BSON Representation - [BsonString][BSON_STRING]
 * JSON Representation - [string][JSON_STRING]
 
