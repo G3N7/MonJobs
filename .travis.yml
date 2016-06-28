@@ -16,6 +16,6 @@ install:
 script:
   - xbuild /p:Configuration=Release /p:TargetFrameworkVersion="v4.5" MonJobs.sln
   - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./MonJobs.Tests/bin/Release/MonJobs.Tests.dll
-  - nuget pack help
+  - nuget pack -Help
   #- nuget pack MonJobs/MonJobs.csproj
   #- nuget pack MonJobs.Subscriptions/MonJobs.Subscriptions.csproj
