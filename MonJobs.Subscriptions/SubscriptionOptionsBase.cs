@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace MonJobs.Subscriptions
 {
@@ -8,5 +9,6 @@ namespace MonJobs.Subscriptions
     {
         public TimeSpan? PollingInterval { get; set; }
         public CancellationToken? Token { get; set; }
+        public Func<Exception, Task> OnException { get; set; }
     }
 }

@@ -52,15 +52,15 @@ namespace MonJobs.Tests
                 stopwatch.Reset();
                 stopwatch.Start();
 
-                var consumerThreads = new List<Task>();
                 for (int i = 0; i < numberOfConsumers; i++)
                 {
                     try
                     {
 
                         var myDatacenter = new JobAttributes { { "DataCenter", "CAL01" } };
-                        consumerThreads.Add(ContinuouslyTryProcessOneJobUsingPeekThanAck(database, exampleQueueName,
-                            finishedJobs, myDatacenter, token));
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                        ContinuouslyTryProcessOneJobUsingPeekThanAck(database, exampleQueueName, finishedJobs, myDatacenter, token);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     }
                     catch (AssertionException)
                     {
@@ -127,15 +127,15 @@ namespace MonJobs.Tests
                 stopwatch.Reset();
                 stopwatch.Start();
 
-                var consumerThreads = new List<Task>();
                 for (int i = 0; i < numberOfConsumers; i++)
                 {
                     try
                     {
                         var myDataCenter = new JobAttributes { { "DataCenter", "CAL01" } };
 
-                        consumerThreads.Add(ContinuouslyTryProcessOneJobUsingTakeNext(database, exampleQueueName,
-                            finishedJobs, myDataCenter, token));
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                        ContinuouslyTryProcessOneJobUsingTakeNext(database, exampleQueueName, finishedJobs, myDataCenter, token);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     }
                     catch (AssertionException)
                     {
@@ -164,9 +164,9 @@ namespace MonJobs.Tests
                 }
             });
         }
-        
+
         [Test]
-        public async Task RollingDeploy_ModelSubJobsOrchistratedByParent()
+        public async Task RollingDeploy_ModelSubJobsOrchestratedByParent()
         {
             var exampleQueueName = QueueId.Parse("Wind");
 
@@ -185,7 +185,7 @@ namespace MonJobs.Tests
 
                 // Create a rolling deploy relevant for my datacenter
                 var creationService = new MongoJobCreationService(database);
-                var rollingDeploy = await creationService.Create(exampleQueueName, new JobAttributes
+                await creationService.Create(exampleQueueName, new JobAttributes
                 {
                     { "Name", "RollingDeploy" },
                     { "Environment", "Prod" }
@@ -212,7 +212,7 @@ namespace MonJobs.Tests
                     reportService.AddReport(exampleQueueName, rollingDeployJob.Id,
                         new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", "Starting Rolling Deploy" } });
 
-                var queryService = new MongoJobQuerySerivce(database);
+                var queryService = new MongoJobQueryService(database);
 
                 IEnumerable servers = new[] { "PROD2", "PROD1" };
                 foreach (var server in servers)
@@ -231,7 +231,7 @@ namespace MonJobs.Tests
                     do
                     {
                         // replace with detail service
-                        hasResult = (await queryService.QueryFor(new JobQuery { QueueId = exampleQueueName, JobIds = new[] { deployServerJobId }, HasResult = true})).FirstOrDefault();
+                        hasResult = (await queryService.QueryFor(new JobQuery { QueueId = exampleQueueName, JobIds = new[] { deployServerJobId }, HasResult = true })).FirstOrDefault();
                         Thread.Sleep(500);
                     } while (hasResult == null);
 
@@ -241,8 +241,8 @@ namespace MonJobs.Tests
                 }
 
                 // Send Result
-                var completionSerivce = new MongoJobCompletionService(database);
-                await completionSerivce.Complete(exampleQueueName, rollingDeployJob.Id, new JobResult { { "Result", "Success" } });
+                var completionService = new MongoJobCompletionService(database);
+                await completionService.Complete(exampleQueueName, rollingDeployJob.Id, new JobResult { { "Result", "Success" } });
 
                 var finalizedRollingDeployJob = await queryService.QueryFor(new JobQuery { QueueId = exampleQueueName, JobIds = new[] { rollingDeployJob.Id } });
 
@@ -257,9 +257,9 @@ namespace MonJobs.Tests
 
         private static Task ContinuouslyTryProcessOneJobUsingPeekThanAck(IMongoDatabase database, QueueId queueName, List<Job> finishedJobs, JobAttributes attributesThatShouldWork, CancellationToken cancellationToken)
         {
-            return Task.Factory.StartNew(() =>
+            return Task.Factory.StartNew(async () =>
             {
-                var result = TryProcessOneJobUsingPeekThanAck(database, queueName, attributesThatShouldWork).GetAwaiter().GetResult();
+                var result = await TryProcessOneJobUsingPeekThanAck(database, queueName, attributesThatShouldWork);
 
                 if (result != null) finishedJobs.Add(result);
 
@@ -269,9 +269,9 @@ namespace MonJobs.Tests
 
         private static Task ContinuouslyTryProcessOneJobUsingTakeNext(IMongoDatabase database, QueueId queueName, List<Job> finishedJobs, JobAttributes attributesThatShouldWork, CancellationToken cancellationToken)
         {
-            return Task.Factory.StartNew(() =>
+            return Task.Factory.StartNew(async () =>
             {
-                var result = TryProcessOneJobUsingPeekThanAck(database, queueName, attributesThatShouldWork).GetAwaiter().GetResult();
+                var result = await TryProcessOneJobUsingPeekThanAck(database, queueName, attributesThatShouldWork);
 
                 if (result != null) finishedJobs.Add(result);
 
