@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace MonJobs.Tests
 {
-    class MongoJobReportServiceTests : MongoTestBase
+    internal class MongoJobReportServiceTests : MongoTestBase
     {
         [Test]
         public async Task AddReport_AcknowledgedJob_AddsReport()

@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace MonJobs.Tests
 {
-    public class TaskBasedTakeNextSubscriberTests
+    internal class TaskBasedTakeNextSubscriberTests
     {
         [Test]
         public async Task Subscribe_WillCheckMoreThanMoreThanOnce()

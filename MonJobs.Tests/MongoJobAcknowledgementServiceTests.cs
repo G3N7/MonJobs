@@ -5,10 +5,10 @@ using NUnit.Framework;
 
 namespace MonJobs.Tests
 {
-    public class MongoJobAcknowledgmentServiceTests : MongoTestBase
+    internal class MongoJobAcknowledgmentServiceTests : MongoTestBase
     {
         [Test]
-        public async Task Ack_ValidInformation_StampsAcknowledgmentReturnsPostiveResult()
+        public async Task Ack_ValidInformation_StampsAcknowledgmentReturnsPositiveResult()
         {
             var exampleQueueName = QueueId.Parse("ExampleQueue");
 

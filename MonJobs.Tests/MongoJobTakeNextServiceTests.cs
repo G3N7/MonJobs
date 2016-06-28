@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace MonJobs.Tests
 {
-    public class MongoJobTakeNextServiceTests : MongoTestBase
+    internal class MongoJobTakeNextServiceTests : MongoTestBase
     {
         [Test]
         public async Task TakeFor_NewJobs_ReturnsAvailableJobAndAcknowledges()

@@ -7,6 +7,7 @@ using MongoDB.Bson;
 
 namespace MonJobs
 {
+    // doc: JobId
     [ImmutableObject(true)]
     public sealed class JobId : IComparable<JobId>, IConvertible<ObjectId>, IConvertible<string>
     {

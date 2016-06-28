@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace MonJobs.Tests
 {
-    public class MongoJobQueryServiceTests : MongoTestBase
+    internal class MongoJobQueryServiceTests : MongoTestBase
     {
         [Test]
         public async Task QueryFor_QueryByQueueIdOnly_YieldsAllResults()
@@ -36,7 +36,7 @@ namespace MonJobs.Tests
 
                 await jobs.InsertManyAsync(existingJobs);
 
-                var sut = new MongoJobQuerySerivce(database);
+                var sut = new MongoJobQueryService(database);
 
                 var results = (await sut.QueryFor(exampleQuery))?.ToList();
 
@@ -97,7 +97,7 @@ namespace MonJobs.Tests
 
                 await jobs.InsertManyAsync(existingJobs);
 
-                var sut = new MongoJobQuerySerivce(database);
+                var sut = new MongoJobQueryService(database);
 
                 var results = (await sut.QueryFor(exampleQuery))?.ToList();
 
@@ -164,7 +164,7 @@ namespace MonJobs.Tests
 
                 await jobs.InsertManyAsync(existingJobs);
 
-                var sut = new MongoJobQuerySerivce(database);
+                var sut = new MongoJobQueryService(database);
 
                 var results = (await sut.QueryFor(exampleQuery))?.ToList();
 
@@ -208,7 +208,7 @@ namespace MonJobs.Tests
 
                 await jobs.InsertManyAsync(existingJobs);
 
-                var sut = new MongoJobQuerySerivce(database);
+                var sut = new MongoJobQueryService(database);
 
                 var results = (await sut.QueryFor(exampleQuery))?.ToList();
 
@@ -260,7 +260,7 @@ namespace MonJobs.Tests
 
                 await jobs.InsertManyAsync(existingJobs);
 
-                var sut = new MongoJobQuerySerivce(database);
+                var sut = new MongoJobQueryService(database);
 
                 var results = (await sut.QueryFor(exampleQuery))?.ToList();
 
@@ -314,7 +314,7 @@ namespace MonJobs.Tests
 
                 await jobs.InsertManyAsync(existingJobs);
 
-                var sut = new MongoJobQuerySerivce(database);
+                var sut = new MongoJobQueryService(database);
 
                 var results = (await sut.QueryFor(exampleQuery))?.ToList();
 
@@ -372,7 +372,7 @@ namespace MonJobs.Tests
 
                 await jobs.InsertManyAsync(existingJobs);
 
-                var sut = new MongoJobQuerySerivce(database);
+                var sut = new MongoJobQueryService(database);
 
                 var results = (await sut.QueryFor(exampleQuery))?.ToList();
 
@@ -426,7 +426,7 @@ namespace MonJobs.Tests
 
                 await jobs.InsertManyAsync(existingJobs);
 
-                var sut = new MongoJobQuerySerivce(database);
+                var sut = new MongoJobQueryService(database);
 
                 var results = (await sut.QueryFor(exampleQuery))?.ToList();
 
@@ -477,7 +477,7 @@ namespace MonJobs.Tests
 
                 await jobs.InsertManyAsync(existingJobs);
 
-                var sut = new MongoJobQuerySerivce(database);
+                var sut = new MongoJobQueryService(database);
 
                 var results = (await sut.QueryFor(exampleQuery))?.ToList();
 
@@ -543,7 +543,7 @@ namespace MonJobs.Tests
 
                 await jobs.InsertManyAsync(existingJobs);
 
-                var sut = new MongoJobQuerySerivce(database);
+                var sut = new MongoJobQueryService(database);
 
                 var results = (await sut.QueryFor(exampleQuery))?.ToList();
 

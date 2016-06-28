@@ -1,6 +1,6 @@
 ﻿namespace MonJobs
 {
-    // mitch: documentation
+    // doc: Job
     public class Job
     {
         public JobId Id { get; set; }

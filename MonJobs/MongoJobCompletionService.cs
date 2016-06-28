@@ -3,7 +3,7 @@ using MongoDB.Driver;
 
 namespace MonJobs
 {
-    public class MongoJobCompletionService : IJobCompletionSerivce
+    public class MongoJobCompletionService : IJobCompletionService
     {
         private readonly IMongoCollection<Job> _collection;
 
@@ -14,9 +14,9 @@ namespace MonJobs
 
         public async Task Complete(QueueId queueId, JobId jobId, JobResult result)
         {
-            var matchsQueueId = Builders<Job>.Filter.Eq(x => x.QueueId, queueId);
-            var matchsJobId = Builders<Job>.Filter.Eq(x => x.Id, jobId);
-            var matchesJobIdAndQueueId = Builders<Job>.Filter.And(matchsJobId, matchsQueueId);
+            var matchesQueueId = Builders<Job>.Filter.Eq(x => x.QueueId, queueId);
+            var matchesJobId = Builders<Job>.Filter.Eq(x => x.Id, jobId);
+            var matchesJobIdAndQueueId = Builders<Job>.Filter.And(matchesJobId, matchesQueueId);
 
             var update = Builders<Job>.Update.Set(x => x.Result, result);
 

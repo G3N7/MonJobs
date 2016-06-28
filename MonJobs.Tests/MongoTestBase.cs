@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 namespace MonJobs.Tests
 {
-    public class MongoTestBase
+    internal class MongoTestBase
     {
         private static bool _hasRegistered;
 
@@ -27,7 +27,7 @@ namespace MonJobs.Tests
             }
         }
 
-        public static async Task RunInMongoLand(Func<IMongoDatabase, Task> mongoWork)
+        protected static async Task RunInMongoLand(Func<IMongoDatabase, Task> mongoWork)
         {
             var connectionString = Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION_STRING");
             if (string.IsNullOrWhiteSpace(connectionString))

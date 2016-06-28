@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace MonJobs.Tests
 {
-    public class MongoJobPeekNextServiceTests : MongoTestBase
+    internal class MongoJobPeekNextServiceTests : MongoTestBase
     {
         [Test]
         public async Task PeekFor_NewJobs_ReturnsAvailableJobs()
@@ -49,7 +49,7 @@ namespace MonJobs.Tests
 
                 await jobs.InsertManyAsync(existingJobs);
 
-                var sut = new MongoJobPeekNextService(new MongoJobQuerySerivce(database));
+                var sut = new MongoJobPeekNextService(new MongoJobQueryService(database));
 
                 var results = (await sut.PeekFor(exampleQuery))?.ToList();
 

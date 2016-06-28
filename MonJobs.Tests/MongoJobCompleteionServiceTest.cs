@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace MonJobs.Tests
 {
-    public class MongoJobCompleteionServiceTest : MongoTestBase
+    internal class MongoJobCompleteionServiceTest : MongoTestBase
     {
         [Test]
         public async Task Complete_ValidResult_Persists()

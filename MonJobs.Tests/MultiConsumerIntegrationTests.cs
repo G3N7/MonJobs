@@ -12,7 +12,7 @@ using NUnit.Framework;
 
 namespace MonJobs.Tests
 {
-    public class MultiConsumerIntegrationTests : MongoUsecaseIntegrationTestBase
+    internal class MultiConsumerIntegrationTests : MongoUsecaseIntegrationTestBase
     {
         [TestCase(10, 2)]
         [TestCase(100, 5)]

@@ -4,11 +4,11 @@ using MongoDB.Driver;
 
 namespace MonJobs
 {
-    public class MongoJobQuerySerivce : IJobQueryService
+    public class MongoJobQueryService : IJobQueryService
     {
         private readonly IMongoCollection<Job> _jobs;
 
-        public MongoJobQuerySerivce(IMongoDatabase database)
+        public MongoJobQueryService(IMongoDatabase database)
         {
             _jobs = database.GetJobCollection();
         }

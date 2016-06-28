@@ -3,7 +3,7 @@ using MongoDB.Driver;
 
 namespace MonJobs
 {
-    public class MongoJobReportService : IJobReportSerivce
+    public class MongoJobReportService : IJobReportService
     {
         private readonly IMongoCollection<Job> _jobs;
 

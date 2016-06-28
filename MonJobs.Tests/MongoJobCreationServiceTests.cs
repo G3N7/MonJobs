@@ -2,11 +2,10 @@
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace MonJobs.Tests
 {
-    public class MongoJobCreationServiceTests : MongoTestBase
+    internal class MongoJobCreationServiceTests : MongoTestBase
     {
         [Test]
         public async Task Create_ValidInitialData_Persists()

@@ -3,8 +3,8 @@
     /// <summary>
     /// Allows you to mark a job as complete.
     /// </summary>
-    public interface IJobCompletionSerivce
+    public interface IJobCompletionService
     {
-        //todo: IJobCompletionSerivce
+        // doc: IJobCompletionService
     }
 }

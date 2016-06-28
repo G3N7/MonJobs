@@ -2,7 +2,7 @@
 
 namespace MonJobs
 {
-    // mitch: documentation
+    // doc: JobAcknowledgment
     public class JobAcknowledgment : Dictionary<string, object>
     {
         public JobAcknowledgment()

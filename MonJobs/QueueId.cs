@@ -5,6 +5,7 @@ using System.Diagnostics.Contracts;
 
 namespace MonJobs
 {
+    // doc: QueueId
     [ImmutableObject(true)]
     public sealed class QueueId : IComparable<QueueId>, IConvertible<string>
     {

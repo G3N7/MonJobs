@@ -1,15 +1,9 @@
-using System;
-using System.Collections;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using MongoDB.Driver;
-using MonJobs.Take;
 using NUnit.Framework;
 
 namespace MonJobs.Tests
 {
-    public class SingleConsumerIntegrationTests : MongoUsecaseIntegrationTestBase
+    internal class SingleConsumerIntegrationTests : MongoUsecaseIntegrationTestBase
     {
         [Test]
         public async Task ProcessJobsForMyDataCenter_TwoInQueue_QueryThenAcknowledgeApproach()

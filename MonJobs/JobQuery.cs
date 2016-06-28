@@ -1,5 +1,6 @@
 ﻿namespace MonJobs
 {
+    // doc: JobQuery
     public class JobQuery
     {
         public QueueId QueueId { get; set; }

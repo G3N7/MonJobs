@@ -8,12 +8,12 @@ using NUnit.Framework;
 
 namespace MonJobs.Tests
 {
-    public class MongoUsecaseIntegrationTestBase : MongoTestBase
+    internal class MongoUsecaseIntegrationTestBase : MongoTestBase
     {
         protected static async Task<Job> TryProcessOneJobUsingPeekThanAck(IMongoDatabase database, QueueId exampleQueueName, JobAttributes attributesThatShouldWork)
         {
             // Query for next available a job for my datacenter
-            var peekNextService = new MongoJobPeekNextService(new MongoJobQuerySerivce(database));
+            var peekNextService = new MongoJobPeekNextService(new MongoJobQueryService(database));
             var peekQuery = new PeekNextOptions
             {
                 QueueId = exampleQueueName,
