@@ -82,8 +82,8 @@ namespace MonJobs
             JobId result;
             if (!JobId.TryParse(jobId, out result))
             {
-                throw new ArgumentException("Invalid JobId: " + jobId, "jobId");
-            };
+                throw new ArgumentException("Invalid JobId: " + jobId, nameof(jobId));
+            }
             return result;
         }
 
