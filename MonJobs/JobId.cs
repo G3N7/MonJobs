@@ -7,7 +7,9 @@ using MongoDB.Bson;
 
 namespace MonJobs
 {
-    // doc: JobId
+    /// <summary>
+    /// The unique id for a job.
+    /// </summary>
     [ImmutableObject(true)]
     public sealed class JobId : IComparable<JobId>, IConvertible<ObjectId>, IConvertible<string>
     {
@@ -20,17 +22,17 @@ namespace MonJobs
         {
             Contract.Requires(jobId != null);
             Contract.Requires(jobId != string.Empty);
-            Contract.Ensures(this._sourceValue != null);
-            if (string.IsNullOrWhiteSpace(jobId)) throw new ArgumentNullException("jobId");
-            if (!ValidationRegex.IsMatch(jobId)) throw new ArgumentException("jobId");
-            this._sourceValue = new ObjectId(jobId);
+            Contract.Ensures(_sourceValue != null);
+            if (string.IsNullOrWhiteSpace(jobId)) throw new ArgumentNullException(nameof(jobId));
+            if (!ValidationRegex.IsMatch(jobId)) throw new ArgumentException($"The {nameof(jobId)} provided ({jobId}) is not properly formatted, we expect something that looks like a MongoDB ObjectId", nameof(jobId));
+            _sourceValue = new ObjectId(jobId);
         }
 
         private JobId(ObjectId jobId)
         {
             Contract.Requires(jobId != null);
             Contract.Ensures(this._sourceValue != null);
-            this._sourceValue = jobId;
+            _sourceValue = jobId;
         }
 
         #region Equality
@@ -52,12 +54,7 @@ namespace MonJobs
             }
         }
 
-        private static readonly IEqualityComparer<JobId> SourceValueComparerInstance = new SourceValueEqualityComparer();
-
-        public static IEqualityComparer<JobId> SourceValueComparer
-        {
-            get { return SourceValueComparerInstance; }
-        }
+        public static IEqualityComparer<JobId> SourceValueComparer { get; } = new SourceValueEqualityComparer();
 
         private bool Equals(JobId other)
         {
@@ -106,7 +103,7 @@ namespace MonJobs
             JobId result;
             if (!JobId.TryParse(jobId, out result))
             {
-                throw new ArgumentException("Invalid JobId: " + jobId, "jobId");
+                throw new ArgumentException("Invalid JobId: " + jobId, nameof(jobId));
             };
             return result;
         }
@@ -126,27 +123,27 @@ namespace MonJobs
 
         public int CompareTo(JobId other)
         {
-            return this._sourceValue.CompareTo(other._sourceValue);
+            return _sourceValue.CompareTo(other._sourceValue);
         }
 
         ObjectId IConvertible<ObjectId>.ToValueType()
         {
-            return this._sourceValue;
+            return _sourceValue;
         }
 
         string IConvertible<string>.ToValueType()
         {
-            return this._sourceValue.ToString();
+            return _sourceValue.ToString();
         }
 
         public override string ToString()
         {
-            return this._sourceValue.ToString();
+            return _sourceValue.ToString();
         }
 
         public static implicit operator ObjectId(JobId jobId)
         {
-            return jobId == null ? ObjectId.Empty : jobId._sourceValue;
+            return jobId?._sourceValue ?? ObjectId.Empty;
         }
 
         public static JobId Generate()
