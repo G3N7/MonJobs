@@ -2,7 +2,9 @@
 
 namespace MonJobs.Subscriptions.Peek
 {
-    // doc: PeekNextSubscriptionOptions
+    /// <summary>
+    /// Options related to setting up subscriptions about what to do given jobs are available matching the criteria.
+    /// </summary>
     public class PeekNextSubscriptionOptions : SubscriptionOptionsBase
     {
         public PeekNextOptions PeekNextOptions { get; set; }

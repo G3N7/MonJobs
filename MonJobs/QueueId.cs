@@ -5,7 +5,9 @@ using System.Diagnostics.Contracts;
 
 namespace MonJobs
 {
-    // doc: QueueId
+    /// <summary>
+    /// The id that segments one queue from another.  Access to these queues should be controlled via authorization checks.
+    /// </summary>
     [ImmutableObject(true)]
     public sealed class QueueId : IComparable<QueueId>, IConvertible<string>
     {
@@ -16,10 +18,10 @@ namespace MonJobs
         {
             Contract.Requires(queueId != null);
             Contract.Requires(queueId != string.Empty);
-            Contract.Ensures(this._sourceString != null);
-            Contract.Ensures(this._sourceString != string.Empty);
+            Contract.Ensures(_sourceString != null);
+            Contract.Ensures(_sourceString != string.Empty);
             if (queueId == null) throw new ArgumentNullException(nameof(queueId));
-            this._sourceString = queueId;
+            _sourceString = queueId;
         }
 
         #region Equality
@@ -37,16 +39,11 @@ namespace MonJobs
 
             public int GetHashCode(QueueId obj)
             {
-                return (obj._sourceString != null ? obj._sourceString.GetHashCode() : 0);
+                return obj._sourceString?.GetHashCode() ?? 0;
             }
         }
 
-        private static readonly IEqualityComparer<QueueId> SourceStringComparerInstance = new QueueId.SourceStringEqualityComparer();
-
-        public static IEqualityComparer<QueueId> SourceStringComparer
-        {
-            get { return SourceStringComparerInstance; }
-        }
+        public static IEqualityComparer<QueueId> SourceStringComparer { get; } = new SourceStringEqualityComparer();
 
         private bool Equals(QueueId other)
         {
@@ -62,7 +59,7 @@ namespace MonJobs
 
         public override int GetHashCode()
         {
-            return (_sourceString != null ? _sourceString.GetHashCode() : 0);
+            return _sourceString?.GetHashCode() ?? 0;
         }
 
         #endregion
@@ -74,7 +71,7 @@ namespace MonJobs
             QueueId result;
             if (!QueueId.TryParse(queueId, out result))
             {
-                throw new ArgumentException("Invalid QueueId: " + queueId, "queueId");
+                throw new ArgumentException("Invalid QueueId: " + queueId, nameof(queueId));
             };
             return result;
         }
@@ -99,7 +96,7 @@ namespace MonJobs
 
         public string ToValueType()
         {
-            return this._sourceString;
+            return _sourceString;
         }
 
         public int CompareTo(QueueId other)
@@ -109,12 +106,12 @@ namespace MonJobs
 
         public override string ToString()
         {
-            return this._sourceString;
+            return _sourceString;
         }
 
         public static implicit operator string(QueueId queueId)
         {
-            return queueId == null ? string.Empty : queueId._sourceString;
+            return queueId?._sourceString ?? string.Empty;
         }
 
     }

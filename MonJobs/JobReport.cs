@@ -2,7 +2,9 @@
 
 namespace MonJobs
 {
-    // doc: JobReport
+    /// <summary>
+    /// This is a named dictionary that represents progress information about the job.
+    /// </summary>
     public class JobReport : Dictionary<string, object>
     {
         public JobReport()

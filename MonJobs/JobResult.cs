@@ -2,7 +2,9 @@
 
 namespace MonJobs
 {
-    // doc: JobResult
+    /// <summary>
+    /// This is a named dictionary that represents the final result of a job.
+    /// </summary>
     public class JobResult : Dictionary<string, object>
     {
         public JobResult()
