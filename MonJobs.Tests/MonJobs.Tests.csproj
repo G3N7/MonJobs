@@ -35,6 +35,12 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="LAN.Core.DependencyInjection">
+      <HintPath>..\packages\LAN.Core.DependencyInjection.1.1.9.0\lib\net45\LAN.Core.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="LAN.Core.DependencyInjection.StructureMap">
+      <HintPath>..\packages\LAN.Core.DependencyInjection.StructureMap.1.3.0.0\lib\net45\LAN.Core.DependencyInjection.StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="Mongo2Go, Version=0.1.9.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Mongo2Go.0.2.0\lib\net35\Mongo2Go.dll</HintPath>
       <Private>True</Private>
@@ -63,8 +69,19 @@
       <HintPath>..\packages\NUnit.3.2.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\packages\structuremap.4.2.0.402\lib\net40\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -73,6 +90,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App\JobControllerTests.cs" />
+    <Compile Include="App\ServiceConfigTests.cs" />
     <Compile Include="MongoJobAcknowledgementServiceTests.cs" />
     <Compile Include="MongoJobCompleteionServiceTest.cs" />
     <Compile Include="MongoJobCreationServiceTests.cs" />
@@ -89,9 +108,18 @@
     <Compile Include="TaskBasedTakeNextSubscriberTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MonJobs.App\MonJobs.App.csproj">
+      <Project>{3C19B1D3-55EE-488B-AE17-63DCAE0AEB20}</Project>
+      <Name>MonJobs.App</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonJobs.Http.ApiControllers\MonJobs.Http.ApiControllers.csproj">
+      <Project>{DE03E294-D5C0-40E9-A060-FF1AB7132A09}</Project>
+      <Name>MonJobs.Http.ApiControllers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MonJobs.Subscriptions\MonJobs.Subscriptions.csproj">
       <Project>{3733D9C4-7825-46B2-A655-B785FB58F4A6}</Project>
       <Name>MonJobs.Subscriptions</Name>
