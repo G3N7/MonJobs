@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
-using MonJobs.Http.ApiControllers;
+using MonJobs.WebApi.Controllers;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace MonJobs.Tests.App
 {
-    public class JobControllerTests
+    internal class JobControllerTests : TestBase
     {
         [Test]
         public async Task GetById_GivenValidIdForExistingJob_ReturnsJob()
@@ -26,7 +28,7 @@ namespace MonJobs.Tests.App
                     It.Is<JobQuery>(query => query.JobIds.Contains(exampleJobId))))
                     .ReturnsAsync(new[] { exampleExistingJob });
 
-            var sut = new JobsApiController(mockQueryService.Object, null);
+            var sut = new JobsController(mockQueryService.Object, null);
             var result = await sut.Get(exampleQueueId, exampleJobId);
 
             Assert.That(result.Id, Is.EqualTo(exampleJobId));
@@ -43,7 +45,7 @@ namespace MonJobs.Tests.App
                     It.Is<JobQuery>(query => query.JobIds.Contains(exampleJobId))))
                     .ReturnsAsync(Enumerable.Empty<Job>());
 
-            var sut = new JobsApiController(mockQueryService.Object, null);
+            var sut = new JobsController(mockQueryService.Object, null);
             var result = await sut.Get(exampleQueueId, exampleJobId);
 
             Assert.That(result, Is.Null);
@@ -57,6 +59,7 @@ namespace MonJobs.Tests.App
 
             var exampleExistingJob = new Job
             {
+                QueueId = exampleQueueId,
                 Id = exampleJobId,
             };
 
@@ -66,11 +69,16 @@ namespace MonJobs.Tests.App
                     It.Is<JobQuery>(query => query.JobIds.Contains(exampleJobId))))
                     .ReturnsAsync(new[] { exampleExistingJob });
 
-            var sut = new JobsApiController(mockQueryService.Object, null);
-            var result = await sut.Get(exampleQueueId, new JobQuery
+            var sut = new JobsController(mockQueryService.Object, null);
+
+            sut.Request = new HttpRequestMessage
             {
-                JobIds = new[] { exampleJobId }
-            });
+                Content = new StringContent(JsonConvert.SerializeObject(new JobQuery
+                {
+                    JobIds = new[] { exampleJobId }
+                }))
+            };
+            var result = await sut.Get(exampleQueueId);
 
             var resultingIds = result.Select(x => x.Id);
 
@@ -91,7 +99,7 @@ namespace MonJobs.Tests.App
             mockCreationService.Setup(x => x.Create(exampleQueueId, exampleAttributes))
                 .ReturnsAsync(exampleCreatedJobId);
 
-            var sut = new JobsApiController(null, mockCreationService.Object);
+            var sut = new JobsController(null, mockCreationService.Object);
             var result = await sut.Post(exampleQueueId, exampleAttributes);
 
             Assert.That(result, Is.Not.Null);

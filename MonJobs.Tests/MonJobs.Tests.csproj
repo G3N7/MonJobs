@@ -113,16 +113,13 @@
     <Compile Include="SingleConsumerIntegrationTests.cs" />
     <Compile Include="TaskBasedPeekNextSubscriberTests.cs" />
     <Compile Include="TaskBasedTakeNextSubscriberTests.cs" />
+    <Compile Include="TestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonJobs.Http.ApiControllers\MonJobs.Http.ApiControllers.csproj">
-      <Project>{DE03E294-D5C0-40E9-A060-FF1AB7132A09}</Project>
-      <Name>MonJobs.Http.ApiControllers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MonJobs.Subscriptions\MonJobs.Subscriptions.csproj">
       <Project>{3733D9C4-7825-46B2-A655-B785FB58F4A6}</Project>
       <Name>MonJobs.Subscriptions</Name>

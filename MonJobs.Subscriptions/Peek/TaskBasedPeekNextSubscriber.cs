@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using MonJobs.Peek;
 
 namespace MonJobs.Subscriptions.Peek
 {
-
-
     public class TaskBasedPeekNextSubscriber : TaskBasedSubscriberBase, IPeekNextSubscriber
     {
         private readonly IJobPeekNextService _jobPeekNextService;

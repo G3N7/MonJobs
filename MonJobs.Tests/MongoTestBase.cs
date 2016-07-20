@@ -1,32 +1,12 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Mongo2Go;
 using MongoDB.Driver;
-using MonJobs.Serialization;
-using Newtonsoft.Json;
-using NUnit.Framework;
 
 namespace MonJobs.Tests
 {
-    internal class MongoTestBase
+    internal abstract class MongoTestBase : TestBase
     {
-        private static bool _hasRegistered;
-
-        [OneTimeSetUp]
-        public void OneTimeSetup()
-        {
-            if (!_hasRegistered)
-            {
-                _hasRegistered = true;
-                JsonConvert.DefaultSettings = () => new JsonSerializerSettings
-                {
-                    Converters = MonJobsJsonConverters.TypesConverters.ToList()
-                };
-                MonJobsBsonConverters.RegisterConverters();
-            }
-        }
-
         protected static async Task RunInMongoLand(Func<IMongoDatabase, Task> mongoWork)
         {
             var connectionString = Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION_STRING");

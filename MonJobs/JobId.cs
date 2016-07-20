@@ -146,6 +146,11 @@ namespace MonJobs
             return jobId?._sourceValue ?? ObjectId.Empty;
         }
 
+        public static implicit operator string(JobId jobId)
+        {
+            return jobId?._sourceValue.ToString();
+        }
+
         public static JobId Generate()
         {
             return new JobId(ObjectId.GenerateNewId());

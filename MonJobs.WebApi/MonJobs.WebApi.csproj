@@ -142,10 +142,6 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonJobs.Http.ApiControllers\MonJobs.Http.ApiControllers.csproj">
-      <Project>{DE03E294-D5C0-40E9-A060-FF1AB7132A09}</Project>
-      <Name>MonJobs.Http.ApiControllers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MonJobs\MonJobs.csproj">
       <Project>{763B7FEF-FF24-407D-8DCE-5313E6129941}</Project>
       <Name>MonJobs</Name>
