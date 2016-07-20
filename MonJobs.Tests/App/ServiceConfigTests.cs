@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Http;
 using LAN.Core.DependencyInjection.StructureMap;
-using MonJobs.App;
+using MonJobs.WebApi;
 using NUnit.Framework;
 using StructureMap;
 
@@ -42,7 +42,7 @@ namespace MonJobs.Tests.App
 
                 if (bindingResult.IsMissingDependencies) Assert.Inconclusive();
 
-                var assemblyWhereControllersLive = Assembly.GetAssembly(typeof(Startup));
+                var assemblyWhereControllersLive = Assembly.GetAssembly(typeof(ServiceConfig));
                 var allTypesInAssemblyWhereControllersLive = assemblyWhereControllersLive.GetTypes();
                 var allControllers = allTypesInAssemblyWhereControllersLive
                     .Where(x => !x.IsAbstract)

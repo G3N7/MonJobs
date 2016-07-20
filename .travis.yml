@@ -13,7 +13,7 @@ install:
   - bash build/patch_assembly_file_with_build_id.sh MonJobs/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
   - bash build/patch_assembly_file_with_build_id.sh MonJobs.Http.ApiControllers/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
   - bash build/patch_assembly_file_with_build_id.sh MonJobs.Subscriptions/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
-  - bash build/patch_assembly_file_with_build_id.sh MonJobs.App/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
+  - bash build/patch_assembly_file_with_build_id.sh MonJobs.WebApi/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
 
 script:
   - xbuild /p:Configuration=Release /p:TargetFrameworkVersion="v4.5" MonJobs.sln
