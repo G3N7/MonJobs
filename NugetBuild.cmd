@@ -24,14 +24,4 @@ IF (!deploySubscriptions!) EQU (y) (
 	.nuget\nuget push MonJobs.Subscriptions.!subscriptionsVersion!.nupkg
 )
 
-SET /p deployApiControllers=Would you like to deploy the API Controllers Project? (y/n) %=%
-IF (!deployApiControllers!) EQU (y) (
-	.nuget\nuget pack MonJobs.Http.ApiControllers\MonJobs.Http.ApiControllers.csproj -IncludeReferencedProjects -ExcludeEmptyDirectories -Build -Symbols -Properties Configuration=Release
-	@ECHO Finished Building: MonJobs.Http.ApiControllers
-
-	SET /p apiControllerVersion=Enter MonJobs API Controllers Package Version? %=%
-	@ECHO Publishing MonJobs.Http.ApiControllers.!apiControllerVersion!.nupkg
-	.nuget\nuget push MonJobs.Http.ApiControllers.!apiControllerVersion!.nupkg
-)
-
 @ECHO on
