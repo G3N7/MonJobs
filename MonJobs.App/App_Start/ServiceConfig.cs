@@ -10,6 +10,7 @@ namespace MonJobs.App
         {
             container.RegisterSingleton(database);
             container.Bind<IJobQueryService, MongoJobQueryService>(true);
+            container.Bind<IJobCreationService, MongoJobCreationService>(true);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace MonJobs.App.Controllers
     [AllowAnonymous]
     public class JobsController : JobsApiController
     {
-        public JobsController(IJobQueryService queryService) : base(queryService)
+        public JobsController(IJobQueryService queryService, IJobCreationService creationService) : base(queryService, creationService)
         {
         }
 

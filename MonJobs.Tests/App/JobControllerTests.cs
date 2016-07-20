@@ -5,7 +5,7 @@ using MonJobs.Http.ApiControllers;
 using Moq;
 using NUnit.Framework;
 
-namespace MonJobs.Tests
+namespace MonJobs.Tests.App
 {
     public class JobControllerTests
     {
@@ -14,7 +14,7 @@ namespace MonJobs.Tests
         {
             var exampleQueueId = QueueId.Parse(Guid.NewGuid().ToString("N"));
             var exampleJobId = JobId.Generate();
-            
+
             var exampleExistingJob = new Job
             {
                 Id = exampleJobId,
@@ -26,7 +26,7 @@ namespace MonJobs.Tests
                     It.Is<JobQuery>(query => query.JobIds.Contains(exampleJobId))))
                     .ReturnsAsync(new[] { exampleExistingJob });
 
-            var sut = new JobsApiController(mockQueryService.Object);
+            var sut = new JobsApiController(mockQueryService.Object, null);
             var result = await sut.Get(exampleQueueId, exampleJobId);
 
             Assert.That(result.Id, Is.EqualTo(exampleJobId));
@@ -43,7 +43,7 @@ namespace MonJobs.Tests
                     It.Is<JobQuery>(query => query.JobIds.Contains(exampleJobId))))
                     .ReturnsAsync(Enumerable.Empty<Job>());
 
-            var sut = new JobsApiController(mockQueryService.Object);
+            var sut = new JobsApiController(mockQueryService.Object, null);
             var result = await sut.Get(exampleQueueId, exampleJobId);
 
             Assert.That(result, Is.Null);
@@ -66,15 +66,38 @@ namespace MonJobs.Tests
                     It.Is<JobQuery>(query => query.JobIds.Contains(exampleJobId))))
                     .ReturnsAsync(new[] { exampleExistingJob });
 
-            var sut = new JobsApiController(mockQueryService.Object);
+            var sut = new JobsApiController(mockQueryService.Object, null);
             var result = await sut.Get(exampleQueueId, new JobQuery
             {
-                JobIds = new[] {exampleJobId}
+                JobIds = new[] { exampleJobId }
             });
 
             var resultingIds = result.Select(x => x.Id);
-            
+
             Assert.That(resultingIds, Contains.Item(exampleJobId));
+        }
+
+        [Test]
+        public async Task Post_GivenJobAttributes_CreatesNewJob()
+        {
+            var exampleQueueId = QueueId.Parse(Guid.NewGuid().ToString("N"));
+            var exampleAttributes = new JobAttributes
+            {
+                { "commandname", "ReleaseTheKrakin" }
+            };
+
+            var mockCreationService = new Mock<IJobCreationService>();
+            var exampleCreatedJobId = JobId.Generate();
+            mockCreationService.Setup(x => x.Create(exampleQueueId, exampleAttributes))
+                .ReturnsAsync(exampleCreatedJobId);
+
+            var sut = new JobsApiController(null, mockCreationService.Object);
+            var result = await sut.Post(exampleQueueId, exampleAttributes);
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.Not.EqualTo(JobId.Empty()));
+            Assert.That(result, Is.EqualTo(exampleCreatedJobId));
+            mockCreationService.Verify(x => x.Create(It.IsAny<QueueId>(), It.IsAny<JobAttributes>()), Times.Once);
         }
     }
 }

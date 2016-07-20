@@ -8,10 +8,12 @@ namespace MonJobs.Http.ApiControllers
     public class JobsApiController : MonJobApiControllerBase
     {
         private readonly IJobQueryService _queryService;
+        private readonly IJobCreationService _creationService;
 
-        public JobsApiController(IJobQueryService queryService)
+        public JobsApiController(IJobQueryService queryService, IJobCreationService creationService)
         {
             _queryService = queryService;
+            _creationService = creationService;
         }
 
         public virtual async Task<IEnumerable<Job>> Get(QueueId queueId, JobQuery query)
@@ -31,9 +33,9 @@ namespace MonJobs.Http.ApiControllers
         }
 
         // POST queue/7c9e6679742540de944be07fc1f90ae7/jobs
-        public virtual Task<JobId> Post(QueueId queueId, JobAttributes value)
+        public virtual async Task<JobId> Post(QueueId queueId, JobAttributes value)
         {
-            throw new NotImplementedException();
+            return await _creationService.Create(queueId, value);
         }
     }
 }
