@@ -2,8 +2,9 @@
 using MongoDB.Driver;
 
 namespace MonJobs.App
-{ 
-    public static class ServiceConfig
+{
+    // ReSharper disable once InconsistentNaming
+    public class ServiceConfig
     {
         public static void Configure(IContainer container, IMongoDatabase database)
         {
