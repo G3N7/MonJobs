@@ -27,48 +27,17 @@ namespace MonJobs
                 {
                     var values = (IEnumerable)attribute.Value;
 
+                    // Handle JArrays which always old JTokens, this unfurls the value.
+                    var jArray = attribute.Value as JArray;
+                    if (jArray != null)
+                    {
+                        values = jArray.ToObject<object[]>();
+                    }
+
                     var orValueFilters = new List<FilterDefinition<Job>>();
                     foreach (var value in values)
                     {
-                        var valueToCompare = value;
-                        var jToken = value as JToken;
-                        if (jToken != null)
-                        {
-                            switch (jToken.Type)
-                            {
-                                case JTokenType.String:
-                                    valueToCompare = jToken.ToObject<string>();
-                                    break;
-                                case JTokenType.Integer:
-                                    valueToCompare = jToken.ToObject<int>();
-                                    break;
-                                case JTokenType.Float:
-                                    valueToCompare = jToken.ToObject<float>();
-                                    break;
-                                case JTokenType.Date:
-                                    valueToCompare = jToken.ToObject<DateTime>();
-                                    break;
-                                case JTokenType.Boolean:
-                                    valueToCompare = jToken.ToObject<bool>();
-                                    break;
-                                case JTokenType.Guid:
-                                    valueToCompare = jToken.ToObject<Guid>();
-                                    break;
-                                case JTokenType.Uri:
-                                    valueToCompare = jToken.ToObject<Uri>();
-                                    break;
-                                case JTokenType.TimeSpan:
-                                    valueToCompare = jToken.ToObject<TimeSpan>();
-                                    break;
-                                case JTokenType.Null:
-                                case JTokenType.Undefined:
-                                    valueToCompare = null;
-                                    break;
-                                default:
-                                    throw new NotSupportedException($"Currently monjob only supports primitive types (String, Integer, Date, Boolean, Guid, Uri, and Timespan are supported)");
-                            }
-                        }
-                        var hasAttribute = builder.Eq(x => x.Attributes[attribute.Key], valueToCompare);
+                        var hasAttribute = builder.Eq(x => x.Attributes[attribute.Key], value);
                         orValueFilters.Add(hasAttribute);
                     }
                     var anyOfTheseValuesFilter = builder.Or(orValueFilters);
