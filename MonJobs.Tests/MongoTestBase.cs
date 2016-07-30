@@ -9,18 +9,9 @@ namespace MonJobs.Tests
     {
         protected static async Task RunInMongoLand(Func<IMongoDatabase, Task> mongoWork)
         {
-            var connectionString = Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION_STRING");
-            if (string.IsNullOrWhiteSpace(connectionString))
+            using (var runner = MongoDbRunner.Start(System.IO.Path.GetTempPath() + Guid.NewGuid().ToString("N")))
             {
-
-                using (var runner = MongoDbRunner.Start(System.IO.Path.GetTempPath() + Guid.NewGuid().ToString("N")))
-                {
-                    await RunAction(runner.ConnectionString, mongoWork);
-                }
-            }
-            else
-            {
-                await RunAction(connectionString, mongoWork);
+                await RunAction(runner.ConnectionString, mongoWork);
             }
         }
 
