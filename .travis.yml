@@ -1,11 +1,8 @@
 language: csharp
 solution: MonJobs.sln
 
-services:
-  - mongodb
-  
 env:
-  - MONGO_DB_CONNECTION_STRING=mongodb://127.0.0.1
+  - BIN_SEARCH_PATTERN=tools/mongodb-linux-*/bin
   
 install:
   - nuget restore MonJobs.sln

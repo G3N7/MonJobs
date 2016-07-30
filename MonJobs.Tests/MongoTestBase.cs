@@ -9,7 +9,8 @@ namespace MonJobs.Tests
     {
         protected static async Task RunInMongoLand(Func<IMongoDatabase, Task> mongoWork)
         {
-            using (var runner = MongoDbRunner.Start(System.IO.Path.GetTempPath() + Guid.NewGuid().ToString("N")))
+            var binSearchPattern = Environment.GetEnvironmentVariable("BIN_SEARCH_PATTERN") ?? @"tools\mongodb-win32*\bin";
+            using (var runner = MongoDbRunner.Start(System.IO.Path.GetTempPath() + Guid.NewGuid().ToString("N"), binSearchPattern))
             {
                 await RunAction(runner.ConnectionString, mongoWork);
             }
