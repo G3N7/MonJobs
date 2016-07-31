@@ -39,6 +39,7 @@ namespace MonJobs.Tests
                 var jobWeExpectToHaveBeenAcknowledged = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, readyJobId)).FirstAsync();
 
                 Assert.That(jobWeExpectToHaveBeenAcknowledged.Acknowledgment, Is.EqualTo(exampleAck));
+                Assert.That(jobWeExpectToHaveBeenAcknowledged.Acknowledgment["RunnerId"], Is.EqualTo(exampleAck["RunnerId"]));
             });
         }
 
@@ -74,6 +75,7 @@ namespace MonJobs.Tests
                 var jobWeExpectToHaveBeenAcknowledged = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, readyJobId)).FirstAsync();
 
                 Assert.That(jobWeExpectToHaveBeenAcknowledged.Acknowledgment, Is.EqualTo(exampleAck));
+                Assert.That(jobWeExpectToHaveBeenAcknowledged.Acknowledgment["RunnerId"], Is.Not.EqualTo(exampleAck["RunnerId"]));
             });
         }
     }

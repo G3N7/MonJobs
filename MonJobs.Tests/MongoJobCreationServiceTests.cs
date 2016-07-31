@@ -11,7 +11,7 @@ namespace MonJobs.Tests
         public async Task Create_ValidInitialData_Persists()
         {
             var exampleQueueId = QueueId.Parse(Guid.NewGuid().ToString("N"));
-            var exampleAttributes = new { name = "Thing ToDo" }.ToExpando().ToJobAttributes();
+            var exampleAttributes = new JobAttributes { { "name", "Thing ToDo" } };
 
             await RunInMongoLand(async database =>
             {
@@ -27,6 +27,7 @@ namespace MonJobs.Tests
                 Assert.That(newlyCreatedJob.Id, Is.Not.EqualTo(JobId.Empty()));
                 Assert.That(newlyCreatedJob.QueueId, Is.EqualTo(exampleQueueId));
                 Assert.That(newlyCreatedJob.Attributes, Is.EqualTo(exampleAttributes));
+                Assert.That(newlyCreatedJob.Attributes["name"], Is.EqualTo("Thing ToDo"));
             });
         }
     }

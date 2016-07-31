@@ -12,7 +12,7 @@ namespace MonJobs.Tests
         public async Task TakeFor_NewJobs_ReturnsAvailableJobAndAcknowledges()
         {
             var exampleQueueId = QueueId.Parse("ExampleQueue");
-            var exampleQuery = new TakeNextOptions
+            var exampleOptions = new TakeNextOptions
             {
                 QueueId = exampleQueueId,
                 Acknowledgment = new JobAcknowledgment
@@ -55,13 +55,14 @@ namespace MonJobs.Tests
 
                 var sut = new MongoJobTakeNextService(database);
 
-                var result = await sut.TakeFor(exampleQuery);
+                var result = await sut.TakeFor(exampleOptions);
 
                 Assert.That(result, Is.Not.Null);
                 Assert.That(result?.Id, Is.EqualTo(newlyCreatedJobId));
 
                 var jobInDb = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, result?.Id)).SingleAsync();
                 Assert.That(jobInDb.Acknowledgment, Is.Not.Null);
+                Assert.That(jobInDb.Acknowledgment["RunnerId"], Is.EqualTo(exampleOptions.Acknowledgment["RunnerId"]));
             });
         }
 
@@ -69,7 +70,7 @@ namespace MonJobs.Tests
         public async Task TakeFor_NewJobs_OnlyModifiesOneJob()
         {
             var exampleQueueId = QueueId.Parse("ExampleQueue");
-            var exampleQuery = new TakeNextOptions
+            var exampleOptions = new TakeNextOptions
             {
                 QueueId = exampleQueueId,
                 Acknowledgment = new JobAcknowledgment
@@ -118,13 +119,14 @@ namespace MonJobs.Tests
 
                 var sut = new MongoJobTakeNextService(database);
 
-                var result = await sut.TakeFor(exampleQuery);
+                var result = await sut.TakeFor(exampleOptions);
 
                 Assert.That(result, Is.Not.Null);
                 Assert.That(result?.Id, Is.EqualTo(newlyCreatedJobId1));
 
                 var jobInDb1 = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, newlyCreatedJobId1)).SingleAsync();
                 Assert.That(jobInDb1.Acknowledgment, Is.Not.Null);
+                Assert.That(jobInDb1.Acknowledgment["RunnerId"], Is.EqualTo(exampleOptions.Acknowledgment["RunnerId"]));
 
                 var jobInDb2 = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, newlyCreatedJobId2)).SingleAsync();
                 Assert.That(jobInDb2.Acknowledgment, Is.Null);

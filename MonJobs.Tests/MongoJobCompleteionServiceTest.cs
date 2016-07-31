@@ -12,7 +12,7 @@ namespace MonJobs.Tests
         {
             var exampleQueueId = QueueId.Parse(Guid.NewGuid().ToString("N"));
             var exampleJobId = JobId.Generate();
-            var exampleResult = new { Datacenter = "PEN" }.ToExpando().ToJobResult();
+            var exampleResult = new JobResult { { "Datacenter", "PEN" } };
 
             Assert.That(exampleResult, Is.Not.Null);
 
@@ -26,6 +26,7 @@ namespace MonJobs.Tests
                 var result = await collection.Find(Builders<Job>.Filter.Empty).SingleAsync();
 
                 Assert.That(result.Result, Is.Not.Null);
+                Assert.That(result.Result["Datacenter"], Is.EqualTo("PEN"));
             });
 
         }
