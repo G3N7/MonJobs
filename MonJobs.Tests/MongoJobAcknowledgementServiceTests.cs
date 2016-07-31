@@ -34,10 +34,11 @@ namespace MonJobs.Tests
                 await jobs.InsertManyAsync(existingJobs);
 
                 var sut = new MongoJobAcknowledgmentService(database);
-                await sut.Ack(exampleQueueName, readyJobId, exampleAck);
+                var result = await sut.Ack(exampleQueueName, readyJobId, exampleAck);
 
                 var jobWeExpectToHaveBeenAcknowledged = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, readyJobId)).FirstAsync();
 
+                Assert.That(result?.Success, Is.True);
                 Assert.That(jobWeExpectToHaveBeenAcknowledged.Acknowledgment, Is.EqualTo(exampleAck));
                 Assert.That(jobWeExpectToHaveBeenAcknowledged.Acknowledgment["RunnerId"], Is.EqualTo(exampleAck["RunnerId"]));
             });
@@ -55,7 +56,11 @@ namespace MonJobs.Tests
                 new Job
                 {
                     Id = readyJobId,
-                    QueueId = exampleQueueName
+                    QueueId = exampleQueueName,
+                    Acknowledgment = new JobAcknowledgment
+                    {
+                        {"RunnerId", Guid.NewGuid().ToString("N") }
+                    }
                 }
             };
 
@@ -70,11 +75,12 @@ namespace MonJobs.Tests
                 await jobs.InsertManyAsync(existingJobs);
 
                 var sut = new MongoJobAcknowledgmentService(database);
-                await sut.Ack(exampleQueueName, readyJobId, exampleAck);
+                var result = await sut.Ack(exampleQueueName, readyJobId, exampleAck);
 
                 var jobWeExpectToHaveBeenAcknowledged = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, readyJobId)).FirstAsync();
 
-                Assert.That(jobWeExpectToHaveBeenAcknowledged.Acknowledgment, Is.EqualTo(exampleAck));
+                Assert.That(result?.Success, Is.False);
+                Assert.That(jobWeExpectToHaveBeenAcknowledged.Acknowledgment, Is.Not.EqualTo(exampleAck));
                 Assert.That(jobWeExpectToHaveBeenAcknowledged.Acknowledgment["RunnerId"], Is.Not.EqualTo(exampleAck["RunnerId"]));
             });
         }
