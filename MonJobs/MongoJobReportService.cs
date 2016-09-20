@@ -25,7 +25,7 @@ namespace MonJobs
 
             var update = Builders<Job>.Update.Push(x => x.Reports, report);
 
-            await _jobs.FindOneAndUpdateAsync(matchesQueueAndId, update);
+            await _jobs.FindOneAndUpdateAsync(matchesQueueAndId, update).ConfigureAwait(false);
         }
     }
 }

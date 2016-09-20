@@ -20,7 +20,7 @@ namespace MonJobs.Tests
                 HasAttributes = attributesThatShouldWork,
                 Limit = 5
             };
-            var jobs = (await peekNextService.PeekFor(peekQuery)).ToList();
+            var jobs = (await peekNextService.PeekFor(peekQuery).ConfigureAwait(false)).ToList();
             if (!jobs.Any()) return null;
 
             foreach (var job in jobs)
@@ -31,7 +31,7 @@ namespace MonJobs.Tests
                 {
                     {"RunnerId", Guid.NewGuid().ToString("N")}
                 };
-                var ackResult = await acknowledgmentService.Ack(exampleQueueName, job.Id, standardAck);
+                var ackResult = await acknowledgmentService.Ack(exampleQueueName, job.Id, standardAck).ConfigureAwait(false);
                 if (!ackResult.Success) continue;
 
                 var exampleReportMessage1 = "FooBar";
@@ -42,21 +42,21 @@ namespace MonJobs.Tests
                 var reportService = new MongoJobReportService(database);
                 await
                     reportService.AddReport(exampleQueueName, job.Id,
-                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage1 } });
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage1 } }).ConfigureAwait(false);
                 await
                     reportService.AddReport(exampleQueueName, job.Id,
-                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage2 } });
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage2 } }).ConfigureAwait(false);
                 await
                     reportService.AddReport(exampleQueueName, job.Id,
-                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage3 } });
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage3 } }).ConfigureAwait(false);
 
                 // Send Result
                 var completionService = new MongoJobCompletionService(database);
-                await completionService.Complete(exampleQueueName, job.Id, new JobResult { { "Result", "Success" } });
+                await completionService.Complete(exampleQueueName, job.Id, new JobResult { { "Result", "Success" } }).ConfigureAwait(false);
 
                 // Finish Job
                 var finishedJobFromDb =
-                    await database.GetJobCollection().Find(Builders<Job>.Filter.Eq(x => x.Id, job.Id)).FirstAsync();
+                    await database.GetJobCollection().Find(Builders<Job>.Filter.Eq(x => x.Id, job.Id)).FirstAsync().ConfigureAwait(false);
 
                 Assert.That(finishedJobFromDb, Is.Not.Null);
                 Assert.That(finishedJobFromDb.Acknowledgment, Is.Not.Null);
@@ -88,7 +88,7 @@ namespace MonJobs.Tests
                 HasAttributes = attributesThatShouldWork,
                 Acknowledgment = standardAck
             };
-            var nextJob = await takeNextService.TakeFor(peekQuery);
+            var nextJob = await takeNextService.TakeFor(peekQuery).ConfigureAwait(false);
             if (nextJob == null) return null;
 
             var exampleReportMessage1 = "FooBar";
@@ -99,21 +99,21 @@ namespace MonJobs.Tests
             var reportService = new MongoJobReportService(database);
             await
                 reportService.AddReport(exampleQueueName, nextJob.Id,
-                    new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage1 } });
+                    new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage1 } }).ConfigureAwait(false);
             await
                 reportService.AddReport(exampleQueueName, nextJob.Id,
-                    new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage2 } });
+                    new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage2 } }).ConfigureAwait(false);
             await
                 reportService.AddReport(exampleQueueName, nextJob.Id,
-                    new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage3 } });
+                    new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage3 } }).ConfigureAwait(false);
 
             // Send Result
             var completionService = new MongoJobCompletionService(database);
-            await completionService.Complete(exampleQueueName, nextJob.Id, new JobResult { { "Result", "Success" } });
+            await completionService.Complete(exampleQueueName, nextJob.Id, new JobResult { { "Result", "Success" } }).ConfigureAwait(false);
 
             // Finish Job
             var finishedJobFromDb =
-                await database.GetJobCollection().Find(Builders<Job>.Filter.Eq(x => x.Id, nextJob.Id)).FirstAsync();
+                await database.GetJobCollection().Find(Builders<Job>.Filter.Eq(x => x.Id, nextJob.Id)).FirstAsync().ConfigureAwait(false);
 
             Assert.That(finishedJobFromDb, Is.Not.Null);
             Assert.That(finishedJobFromDb.Acknowledgment, Is.Not.Null);

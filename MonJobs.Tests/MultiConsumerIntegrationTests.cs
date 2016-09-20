@@ -43,7 +43,7 @@ namespace MonJobs.Tests
                     {
                         { "Name", "SpinWidget" },
                         { "DataCenter", "CAL01" },
-                    });
+                    }).ConfigureAwait(false);
 
                     jobsInQueue.Add(newJobId);
                 }
@@ -66,11 +66,11 @@ namespace MonJobs.Tests
                     var myDatacenter = new JobAttributes { { "DataCenter", "CAL01" } };
 
                     await SetupPeekThenAckWorkerWithSubscription(
-                            database,
-                            exampleQueueName,
-                            finishedJobs,
-                            myDatacenter,
-                            cancellationToken);
+                        database,
+                        exampleQueueName,
+                        finishedJobs,
+                        myDatacenter,
+                        cancellationToken).ConfigureAwait(false);
                 }
 
                 do
@@ -88,7 +88,7 @@ namespace MonJobs.Tests
                 {
                     Assert.That(finishedJobIds, Contains.Item(jobId));
                 }
-            });
+            }).ConfigureAwait(false);
         }
 
         [TestCase(10, 2)]
@@ -113,7 +113,7 @@ namespace MonJobs.Tests
                     {
                         { "Name", "SpinWidget" },
                         { "DataCenter", "CAL01" },
-                    });
+                    }).ConfigureAwait(false);
 
                     jobsInQueue.Add(newJobId);
                 }
@@ -135,7 +135,7 @@ namespace MonJobs.Tests
 
                     var myDataCenter = new JobAttributes { { "DataCenter", "CAL01" } };
 
-                    await SetupTakeNextWorkerWithSubscription(database, exampleQueueName, finishedJobs, myDataCenter, cancellationToken);
+                    await SetupTakeNextWorkerWithSubscription(database, exampleQueueName, finishedJobs, myDataCenter, cancellationToken).ConfigureAwait(false);
                 }
 
                 do
@@ -153,7 +153,7 @@ namespace MonJobs.Tests
                 {
                     Assert.That(finishedJobIds, Contains.Item(jobId));
                 }
-            });
+            }).ConfigureAwait(false);
         }
 
         [Test]
@@ -170,7 +170,7 @@ namespace MonJobs.Tests
 
                 var finishedJobs = new ConcurrentBag<Job>();
 
-                await SetupTakeNextWorkerWithSubscription(database, exampleQueueName, finishedJobs, new JobAttributes { { "Name", "DeployServer" }, }, cancellationToken);
+                await SetupTakeNextWorkerWithSubscription(database, exampleQueueName, finishedJobs, new JobAttributes { { "Name", "DeployServer" }, }, cancellationToken).ConfigureAwait(false);
 
                 // Create a rolling deploy relevant for my datacenter
                 var creationService = new MongoJobCreationService(database);
@@ -178,7 +178,7 @@ namespace MonJobs.Tests
                 {
                     { "Name", "RollingDeploy" },
                     { "Environment", "Prod" }
-                });
+                }).ConfigureAwait(false);
 
                 // Take Next available job
                 var takeNextSubscriber = new TaskBasedTakeNextSubscriber(new MongoJobTakeNextService(database));
@@ -198,7 +198,7 @@ namespace MonJobs.Tests
                     var reportService = new MongoJobReportService(database);
                     await
                         reportService.AddReport(exampleQueueName, rollingDeployJob.Id,
-                            new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", "Starting Rolling Deploy" } });
+                            new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", "Starting Rolling Deploy" } }).ConfigureAwait(false);
 
                     var queryService = new MongoJobQueryService(database);
 
@@ -212,27 +212,27 @@ namespace MonJobs.Tests
                         };
 
                         await reportService.AddReport(exampleQueueName, rollingDeployJob.Id,
-                            new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", $"Requesting Deploy on server {server}" } });
-                        var deployServerJobId = await creationService.Create(exampleQueueName, deployServer);
+                            new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", $"Requesting Deploy on server {server}" } }).ConfigureAwait(false);
+                        var deployServerJobId = await creationService.Create(exampleQueueName, deployServer).ConfigureAwait(false);
 
                         Job hasResult;
                         do
                         {
                             // replace with detail service
-                            hasResult = (await queryService.QueryFor(new JobQuery { QueueId = exampleQueueName, JobIds = new[] { deployServerJobId }, HasResult = true })).FirstOrDefault();
+                            hasResult = (await queryService.QueryFor(new JobQuery { QueueId = exampleQueueName, JobIds = new[] { deployServerJobId }, HasResult = true }).ConfigureAwait(false)).FirstOrDefault();
                             Thread.Sleep(500);
                         } while (hasResult == null);
 
                         await reportService.AddReport(exampleQueueName, rollingDeployJob.Id,
-                            new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", $"Deploy on server {server} Completed, {JsonConvert.SerializeObject(hasResult.Result)}" } });
+                            new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", $"Deploy on server {server} Completed, {JsonConvert.SerializeObject(hasResult.Result)}" } }).ConfigureAwait(false);
                         // inspect result
                     }
 
                     // Send Result
                     var completionService = new MongoJobCompletionService(database);
-                    await completionService.Complete(exampleQueueName, rollingDeployJob.Id, new JobResult { { "Result", "Success" } });
+                    await completionService.Complete(exampleQueueName, rollingDeployJob.Id, new JobResult { { "Result", "Success" } }).ConfigureAwait(false);
 
-                    var finalizedRollingDeployJob = await queryService.QueryFor(new JobQuery { QueueId = exampleQueueName, JobIds = new[] { rollingDeployJob.Id } });
+                    var finalizedRollingDeployJob = await queryService.QueryFor(new JobQuery { QueueId = exampleQueueName, JobIds = new[] { rollingDeployJob.Id } }).ConfigureAwait(false);
 
                     cancellationSource.Cancel();
 
@@ -243,8 +243,8 @@ namespace MonJobs.Tests
                 {
                     TakeNextOptions = peekQuery,
                     Token = cancellationToken,
-                });
-            });
+                }).ConfigureAwait(false);
+            }).ConfigureAwait(false);
         }
 
         private static Task SetupTakeNextWorkerWithSubscription(IMongoDatabase database, QueueId queueName, ConcurrentBag<Job> finishedJobs, JobAttributes attributesThatShouldWork, CancellationToken cancellationToken)
@@ -276,23 +276,24 @@ namespace MonJobs.Tests
                 var reportService = new MongoJobReportService(database);
                 await
                     reportService.AddReport(queueName, nextJob.Id,
-                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage1 } });
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage1 } }).ConfigureAwait(false);
                 await
                     reportService.AddReport(queueName, nextJob.Id,
-                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage2 } });
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage2 } }).ConfigureAwait(false);
                 await
                     reportService.AddReport(queueName, nextJob.Id,
-                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage3 } });
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage3 } }).ConfigureAwait(false);
 
                 // Send Result
                 var completionService = new MongoJobCompletionService(database);
-                await completionService.Complete(queueName, nextJob.Id, new JobResult { { "Result", "Success" } });
+                await completionService.Complete(queueName, nextJob.Id, new JobResult { { "Result", "Success" } }).ConfigureAwait(false);
 
                 // Finish Job
                 var finishedJobFromDb =
                     await database.GetJobCollection()
-                    .Find(Builders<Job>.Filter.Eq(x => x.Id, nextJob.Id))
-                    .FirstAsync(cancellationToken);
+                        .Find(Builders<Job>.Filter.Eq(x => x.Id, nextJob.Id))
+                        .FirstAsync(cancellationToken)
+                        .ConfigureAwait(false);
 
                 Assert.That(finishedJobFromDb, Is.Not.Null);
                 Assert.That(finishedJobFromDb.Acknowledgment, Is.Not.Null);
@@ -332,7 +333,7 @@ namespace MonJobs.Tests
                 // Acknowledge the job
                 var acknowledgmentService = new MongoJobAcknowledgmentService(database);
 
-                var ackResult = await acknowledgmentService.Ack(queueName, nextJob.Id, standardAck);
+                var ackResult = await acknowledgmentService.Ack(queueName, nextJob.Id, standardAck).ConfigureAwait(false);
                 if (!ackResult.Success) return;
 
                 var exampleReportMessage1 = "FooBar";
@@ -343,21 +344,21 @@ namespace MonJobs.Tests
                 var reportService = new MongoJobReportService(database);
                 await
                     reportService.AddReport(queueName, nextJob.Id,
-                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage1 } });
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage1 } }).ConfigureAwait(false);
                 await
                     reportService.AddReport(queueName, nextJob.Id,
-                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage2 } });
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage2 } }).ConfigureAwait(false);
                 await
                     reportService.AddReport(queueName, nextJob.Id,
-                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage3 } });
+                        new JobReport { { "Timestamp", DateTime.UtcNow.ToString("O") }, { "Message", exampleReportMessage3 } }).ConfigureAwait(false);
 
                 // Send Result
                 var completionService = new MongoJobCompletionService(database);
-                await completionService.Complete(queueName, nextJob.Id, new JobResult { { "Result", "Success" } });
+                await completionService.Complete(queueName, nextJob.Id, new JobResult { { "Result", "Success" } }).ConfigureAwait(false);
 
                 // Finish Job
                 var finishedJobFromDb =
-                    await database.GetJobCollection().Find(Builders<Job>.Filter.Eq(x => x.Id, nextJob.Id)).FirstAsync(cancellationToken);
+                    await database.GetJobCollection().Find(Builders<Job>.Filter.Eq(x => x.Id, nextJob.Id)).FirstAsync(cancellationToken).ConfigureAwait(false);
 
                 Assert.That(finishedJobFromDb, Is.Not.Null);
                 Assert.That(finishedJobFromDb.Acknowledgment, Is.Not.Null);

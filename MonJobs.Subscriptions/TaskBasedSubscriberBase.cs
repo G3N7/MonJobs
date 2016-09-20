@@ -12,7 +12,7 @@ namespace MonJobs.Subscriptions
             {
                 try
                 {
-                    var hadSomethingToDo = await whatToDoReturningIfNoWorkWasNeeded();
+                    var hadSomethingToDo = await whatToDoReturningIfNoWorkWasNeeded().ConfigureAwait(false);
                     if (!hadSomethingToDo)
                     {
                         Thread.Sleep(options.PollingInterval ?? TimeSpan.FromSeconds(.5));
@@ -21,7 +21,7 @@ namespace MonJobs.Subscriptions
                 catch (Exception ex)
                 {
                     // if the consumer configured an exception handling mechanism use it.
-                    if (options.OnException != null) await options.OnException(ex);
+                    if (options.OnException != null) await options.OnException(ex).ConfigureAwait(false);
                 }
 
                 // Here we are ensuring recursion without having to await.

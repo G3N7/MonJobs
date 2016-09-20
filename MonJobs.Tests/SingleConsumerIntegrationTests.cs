@@ -18,21 +18,21 @@ namespace MonJobs.Tests
                 {
                     { "Name", "SpinWidget" },
                     { "DataCenter", "CAL01" }
-                });
+                }).ConfigureAwait(false);
                 var fooBarJobId = await creationService.Create(exampleQueueName, new JobAttributes
                 {
                     { "Name", "FooBar" },
                     { "DataCenter", "CAL01" }
-                });
+                }).ConfigureAwait(false);
 
-                var finished1 = await TryProcessOneJobUsingPeekThanAck(database, exampleQueueName, new JobAttributes { { "DataCenter", "CAL01" } });
-                var finished2 = await TryProcessOneJobUsingPeekThanAck(database, exampleQueueName, new JobAttributes { { "DataCenter", "CAL01" } });
-                var finished3 = await TryProcessOneJobUsingPeekThanAck(database, exampleQueueName, new JobAttributes { { "DataCenter", "CAL01" } });
+                var finished1 = await TryProcessOneJobUsingPeekThanAck(database, exampleQueueName, new JobAttributes { { "DataCenter", "CAL01" } }).ConfigureAwait(false);
+                var finished2 = await TryProcessOneJobUsingPeekThanAck(database, exampleQueueName, new JobAttributes { { "DataCenter", "CAL01" } }).ConfigureAwait(false);
+                var finished3 = await TryProcessOneJobUsingPeekThanAck(database, exampleQueueName, new JobAttributes { { "DataCenter", "CAL01" } }).ConfigureAwait(false);
 
                 Assert.That(finished1, Is.Not.Null);
                 Assert.That(finished2, Is.Not.Null);
                 Assert.That(finished3, Is.Null);
-            });
+            }).ConfigureAwait(false);
         }
 
         [Test]
@@ -48,23 +48,23 @@ namespace MonJobs.Tests
                 {
                     { "Name", "SpinWidget" },
                     { "DataCenter", "CAL01" }
-                });
+                }).ConfigureAwait(false);
                 var fooBarJobId = await creationService.Create(exampleQueueName, new JobAttributes
                 {
                     { "Name", "FooBar" },
                     { "DataCenter", "CAL01" }
-                });
+                }).ConfigureAwait(false);
 
                 var myDataCenter = new JobAttributes { { "DataCenter", "CAL01" } };
 
-                var finished1 = await TryProcessOneJobUsingTakeNext(database, exampleQueueName, myDataCenter);
-                var finished2 = await TryProcessOneJobUsingTakeNext(database, exampleQueueName, myDataCenter);
-                var finished3 = await TryProcessOneJobUsingTakeNext(database, exampleQueueName, myDataCenter);
+                var finished1 = await TryProcessOneJobUsingTakeNext(database, exampleQueueName, myDataCenter).ConfigureAwait(false);
+                var finished2 = await TryProcessOneJobUsingTakeNext(database, exampleQueueName, myDataCenter).ConfigureAwait(false);
+                var finished3 = await TryProcessOneJobUsingTakeNext(database, exampleQueueName, myDataCenter).ConfigureAwait(false);
 
                 Assert.That(finished1, Is.Not.Null);
                 Assert.That(finished2, Is.Not.Null);
                 Assert.That(finished3, Is.Null);
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

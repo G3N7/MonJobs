@@ -20,7 +20,7 @@ namespace MonJobs
 
             var update = Builders<Job>.Update.Set(x => x.Result, result);
 
-            await _collection.UpdateOneAsync(matchesJobIdAndQueueId, update);
+            await _collection.UpdateOneAsync(matchesJobIdAndQueueId, update).ConfigureAwait(false);
         }
     }
 }

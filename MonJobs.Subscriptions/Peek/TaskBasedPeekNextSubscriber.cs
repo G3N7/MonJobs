@@ -19,10 +19,10 @@ namespace MonJobs.Subscriptions.Peek
         {
             return Subscribe(async () =>
             {
-                var jobs = await _jobPeekNextService.PeekFor(options.PeekNextOptions);
+                var jobs = await _jobPeekNextService.PeekFor(options.PeekNextOptions).ConfigureAwait(false);
                 var jobsArray = jobs as Job[] ?? jobs.ToArray();
                 if (jobs == null || !jobsArray.Any()) return false;
-                await whatToDo(jobsArray);
+                await whatToDo(jobsArray).ConfigureAwait(false);
                 return true;
             }, options);
         }

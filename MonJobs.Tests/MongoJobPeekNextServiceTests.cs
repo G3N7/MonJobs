@@ -47,17 +47,17 @@ namespace MonJobs.Tests
             {
                 var jobs = database.GetJobCollection();
 
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobPeekNextService(new MongoJobQueryService(database));
 
-                var results = (await sut.PeekFor(exampleQuery))?.ToList();
+                var results = (await sut.PeekFor(exampleQuery).ConfigureAwait(false))?.ToList();
 
                 Assert.That(results, Is.Not.Null);
                 Assert.That(results, Has.Count.EqualTo(1));
 
                 Assert.That(results?.First()?.Id, Is.EqualTo(newlyCreatedJobId));
-            });
+            }).ConfigureAwait(false);
 
         }
     }

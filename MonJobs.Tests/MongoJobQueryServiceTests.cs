@@ -35,15 +35,15 @@ namespace MonJobs.Tests
             {
                 var jobs = database.GetJobCollection();
 
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobQueryService(database);
 
-                var results = (await sut.QueryFor(exampleQuery))?.ToList();
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
 
                 Assert.That(results, Is.Not.Null);
                 Assert.That(results, Has.Count.EqualTo(2));
-            });
+            }).ConfigureAwait(false);
 
         }
 
@@ -96,11 +96,11 @@ namespace MonJobs.Tests
             {
                 var jobs = database.GetJobCollection();
 
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobQueryService(database);
 
-                var results = (await sut.QueryFor(exampleQuery))?.ToList();
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
 
                 Assert.That(results, Is.Not.Null);
                 Assert.That(results, Has.Count.EqualTo(2));
@@ -110,7 +110,7 @@ namespace MonJobs.Tests
 
                 Assert.That(foundIds, Contains.Item(matchingJob1));
                 Assert.That(foundIds, Contains.Item(matchingJob2));
-            });
+            }).ConfigureAwait(false);
         }
 
         [Test]
@@ -163,11 +163,11 @@ namespace MonJobs.Tests
             {
                 var jobs = database.GetJobCollection();
 
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobQueryService(database);
 
-                var results = (await sut.QueryFor(exampleQuery))?.ToList();
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
 
                 Assert.That(results, Is.Not.Null);
                 Assert.That(results, Has.Count.EqualTo(1));
@@ -176,7 +176,7 @@ namespace MonJobs.Tests
                 var foundIds = results.Select(x => x.Id).ToList();
 
                 Assert.That(foundIds, Contains.Item(matchingJob1));
-            });
+            }).ConfigureAwait(false);
         }
 
         [Test]
@@ -207,15 +207,15 @@ namespace MonJobs.Tests
             {
                 var jobs = database.GetJobCollection();
 
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobQueryService(database);
 
-                var results = (await sut.QueryFor(exampleQuery))?.ToList();
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
 
                 Assert.That(results, Is.Not.Null);
                 Assert.That(results, Has.Count.EqualTo(2));
-            });
+            }).ConfigureAwait(false);
         }
 
         [Test]
@@ -259,11 +259,11 @@ namespace MonJobs.Tests
             {
                 var jobs = database.GetJobCollection();
 
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobQueryService(database);
 
-                var results = (await sut.QueryFor(exampleQuery))?.ToList();
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
 
                 Assert.That(results, Is.Not.Null);
                 Assert.That(results, Has.Count.EqualTo(2));
@@ -273,7 +273,7 @@ namespace MonJobs.Tests
 
                 Assert.That(foundIds, Contains.Item(matchingJob1));
                 Assert.That(foundIds, Contains.Item(matchingJob2));
-            });
+            }).ConfigureAwait(false);
         }
 
         [Test]
@@ -313,11 +313,11 @@ namespace MonJobs.Tests
             {
                 var jobs = database.GetJobCollection();
 
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobQueryService(database);
 
-                var results = (await sut.QueryFor(exampleQuery))?.ToList();
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
 
                 Assert.That(results, Is.Not.Null);
                 Assert.That(results, Has.Count.EqualTo(2));
@@ -327,7 +327,7 @@ namespace MonJobs.Tests
 
                 Assert.That(foundIds, Contains.Item(matchingJob1));
                 Assert.That(foundIds, Contains.Item(matchingJob2));
-            });
+            }).ConfigureAwait(false);
         }
 
         [Test]
@@ -371,11 +371,11 @@ namespace MonJobs.Tests
             {
                 var jobs = database.GetJobCollection();
 
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobQueryService(database);
 
-                var results = (await sut.QueryFor(exampleQuery))?.ToList();
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
 
                 Assert.That(results, Is.Not.Null);
                 Assert.That(results, Has.Count.EqualTo(2));
@@ -385,7 +385,7 @@ namespace MonJobs.Tests
 
                 Assert.That(foundIds, Contains.Item(matchingJob1));
                 Assert.That(foundIds, Contains.Item(matchingJob2));
-            });
+            }).ConfigureAwait(false);
         }
 
         [Test]
@@ -425,11 +425,11 @@ namespace MonJobs.Tests
             {
                 var jobs = database.GetJobCollection();
 
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobQueryService(database);
 
-                var results = (await sut.QueryFor(exampleQuery))?.ToList();
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
 
                 Assert.That(results, Is.Not.Null);
                 Assert.That(results, Has.Count.EqualTo(2));
@@ -439,7 +439,7 @@ namespace MonJobs.Tests
 
                 Assert.That(foundIds, Contains.Item(matchingJob1));
                 Assert.That(foundIds, Contains.Item(matchingJob2));
-            });
+            }).ConfigureAwait(false);
         }
 
         [Test]
@@ -476,11 +476,11 @@ namespace MonJobs.Tests
             {
                 var jobs = database.GetJobCollection();
 
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobQueryService(database);
 
-                var results = (await sut.QueryFor(exampleQuery))?.ToList();
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
 
                 Assert.That(results, Is.Not.Null);
                 Assert.That(results, Has.Count.EqualTo(2));
@@ -490,7 +490,7 @@ namespace MonJobs.Tests
 
                 Assert.That(foundIds, Contains.Item(matchingJob1));
                 Assert.That(foundIds, Contains.Item(matchingJob2));
-            });
+            }).ConfigureAwait(false);
         }
 
         [Test]
@@ -542,11 +542,11 @@ namespace MonJobs.Tests
             {
                 var jobs = database.GetJobCollection();
 
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobQueryService(database);
 
-                var results = (await sut.QueryFor(exampleQuery))?.ToList();
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
 
                 Assert.That(results, Is.Not.Null);
                 Assert.That(results, Has.Count.EqualTo(2));
@@ -556,7 +556,7 @@ namespace MonJobs.Tests
 
                 Assert.That(foundIds, Contains.Item(matchingJob1));
                 Assert.That(foundIds, Contains.Item(matchingJob2));
-            });
+            }).ConfigureAwait(false);
         }
 
         [Test]
@@ -608,11 +608,11 @@ namespace MonJobs.Tests
             {
                 var jobs = database.GetJobCollection();
 
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobQueryService(database);
 
-                var results = (await sut.QueryFor(exampleQuery))?.ToList();
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
 
                 Assert.That(results, Is.Not.Null);
                 Assert.That(results, Has.Count.EqualTo(2));
@@ -622,7 +622,7 @@ namespace MonJobs.Tests
 
                 Assert.That(foundIds, Contains.Item(matchingJob1));
                 Assert.That(foundIds, Contains.Item(matchingJob2));
-            });
+            }).ConfigureAwait(false);
         }
 
         [Test]
@@ -674,11 +674,11 @@ namespace MonJobs.Tests
             {
                 var jobs = database.GetJobCollection();
 
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobQueryService(database);
 
-                var results = (await sut.QueryFor(exampleQuery))?.ToList();
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
 
                 Assert.That(results, Is.Not.Null);
                 Assert.That(results, Has.Count.EqualTo(2));
@@ -688,7 +688,7 @@ namespace MonJobs.Tests
 
                 Assert.That(foundIds, Contains.Item(matchingJob1));
                 Assert.That(foundIds, Contains.Item(matchingJob2));
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

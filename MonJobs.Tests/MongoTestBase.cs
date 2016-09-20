@@ -12,7 +12,7 @@ namespace MonJobs.Tests
             var binSearchPattern = Environment.GetEnvironmentVariable("BIN_SEARCH_PATTERN") ?? @"tools\mongodb-win32*\bin";
             using (var runner = MongoDbRunner.Start(System.IO.Path.GetTempPath() + Guid.NewGuid().ToString("N"), binSearchPattern))
             {
-                await RunAction(runner.ConnectionString, mongoWork);
+                await RunAction(runner.ConnectionString, mongoWork).ConfigureAwait(false);
             }
         }
 
@@ -21,9 +21,9 @@ namespace MonJobs.Tests
             var server = new MongoClient(connectionString);
             const string databaseName = "IntegrationTest";
             var database = server.GetDatabase(databaseName);
-            await database.Client.DropDatabaseAsync(databaseName);
-            await mongoWork(database);
-            await database.Client.DropDatabaseAsync(databaseName);
+            await database.Client.DropDatabaseAsync(databaseName).ConfigureAwait(false);
+            await mongoWork(database).ConfigureAwait(false);
+            await database.Client.DropDatabaseAsync(databaseName).ConfigureAwait(false);
         }
     }
 }

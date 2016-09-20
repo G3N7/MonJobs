@@ -29,7 +29,7 @@ namespace MonJobs.Tests.App
                     .ReturnsAsync(new[] { exampleExistingJob });
 
             var sut = new JobsController(mockQueryService.Object, null);
-            var result = await sut.Get(exampleQueueId, exampleJobId);
+            var result = await sut.Get(exampleQueueId, exampleJobId).ConfigureAwait(false);
 
             Assert.That(result.Id, Is.EqualTo(exampleJobId));
         }
@@ -46,7 +46,7 @@ namespace MonJobs.Tests.App
                     .ReturnsAsync(Enumerable.Empty<Job>());
 
             var sut = new JobsController(mockQueryService.Object, null);
-            var result = await sut.Get(exampleQueueId, exampleJobId);
+            var result = await sut.Get(exampleQueueId, exampleJobId).ConfigureAwait(false);
 
             Assert.That(result, Is.Null);
         }
@@ -78,7 +78,7 @@ namespace MonJobs.Tests.App
                     JobIds = new[] { exampleJobId }
                 }))
             };
-            var result = await sut.Get(exampleQueueId);
+            var result = await sut.Get(exampleQueueId).ConfigureAwait(false);
 
             var resultingIds = result.Select(x => x.Id);
 
@@ -100,7 +100,7 @@ namespace MonJobs.Tests.App
                 .ReturnsAsync(exampleCreatedJobId);
 
             var sut = new JobsController(null, mockCreationService.Object);
-            var result = await sut.Post(exampleQueueId, exampleAttributes);
+            var result = await sut.Post(exampleQueueId, exampleAttributes).ConfigureAwait(false);
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.Not.EqualTo(JobId.Empty()));

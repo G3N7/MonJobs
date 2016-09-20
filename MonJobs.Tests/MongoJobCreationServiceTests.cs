@@ -17,18 +17,18 @@ namespace MonJobs.Tests
             {
                 var sut = new MongoJobCreationService(database);
 
-                var newId = await sut.Create(exampleQueueId, exampleAttributes);
+                var newId = await sut.Create(exampleQueueId, exampleAttributes).ConfigureAwait(false);
 
                 Assert.That(newId, Is.Not.Null);
                 var collection = database.GetCollection<Job>(CollectionNames.Job);
-                var newlyCreatedJob = await collection.Find(Builders<Job>.Filter.Empty).SingleAsync();
+                var newlyCreatedJob = await collection.Find(Builders<Job>.Filter.Empty).SingleAsync().ConfigureAwait(false);
 
                 Assert.That(newlyCreatedJob.Id, Is.Not.Null);
                 Assert.That(newlyCreatedJob.Id, Is.Not.EqualTo(JobId.Empty()));
                 Assert.That(newlyCreatedJob.QueueId, Is.EqualTo(exampleQueueId));
                 Assert.That(newlyCreatedJob.Attributes, Is.EqualTo(exampleAttributes));
                 Assert.That(newlyCreatedJob.Attributes["name"], Is.EqualTo("Thing ToDo"));
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

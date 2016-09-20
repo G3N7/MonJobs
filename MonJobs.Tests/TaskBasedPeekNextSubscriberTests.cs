@@ -27,7 +27,7 @@ namespace MonJobs.Tests
             var sut = new TaskBasedPeekNextSubscriber(mockPeekNextService.Object);
 
             var hasBeenCalled = false;
-            await sut.Subscribe(job => Task.FromResult(hasBeenCalled = true), exampleOptions);
+            await sut.Subscribe(job => Task.FromResult(hasBeenCalled = true), exampleOptions).ConfigureAwait(false);
 
             Thread.Sleep(10);
 
@@ -56,7 +56,7 @@ namespace MonJobs.Tests
             var sut = new TaskBasedPeekNextSubscriber(mockPeekNextService.Object);
 
             var numberOfTimesOurDelegateIsInvoked = 0;
-            await sut.Subscribe(job => Task.FromResult(numberOfTimesOurDelegateIsInvoked += 1), exampleOptions);
+            await sut.Subscribe(job => Task.FromResult(numberOfTimesOurDelegateIsInvoked += 1), exampleOptions).ConfigureAwait(false);
 
             Thread.Sleep(10);
 
@@ -90,7 +90,7 @@ namespace MonJobs.Tests
             var sut = new TaskBasedPeekNextSubscriber(mockPeekNextService.Object);
 
             var numberOfTimesOurDelegateIsInvoked = 0;
-            await sut.Subscribe(job => Task.FromResult(numberOfTimesOurDelegateIsInvoked += 1), exampleOptions);
+            await sut.Subscribe(job => Task.FromResult(numberOfTimesOurDelegateIsInvoked += 1), exampleOptions).ConfigureAwait(false);
 
             do
             {

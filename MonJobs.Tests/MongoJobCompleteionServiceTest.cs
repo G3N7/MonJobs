@@ -21,13 +21,13 @@ namespace MonJobs.Tests
                 var collection = database.GetJobCollection();
                 collection.InsertOne(new Job { QueueId = exampleQueueId, Id = exampleJobId });
                 var sut = new MongoJobCompletionService(database);
-                await sut.Complete(exampleQueueId, exampleJobId, exampleResult);
+                await sut.Complete(exampleQueueId, exampleJobId, exampleResult).ConfigureAwait(false);
 
-                var result = await collection.Find(Builders<Job>.Filter.Empty).SingleAsync();
+                var result = await collection.Find(Builders<Job>.Filter.Empty).SingleAsync().ConfigureAwait(false);
 
                 Assert.That(result.Result, Is.Not.Null);
                 Assert.That(result.Result["Datacenter"], Is.EqualTo("PEN"));
-            });
+            }).ConfigureAwait(false);
 
         }
     }

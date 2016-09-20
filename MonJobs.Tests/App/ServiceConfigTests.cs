@@ -26,7 +26,7 @@ namespace MonJobs.Tests.App
 
                 Assert.That(bindingResult.IsMissingDependencies, Is.False, bindingResult.Message);
                 return Task.FromResult(true);
-            });
+            }).ConfigureAwait(false);
 
         }
 
@@ -57,7 +57,7 @@ namespace MonJobs.Tests.App
                     Assert.That(controllerFromContainer, Is.Not.Null, $"{controller.Name} Could not be created.");
                 }
                 return Task.FromResult(true);
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

@@ -33,19 +33,19 @@ namespace MonJobs.Tests
             await RunInMongoLand(async database =>
             {
                 var jobs = database.GetJobCollection();
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
                 
                 var sut = new MongoJobReportService(database);
-                await sut.AddReport(exampleQueue, myJobId, exampleReport);
+                await sut.AddReport(exampleQueue, myJobId, exampleReport).ConfigureAwait(false);
 
-                var myJob = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, myJobId)).FirstAsync();
+                var myJob = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, myJobId)).FirstAsync().ConfigureAwait(false);
 
                 Assert.That(myJob.Reports, Has.Length.EqualTo(1));
                 Assert.That(myJob.Reports.First().Keys, Contains.Item("Timestamp"));
                 Assert.That(myJob.Reports.Last()["Timestamp"], Is.EqualTo(exampleReport["Timestamp"]));
                 Assert.That(myJob.Reports.First().Keys, Contains.Item("Message"));
                 Assert.That(myJob.Reports.Last()["Message"], Is.EqualTo(exampleReport["Message"]));
-            });
+            }).ConfigureAwait(false);
         }
 
         [Test]
@@ -70,19 +70,19 @@ namespace MonJobs.Tests
             await RunInMongoLand(async database =>
             {
                 var jobs = database.GetJobCollection();
-                await jobs.InsertManyAsync(existingJobs);
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
 
                 var sut = new MongoJobReportService(database);
-                await sut.AddReport(exampleQueue, myJobId, exampleReport);
+                await sut.AddReport(exampleQueue, myJobId, exampleReport).ConfigureAwait(false);
 
-                var myJob = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, myJobId)).FirstAsync();
+                var myJob = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, myJobId)).FirstAsync().ConfigureAwait(false);
 
                 Assert.That(myJob.Reports, Has.Length.EqualTo(2));
                 Assert.That(myJob.Reports.Last().Keys, Contains.Item("Timestamp"));
                 Assert.That(myJob.Reports.Last()["Timestamp"], Is.EqualTo(exampleReport["Timestamp"]));
                 Assert.That(myJob.Reports.Last().Keys, Contains.Item("Message"));
                 Assert.That(myJob.Reports.Last()["Message"], Is.EqualTo(exampleReport["Message"]));
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

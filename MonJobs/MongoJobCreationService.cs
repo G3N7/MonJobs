@@ -15,7 +15,7 @@ namespace MonJobs
         public async Task<JobId> Create(QueueId queue, JobAttributes attributes)
         {
             var newId = JobId.Generate();
-            await _collection.InsertOneAsync(new Job { Id = newId, QueueId = queue, Attributes = attributes });
+            await _collection.InsertOneAsync(new Job { Id = newId, QueueId = queue, Attributes = attributes }).ConfigureAwait(false);
             return newId;
         }
     }

@@ -17,9 +17,9 @@ namespace MonJobs.Subscriptions.Take
         {
             return Subscribe(async () =>
             {
-                var job = await _jobTakeNextService.TakeFor(options.TakeNextOptions);
+                var job = await _jobTakeNextService.TakeFor(options.TakeNextOptions).ConfigureAwait(false);
                 if (job == null) return false;
-                await whatToDo(job);
+                await whatToDo(job).ConfigureAwait(false);
                 return true;
             }, options);
         }
