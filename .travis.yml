@@ -6,7 +6,7 @@ env:
   
 install:
   - nuget restore MonJobs.sln
-  - nuget install NUnit.Runners -Version 3.4.1 -OutputDirectory testrunner
+  - nuget install NUnit.Runners -Version 3.5.0 -OutputDirectory testrunner
   - curl -fsSL https://gist.githubusercontent.com/G3N7/d8c6c2b98e6c9ec36953d0341d8f5d9b/raw/17c83de0e005d905e1fc2cf6289f243d0890e622/patch_assembly_file_with_build_id.sh -o patch_assembly_file_with_build_id.sh  
 
 before_script:
@@ -16,6 +16,6 @@ before_script:
 
 script:
   - xbuild /p:Configuration=Release /p:TargetFrameworkVersion="v4.5" MonJobs.sln
-  - mono ./testrunner/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./MonJobs.Tests/bin/Release/MonJobs.Tests.dll
+  - mono ./testrunner/NUnit.ConsoleRunner.3.5.0/tools/nunit3-console.exe ./MonJobs.Tests/bin/Release/MonJobs.Tests.dll
   #- nuget pack ./MonJobs/MonJobs.csproj
   #- nuget pack ./MonJobs.Subscriptions/MonJobs.Subscriptions.csproj
