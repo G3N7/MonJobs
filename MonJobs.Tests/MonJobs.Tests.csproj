@@ -95,6 +95,11 @@
   <ItemGroup>
     <Compile Include="App\JobControllerTests.cs" />
     <Compile Include="App\ServiceConfigTests.cs" />
+    <Compile Include="ContextSpecification.cs" />
+    <Compile Include="JobDatabaseContext.cs" />
+    <Compile Include="Performance\AddingNewJobs.cs" />
+    <Compile Include="Performance\OneHundredThousandExistingOfEachTypeAcrossSixtyQueues.cs" />
+    <Compile Include="Performance\ExistingJobsContext.cs" />
     <Compile Include="MongoJobAcknowledgementServiceTests.cs" />
     <Compile Include="MongoJobCompleteionServiceTest.cs" />
     <Compile Include="MongoJobCreationServiceTests.cs" />
@@ -109,6 +114,7 @@
     <Compile Include="SingleConsumerIntegrationTests.cs" />
     <Compile Include="TaskBasedPeekNextSubscriberTests.cs" />
     <Compile Include="TaskBasedTakeNextSubscriberTests.cs" />
+    <Compile Include="Performance\TenThousandExistingOfEachTypeAcrossSixtyQueues.cs" />
     <Compile Include="TestBase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +135,7 @@
       <Name>MonJobs</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
