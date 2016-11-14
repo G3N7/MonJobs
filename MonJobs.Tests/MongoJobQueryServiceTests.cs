@@ -690,5 +690,250 @@ namespace MonJobs.Tests
                 Assert.That(foundIds, Contains.Item(matchingJob2));
             }).ConfigureAwait(false);
         }
+
+
+        [Test]
+        public async Task QueryFor_AJArrayOfStringsAndWithSimpleAdhocQuery_ReturnsAllJobsMatching()
+        {
+
+            var matchingJob1 = JobId.Generate();
+            var matchingJob2 = JobId.Generate();
+            var matchingJob3 = JobId.Generate();
+            var unmatchedJob1 = JobId.Generate();
+
+            var exampleQueueId = QueueId.Parse("ExampleQueue");
+            var exampleQuery = new JobQuery
+            {
+                QueueId = exampleQueueId,
+                HasAttributes = new JobAttributes
+                {
+                    { "name", new JArray { "DeployApi" , "DeployWebsite" } }
+                },
+                AdhocQuery = "{\"$and\" : [{ \"Acknowledgment.superspecialfield\": \"superspecialfieldvalue\" }]}"
+            };
+
+            var existingJobs = new[] { new Job
+                {
+                    Id = matchingJob1,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployApi" }
+                    }
+                }, new Job
+                {
+                    Id = matchingJob2,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployWebsite" }
+                    }
+                }, new Job
+                {
+                    Id = unmatchedJob1,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeploySchema" }
+                    }
+                }, new Job()
+                {
+                    Id = matchingJob3,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployApi" }
+                    },
+                    Acknowledgment = new JobAcknowledgment
+                    {
+                        {"superspecialfield","superspecialfieldvalue"}
+                    }
+                }
+            };
+
+            await RunInMongoLand(async database =>
+            {
+                var jobs = database.GetJobCollection();
+
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
+
+                var sut = new MongoJobQueryService(database);
+
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
+
+                Assert.That(results, Is.Not.Null);
+                Assert.That(results, Has.Count.EqualTo(1));
+
+                // ReSharper disable once AssignNullToNotNullAttribute
+                var foundIds = results.Select(x => x.Id).ToList();
+
+                Assert.That(foundIds, Contains.Item(matchingJob3));
+            }).ConfigureAwait(false);
+        }
+
+        [Test]
+        public async Task QueryFor_AJArrayOfStringsAndWithOrStyleAdhocQuery_ReturnsAllJobsMatching()
+        {
+
+            var matchingJob1 = JobId.Generate();
+            var matchingJob2 = JobId.Generate();
+            var matchingJob3 = JobId.Generate();
+            var unmatchedJob1 = JobId.Generate();
+
+            var exampleQueueId = QueueId.Parse("ExampleQueue");
+            var exampleQuery = new JobQuery
+            {
+                QueueId = exampleQueueId,
+                HasAttributes = new JobAttributes
+                {
+                    { "name", new JArray { "DeployApi" , "DeployWebsite" } }
+                },
+                AdhocQuery = "{\"$or\" : [{ \"Acknowledgment.superspecialfield\": \"superspecialfieldvalue\" },{ \"Acknowledgment.superspecialfield\": \"superDuperSpecialFieldValue\" }]}"
+            };
+
+            var existingJobs = new[] { new Job
+                {
+                    Id = matchingJob1,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployApi" }
+                    }
+                }, new Job
+                {
+                    Id = matchingJob2,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployWebsite" }
+                    },
+                    Acknowledgment = new JobAcknowledgment
+                    {
+                        {"superspecialfield","superDuperSpecialFieldValue"}
+                    }
+                }, new Job
+                {
+                    Id = unmatchedJob1,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeploySchema" }
+                    }
+                }, new Job()
+                {
+                    Id = matchingJob3,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployApi" }
+                    },
+                    Acknowledgment = new JobAcknowledgment
+                    {
+                        {"superspecialfield","superspecialfieldvalue"}
+                    }
+                }
+            };
+
+            await RunInMongoLand(async database =>
+            {
+                var jobs = database.GetJobCollection();
+
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
+
+                var sut = new MongoJobQueryService(database);
+
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
+
+                Assert.That(results, Is.Not.Null);
+                Assert.That(results, Has.Count.EqualTo(2));
+
+                // ReSharper disable once AssignNullToNotNullAttribute
+                var foundIds = results.Select(x => x.Id).ToList();
+
+                Assert.That(foundIds, Contains.Item(matchingJob2));
+                Assert.That(foundIds, Contains.Item(matchingJob3));
+            }).ConfigureAwait(false);
+        }
+
+        [Test]
+        public async Task QueryFor_AJArrayOfStringsAndWithInvalidAdhocQuery_ThrowsException()
+        {
+
+            var matchingJob1 = JobId.Generate();
+            var matchingJob2 = JobId.Generate();
+            var matchingJob3 = JobId.Generate();
+            var unmatchedJob1 = JobId.Generate();
+
+            var exampleQueueId = QueueId.Parse("ExampleQueue");
+            var exampleQuery = new JobQuery
+            {
+                QueueId = exampleQueueId,
+                HasAttributes = new JobAttributes
+                {
+                    { "name", new JArray { "DeployApi" , "DeployWebsite" } }
+                },
+                AdhocQuery = "SampeInvalidMongoQuery"
+            };
+
+            var existingJobs = new[] { new Job
+                {
+                    Id = matchingJob1,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployApi" }
+                    }
+                }, new Job
+                {
+                    Id = matchingJob2,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployWebsite" }
+                    },
+                    Acknowledgment = new JobAcknowledgment
+                    {
+                        {"superspecialfield","superDuperSpecialFieldValue"}
+                    }
+                }, new Job
+                {
+                    Id = unmatchedJob1,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeploySchema" }
+                    }
+                }, new Job()
+                {
+                    Id = matchingJob3,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployApi" }
+                    },
+                    Acknowledgment = new JobAcknowledgment
+                    {
+                        {"superspecialfield","superspecialfieldvalue"}
+                    }
+                }
+            };
+
+            await RunInMongoLand(async database =>
+            {
+                var jobs = database.GetJobCollection();
+
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
+
+                var sut = new MongoJobQueryService(database);
+
+                var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                {
+                    await sut.QueryFor(exampleQuery).ConfigureAwait(false);
+                });      
+                
+                Assert.That(ex.Message,Does.Contain("Invalid adhocQuery"));
+
+            }).ConfigureAwait(false);
+        }
     }
 }

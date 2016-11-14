@@ -14,6 +14,8 @@
             set { _hasAttributes = value; }
         }
 
+        public string AdhocQuery { get; set; }
+
         // mitch: these should be value types instead of nullables.
         public int? Limit { get; set; }
         public bool? HasBeenAcknowledged { get; set; }

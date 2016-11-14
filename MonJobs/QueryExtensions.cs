@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Newtonsoft.Json.Linq;
 
@@ -62,6 +64,21 @@ namespace MonJobs
                 var hasFinished = builder.Not(builder.Eq(x => x.Result, null));
                 var hasNoResults = builder.Eq(x => x.Result, null);
                 filters.Add(query.HasResult.Value ? hasFinished : hasNoResults);
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.AdhocQuery))
+            {
+
+                BsonDocument bsonDocumentFilter;
+                try
+                {
+                    bsonDocumentFilter = BsonSerializer.Deserialize<BsonDocument>(query.AdhocQuery);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException($"Invalid adhocQuery ({query.AdhocQuery})", ex);
+                }
+                filters.Add(bsonDocumentFilter);
             }
 
             var matchesAllFilters = Builders<Job>.Filter.And(filters);
