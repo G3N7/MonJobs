@@ -701,6 +701,7 @@ namespace MonJobs.Tests
             var matchingJob3 = JobId.Generate();
             var unmatchedJob1 = JobId.Generate();
 
+            var exampleAcknowledgedDateTime1 = new DateTime(2010, 1, 22, 22, 00, 00, DateTimeKind.Utc);
             var exampleQueueId = QueueId.Parse("ExampleQueue");
             var exampleQuery = new JobQuery
             {
@@ -709,7 +710,7 @@ namespace MonJobs.Tests
                 {
                     { "name", new JArray { "DeployApi" , "DeployWebsite" } }
                 },
-                AdhocQuery = "{\"$and\" : [{ \"Acknowledgment.superspecialfield\": \"superspecialfieldvalue\" }]}"
+                AdhocQuery = "{\"$and\" : [{ \"Acknowledgment.acknowledgedDateTime\": ISODate(\"2010-01-22T22:00:00.000Z\")}]}"
             };
 
             var existingJobs = new[] { new Job
@@ -746,7 +747,7 @@ namespace MonJobs.Tests
                     },
                     Acknowledgment = new JobAcknowledgment
                     {
-                        {"superspecialfield","superspecialfieldvalue"}
+                        {"acknowledgedDateTime",exampleAcknowledgedDateTime1}
                     }
                 }
             };
@@ -780,6 +781,8 @@ namespace MonJobs.Tests
             var matchingJob3 = JobId.Generate();
             var unmatchedJob1 = JobId.Generate();
 
+            var exampleAcknowledgedDateTime1 = new DateTime(2010, 1, 22, 22, 00, 00, DateTimeKind.Utc);
+            var exampleAcknowledgedDateTime2 = new DateTime(2010, 1, 22, 23, 00, 00, DateTimeKind.Utc);
             var exampleQueueId = QueueId.Parse("ExampleQueue");
             var exampleQuery = new JobQuery
             {
@@ -788,7 +791,7 @@ namespace MonJobs.Tests
                 {
                     { "name", new JArray { "DeployApi" , "DeployWebsite" } }
                 },
-                AdhocQuery = "{\"$or\" : [{ \"Acknowledgment.superspecialfield\": \"superspecialfieldvalue\" },{ \"Acknowledgment.superspecialfield\": \"superDuperSpecialFieldValue\" }]}"
+                AdhocQuery = "{\"$or\" : [{ \"Acknowledgment.acknowledgedDateTime\": ISODate(\"2010-01-22T22:00:00.000Z\")},{ \"Acknowledgment.acknowledgedDateTime\": ISODate(\"2010-01-22T23:00:00.000Z\")}]}"
             };
 
             var existingJobs = new[] { new Job
@@ -809,7 +812,7 @@ namespace MonJobs.Tests
                     },
                     Acknowledgment = new JobAcknowledgment
                     {
-                        {"superspecialfield","superDuperSpecialFieldValue"}
+                        {"acknowledgedDateTime",exampleAcknowledgedDateTime1}
                     }
                 }, new Job
                 {
@@ -829,7 +832,7 @@ namespace MonJobs.Tests
                     },
                     Acknowledgment = new JobAcknowledgment
                     {
-                        {"superspecialfield","superspecialfieldvalue"}
+                        {"acknowledgedDateTime",exampleAcknowledgedDateTime2}
                     }
                 }
             };
@@ -858,12 +861,6 @@ namespace MonJobs.Tests
         [Test]
         public async Task QueryFor_AJArrayOfStringsAndWithInvalidAdhocQuery_ThrowsException()
         {
-
-            var matchingJob1 = JobId.Generate();
-            var matchingJob2 = JobId.Generate();
-            var matchingJob3 = JobId.Generate();
-            var unmatchedJob1 = JobId.Generate();
-
             var exampleQueueId = QueueId.Parse("ExampleQueue");
             var exampleQuery = new JobQuery
             {
@@ -875,64 +872,17 @@ namespace MonJobs.Tests
                 AdhocQuery = "SampeInvalidMongoQuery"
             };
 
-            var existingJobs = new[] { new Job
-                {
-                    Id = matchingJob1,
-                    QueueId = exampleQueueId,
-                    Attributes = new JobAttributes
-                    {
-                        { "name", "DeployApi" }
-                    }
-                }, new Job
-                {
-                    Id = matchingJob2,
-                    QueueId = exampleQueueId,
-                    Attributes = new JobAttributes
-                    {
-                        { "name", "DeployWebsite" }
-                    },
-                    Acknowledgment = new JobAcknowledgment
-                    {
-                        {"superspecialfield","superDuperSpecialFieldValue"}
-                    }
-                }, new Job
-                {
-                    Id = unmatchedJob1,
-                    QueueId = exampleQueueId,
-                    Attributes = new JobAttributes
-                    {
-                        { "name", "DeploySchema" }
-                    }
-                }, new Job()
-                {
-                    Id = matchingJob3,
-                    QueueId = exampleQueueId,
-                    Attributes = new JobAttributes
-                    {
-                        { "name", "DeployApi" }
-                    },
-                    Acknowledgment = new JobAcknowledgment
-                    {
-                        {"superspecialfield","superspecialfieldvalue"}
-                    }
-                }
-            };
-
-            await RunInMongoLand(async database =>
+            await RunInMongoLand(database =>
             {
-                var jobs = database.GetJobCollection();
-
-                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
-
                 var sut = new MongoJobQueryService(database);
 
                 var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 {
                     await sut.QueryFor(exampleQuery).ConfigureAwait(false);
-                });      
-                
-                Assert.That(ex.Message,Does.Contain("Invalid adhocQuery"));
+                });
 
+                Assert.That(ex.Message, Does.Contain("Invalid adhocQuery"));
+                return Task.FromResult(true);
             }).ConfigureAwait(false);
         }
     }
