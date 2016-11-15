@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MonJobs.Peek;
-using MonJobs.Subscriptions.Peek;
+using MonJobs.Tests.Peek;
 using Moq;
 using NUnit.Framework;
 

@@ -95,6 +95,9 @@
   <ItemGroup>
     <Compile Include="ContextSpecification.cs" />
     <Compile Include="JobDatabaseContext.cs" />
+    <Compile Include="Peek\IPeekNextSubscriber.cs" />
+    <Compile Include="Peek\PeekNextSubscriptionOptions.cs" />
+    <Compile Include="Peek\TaskBasedPeekNextSubscriber.cs" />
     <Compile Include="Performance\AddingNewJobs.cs" />
     <Compile Include="Performance\OneHundredThousandExistingOfEachTypeAcrossSixtyQueues.cs" />
     <Compile Include="Performance\ExistingJobsContext.cs" />
@@ -110,7 +113,12 @@
     <Compile Include="MultiConsumerIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleConsumerIntegrationTests.cs" />
+    <Compile Include="SubscriptionOptionsBase.cs" />
+    <Compile Include="Take\ITakeNextSubscriber.cs" />
+    <Compile Include="Take\TakeNextSubscriptionOptions.cs" />
+    <Compile Include="Take\TaskBasedTakeNextSubscriber.cs" />
     <Compile Include="TaskBasedPeekNextSubscriberTests.cs" />
+    <Compile Include="TaskBasedSubscriberBase.cs" />
     <Compile Include="TaskBasedTakeNextSubscriberTests.cs" />
     <Compile Include="Performance\TenThousandExistingOfEachTypeAcrossSixtyQueues.cs" />
     <Compile Include="TestBase.cs" />
@@ -120,10 +128,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonJobs.Subscriptions\MonJobs.Subscriptions.csproj">
-      <Project>{3733D9C4-7825-46B2-A655-B785FB58F4A6}</Project>
-      <Name>MonJobs.Subscriptions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MonJobs\MonJobs.csproj">
       <Project>{763B7FEF-FF24-407D-8DCE-5313E6129941}</Project>
       <Name>MonJobs</Name>

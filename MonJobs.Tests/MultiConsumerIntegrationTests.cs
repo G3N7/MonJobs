@@ -8,9 +8,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MonJobs.Peek;
-using MonJobs.Subscriptions.Peek;
-using MonJobs.Subscriptions.Take;
 using MonJobs.Take;
+using MonJobs.Tests.Peek;
+using MonJobs.Tests.Take;
 using Newtonsoft.Json;
 using NUnit.Framework;
 

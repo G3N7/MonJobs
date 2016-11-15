@@ -1,8 +1,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MonJobs.Subscriptions.Take;
 using MonJobs.Take;
+using MonJobs.Tests.Take;
 using Moq;
 using NUnit.Framework;
 
