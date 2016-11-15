@@ -11,9 +11,7 @@ install:
 
 before_script:
   - bash patch_assembly_file_with_build_id.sh MonJobs/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
-  - bash patch_assembly_file_with_build_id.sh MonJobs.Subscriptions/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
-  - bash patch_assembly_file_with_build_id.sh MonJobs.WebApi/Properties/AssemblyInfo.cs ${TRAVIS_BUILD_NUMBER}
-
+  
 script:
   - xbuild /p:Configuration=Release /p:TargetFrameworkVersion="v4.5" MonJobs.sln
   - mono ./testrunner/NUnit.ConsoleRunner.3.5.0/tools/nunit3-console.exe ./MonJobs.Tests/bin/Release/MonJobs.Tests.dll
