@@ -25,7 +25,12 @@ namespace MonJobs.Take
 
             var update = Builders<Job>.Update.Set(x => x.Acknowledgment, options.Acknowledgment);
 
-            var result = await _jobs.FindOneAndUpdateAsync(jobQuery.BuildFilters(), update).ConfigureAwait(false);
+            var findOneAndUpdateOptions = new FindOneAndUpdateOptions<Job>
+            {
+                ReturnDocument = ReturnDocument.After
+            };
+
+            var result = await _jobs.FindOneAndUpdateAsync(jobQuery.BuildFilters(), update, findOneAndUpdateOptions).ConfigureAwait(false);
 
             return result;
         }
