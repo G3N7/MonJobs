@@ -59,10 +59,8 @@ namespace MonJobs.Tests
 
                 Assert.That(result, Is.Not.Null);
                 Assert.That(result?.Id, Is.EqualTo(newlyCreatedJobId));
-
-                var jobInDb = await jobs.Find(Builders<Job>.Filter.Eq(x => x.Id, result?.Id)).SingleAsync().ConfigureAwait(false);
-                Assert.That(jobInDb.Acknowledgment, Is.Not.Null);
-                Assert.That(jobInDb.Acknowledgment["RunnerId"], Is.EqualTo(exampleOptions.Acknowledgment["RunnerId"]));
+                Assert.That(result?.Acknowledgment, Is.Not.Null);
+                Assert.That(result?.Acknowledgment["RunnerId"], Is.EqualTo(exampleOptions.Acknowledgment["RunnerId"]));
             }).ConfigureAwait(false);
         }
 
