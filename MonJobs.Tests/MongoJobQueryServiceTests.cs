@@ -219,7 +219,7 @@ namespace MonJobs.Tests
         }
 
         [Test]
-        public async Task QueryFor_Skip_YieldsOnlyToTheLimit()
+        public async Task QueryFor_Skip_YieldsOnlyWhatIsAfterTheSkipped()
         {
             var exampleQueueId = QueueId.Parse("ExampleQueue");
             var exampleQuery = new JobQuery
