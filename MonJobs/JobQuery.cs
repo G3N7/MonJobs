@@ -18,6 +18,7 @@
 
         // mitch: these should be value types instead of nullables.
         public int? Limit { get; set; }
+        public int? Skip { get; set; }
         public bool? HasBeenAcknowledged { get; set; }
         public bool? HasResult { get; set; }
     }

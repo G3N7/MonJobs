@@ -19,6 +19,8 @@ namespace MonJobs
 
             if (query.Limit.HasValue) mongoQuery = mongoQuery.Limit(query.Limit.Value);
 
+            if (query.Skip.HasValue) mongoQuery = mongoQuery.Skip(query.Skip.Value);
+
             return await mongoQuery.ToListAsync().ConfigureAwait(false);
         }
     }

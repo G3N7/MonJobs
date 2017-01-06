@@ -219,6 +219,45 @@ namespace MonJobs.Tests
         }
 
         [Test]
+        public async Task QueryFor_Skip_YieldsOnlyToTheLimit()
+        {
+            var exampleQueueId = QueueId.Parse("ExampleQueue");
+            var exampleQuery = new JobQuery
+            {
+                QueueId = exampleQueueId,
+                Skip = 2,
+            };
+
+            var existingJobs = new[] { new Job
+            {
+                Id = JobId.Generate(),
+                QueueId = exampleQueueId
+            }, new Job
+            {
+                Id = JobId.Generate(),
+                QueueId = exampleQueueId
+            }, new Job
+            {
+                Id = JobId.Generate(),
+                QueueId = exampleQueueId
+            } };
+
+            await RunInMongoLand(async database =>
+            {
+                var jobs = database.GetJobCollection();
+
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
+
+                var sut = new MongoJobQueryService(database);
+
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
+
+                Assert.That(results, Is.Not.Null);
+                Assert.That(results, Has.Count.EqualTo(1));
+            }).ConfigureAwait(false);
+        }
+
+        [Test]
         public async Task QueryFor_HasBeenAcknowledged_YieldsOnlyAcknowledgedJobs()
         {
             var exampleQueueId = QueueId.Parse("ExampleQueue");
