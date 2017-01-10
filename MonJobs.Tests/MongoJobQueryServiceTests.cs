@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -921,6 +922,133 @@ namespace MonJobs.Tests
                 });
 
                 Assert.That(ex.Message, Does.Contain("Invalid adhocQuery"));
+                return Task.FromResult(true);
+            }).ConfigureAwait(false);
+        }
+
+        [Test]
+        public async Task QueryFor_AJArrayOfStringsAndWithSimpleAdhocSort_ReturnsAllJobsMatchingSorted()
+        {
+
+            var jobOrder1 = JobId.Generate();
+            var jobOrder2 = JobId.Generate();
+            var jobOrder3 = JobId.Generate();
+            var jobOrder4 = JobId.Generate();
+
+            var exampleAcknowledgedDateTime1 = new DateTime(2010, 1, 22, 22, 00, 00, DateTimeKind.Utc);
+            var exampleAcknowledgedDateTime2 = new DateTime(2009, 1, 22, 22, 00, 00, DateTimeKind.Utc);
+            var exampleAcknowledgedDateTime3 = new DateTime(2008, 1, 22, 22, 00, 00, DateTimeKind.Utc);
+            var exampleAcknowledgedDateTime4 = new DateTime(2011, 1, 22, 22, 00, 00, DateTimeKind.Utc);
+
+            var exampleQueueId = QueueId.Parse("ExampleQueue");
+            var exampleQuery = new JobQuery
+            {
+                QueueId = exampleQueueId,
+                HasAttributes = new JobAttributes
+                {
+                    { "name", new JArray { "DeployApi" , "DeployWebsite" } }
+                },
+                AdhocSort = "{\"Acknowledgment.acknowledgedDateTime\": -1}"
+            };
+
+            var existingJobs = new[] { new Job
+                {
+                    Id = jobOrder1,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployApi" }
+                    },
+                    Acknowledgment = new JobAcknowledgment
+                    {
+                        {"acknowledgedDateTime",exampleAcknowledgedDateTime1}
+                    }
+                }, new Job
+                {
+                    Id = jobOrder2,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployWebsite" }
+                    },
+                    Acknowledgment = new JobAcknowledgment
+                    {
+                        {"acknowledgedDateTime",exampleAcknowledgedDateTime2}
+                    }
+                }, new Job
+                {
+                    Id = jobOrder3,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeploySchema" }
+                    },
+                    Acknowledgment = new JobAcknowledgment
+                    {
+                        {"acknowledgedDateTime",exampleAcknowledgedDateTime3}
+                    }
+                }, new Job
+                {
+                    Id = jobOrder4,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployWebsite" }
+                    },
+                    Acknowledgment = new JobAcknowledgment
+                    {
+                        {"acknowledgedDateTime",exampleAcknowledgedDateTime4}
+                    }
+                }
+            };
+
+            await RunInMongoLand(async database =>
+            {
+                var jobs = database.GetJobCollection();
+
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
+
+                var sut = new MongoJobQueryService(database);
+
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
+
+                Assert.That(results, Is.Not.Null);
+                Assert.That(results, Has.Count.EqualTo(3));
+                
+                var foundIds = results.Select(x => x.Id).ToList();
+                List<MonJobs.JobId> expecedIds = new List<MonJobs.JobId>();
+                expecedIds.Add(jobOrder4);
+                expecedIds.Add(jobOrder1);
+                expecedIds.Add(jobOrder2);
+
+                Assert.AreEqual(foundIds, expecedIds);
+            }).ConfigureAwait(false);
+        }
+
+        [Test]
+        public async Task QueryFor_AJArrayOfStringsAndWithInvalidAdhocSort_ThrowsException()
+        {
+            var exampleQueueId = QueueId.Parse("ExampleQueue");
+            var exampleQuery = new JobQuery
+            {
+                QueueId = exampleQueueId,
+                HasAttributes = new JobAttributes
+                {
+                    { "name", new JArray { "DeployApi" , "DeployWebsite" } }
+                },
+                AdhocSort = "SampeInvalidMongoSort"
+            };
+
+            await RunInMongoLand(database =>
+            {
+                var sut = new MongoJobQueryService(database);
+
+                var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                {
+                    await sut.QueryFor(exampleQuery).ConfigureAwait(false);
+                });
+
+                Assert.That(ex.Message, Does.Contain("Invalid adhocSort"));
                 return Task.FromResult(true);
             }).ConfigureAwait(false);
         }
