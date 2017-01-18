@@ -81,9 +81,9 @@ namespace MonJobs
                 filters.Add(bsonDocumentFilter);
             }
 
-            if (!(query.Filter == null))
+            if (!(query.AdhocFilter == null))
             {
-                filters.Add(query.Filter);
+                filters.Add(query.AdhocFilter);
             }
 
             var matchesAllFilters = Builders<Job>.Filter.And(filters);

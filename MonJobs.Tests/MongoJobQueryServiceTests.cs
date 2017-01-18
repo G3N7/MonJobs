@@ -1079,7 +1079,7 @@ namespace MonJobs.Tests
                 {
                     { "name", new JArray { "DeployApi" , "DeployWebsite" } }
                 },
-                Filter = filter.Render(documentSerializer, serializerRegistry)
+                AdhocFilter = filter.Render(documentSerializer, serializerRegistry)
         };
 
             var existingJobs = new[] { new Job
@@ -1159,7 +1159,7 @@ namespace MonJobs.Tests
                 {
                     { "name", new JArray { "DeployApi" , "DeployWebsite" } }
                 },
-                Filter = BsonSerializer.Deserialize<BsonDocument>("{\"$and\" : [{ \"Acknowledgment.acknowledgedDateTime\": ISODate(\"2010-01-22T22:00:00.000Z\")}]}")
+                AdhocFilter = BsonSerializer.Deserialize<BsonDocument>("{\"$and\" : [{ \"Acknowledgment.acknowledgedDateTime\": ISODate(\"2010-01-22T22:00:00.000Z\")}]}")
             };
 
             var existingJobs = new[] { new Job

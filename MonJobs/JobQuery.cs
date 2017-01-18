@@ -18,7 +18,7 @@ namespace MonJobs
 
         public string AdhocQuery { get; set; }
         public string AdhocSort { get; set; }
-        public BsonDocument Filter { get; set; }
+        public BsonDocument AdhocFilter { get; set; }
 
         // mitch: these should be value types instead of nullables.
         public int? Limit { get; set; }
