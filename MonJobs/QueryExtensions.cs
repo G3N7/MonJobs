@@ -81,6 +81,11 @@ namespace MonJobs
                 filters.Add(bsonDocumentFilter);
             }
 
+            if (!(query.Filter == null))
+            {
+                filters.Add(query.Filter);
+            }
+
             var matchesAllFilters = Builders<Job>.Filter.And(filters);
             return matchesAllFilters;
         }

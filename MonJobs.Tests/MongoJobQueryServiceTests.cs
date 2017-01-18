@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
@@ -1050,6 +1053,172 @@ namespace MonJobs.Tests
 
                 Assert.That(ex.Message, Does.Contain("Invalid adhocSort"));
                 return Task.FromResult(true);
+            }).ConfigureAwait(false);
+        }
+
+        [Test]
+        public async Task QueryFor_AJArrayOfStringsAndWithFilter_ReturnsAllJobsMatching()
+        {
+
+            var unmatchedJob1 = JobId.Generate();
+            var unmatchedJob2 = JobId.Generate();
+            var unmatchedJob3 = JobId.Generate();
+            var matchingJob1 = JobId.Generate();
+
+
+            var exampleAcknowledgedDateTime1 = new DateTime(2010, 1, 22, 22, 00, 00, DateTimeKind.Utc);
+            var exampleQueueId = QueueId.Parse("ExampleQueue");
+            FilterDefinition<BsonDocument> filter = new BsonDocument("Attributes.name", "DeployWebsite");
+            var serializerRegistry = BsonSerializer.SerializerRegistry;
+            var documentSerializer = serializerRegistry.GetSerializer<BsonDocument>();
+
+            var exampleQuery = new JobQuery
+            {
+                QueueId = exampleQueueId,
+                HasAttributes = new JobAttributes
+                {
+                    { "name", new JArray { "DeployApi" , "DeployWebsite" } }
+                },
+                //Filter = BsonSerializer.Deserialize<BsonDocument>("{\"$and\" : [{ \"Acknowledgment.acknowledgedDateTime\": ISODate(\"2010-01-22T22:00:00.000Z\")}]}")
+                Filter = filter.Render(documentSerializer, serializerRegistry)
+        };
+
+            var existingJobs = new[] { new Job
+                {
+                    Id = unmatchedJob1,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployApi" }
+                    }
+                }, new Job
+                {
+                    Id = matchingJob1,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployWebsite" }
+                    }
+                }, new Job
+                {
+                    Id = unmatchedJob2,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeploySchema" }
+                    }
+                }, new Job()
+                {
+                    Id = unmatchedJob3,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployApi" }
+                    },
+                    Acknowledgment = new JobAcknowledgment
+                    {
+                        {"acknowledgedDateTime",exampleAcknowledgedDateTime1}
+                    }
+                }
+            };
+
+            await RunInMongoLand(async database =>
+            {
+                var jobs = database.GetJobCollection();
+
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
+
+                var sut = new MongoJobQueryService(database);
+
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
+
+                Assert.That(results, Is.Not.Null);
+                Assert.That(results, Has.Count.EqualTo(1));
+                
+                var foundIds = results.Select(x => x.Id).ToList();
+
+                Assert.That(foundIds, Contains.Item(matchingJob1));
+            }).ConfigureAwait(false);
+        }
+
+        public async Task QueryFor_AJArrayOfStringsAndWithFilterFromString_ReturnsAllJobsMatching()
+        {
+
+            var unmatchedJob1 = JobId.Generate();
+            var unmatchedJob2 = JobId.Generate();
+            var unmatchedJob3 = JobId.Generate();
+            var matchingJob1 = JobId.Generate();
+
+
+            var exampleAcknowledgedDateTime1 = new DateTime(2010, 1, 22, 22, 00, 00, DateTimeKind.Utc);
+            var exampleQueueId = QueueId.Parse("ExampleQueue");
+
+            var exampleQuery = new JobQuery
+            {
+                QueueId = exampleQueueId,
+                HasAttributes = new JobAttributes
+                {
+                    { "name", new JArray { "DeployApi" , "DeployWebsite" } }
+                },
+                Filter = BsonSerializer.Deserialize<BsonDocument>("{\"$and\" : [{ \"Acknowledgment.acknowledgedDateTime\": ISODate(\"2010-01-22T22:00:00.000Z\")}]}")
+            };
+
+            var existingJobs = new[] { new Job
+                {
+                    Id = unmatchedJob1,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployApi" }
+                    }
+                }, new Job
+                {
+                    Id = unmatchedJob2,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployWebsite" }
+                    }
+                }, new Job
+                {
+                    Id = unmatchedJob3,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeploySchema" }
+                    }
+                }, new Job()
+                {
+                    Id = matchingJob1,
+                    QueueId = exampleQueueId,
+                    Attributes = new JobAttributes
+                    {
+                        { "name", "DeployApi" }
+                    },
+                    Acknowledgment = new JobAcknowledgment
+                    {
+                        {"acknowledgedDateTime",exampleAcknowledgedDateTime1}
+                    }
+                }
+            };
+
+            await RunInMongoLand(async database =>
+            {
+                var jobs = database.GetJobCollection();
+
+                await jobs.InsertManyAsync(existingJobs).ConfigureAwait(false);
+
+                var sut = new MongoJobQueryService(database);
+
+                var results = (await sut.QueryFor(exampleQuery).ConfigureAwait(false))?.ToList();
+
+                Assert.That(results, Is.Not.Null);
+                Assert.That(results, Has.Count.EqualTo(1));
+
+                // ReSharper disable once AssignNullToNotNullAttribute
+                var foundIds = results.Select(x => x.Id).ToList();
+
+                Assert.That(foundIds, Contains.Item(matchingJob1));
             }).ConfigureAwait(false);
         }
     }

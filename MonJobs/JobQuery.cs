@@ -1,4 +1,6 @@
-﻿namespace MonJobs
+﻿using MongoDB.Bson;
+
+namespace MonJobs
 {
     // doc: JobQuery
     public class JobQuery
@@ -16,6 +18,7 @@
 
         public string AdhocQuery { get; set; }
         public string AdhocSort { get; set; }
+        public BsonDocument Filter { get; set; }
 
         // mitch: these should be value types instead of nullables.
         public int? Limit { get; set; }
