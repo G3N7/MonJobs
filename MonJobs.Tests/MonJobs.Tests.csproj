@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="ContextSpecification.cs" />
     <Compile Include="JobDatabaseContext.cs" />
+    <Compile Include="MongoJobQueryCountServiceTests.cs" />
     <Compile Include="Peek\IPeekNextSubscriber.cs" />
     <Compile Include="Peek\PeekNextSubscriptionOptions.cs" />
     <Compile Include="Peek\TaskBasedPeekNextSubscriber.cs" />

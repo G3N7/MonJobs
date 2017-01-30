@@ -62,7 +62,9 @@
     <Compile Include="IConvertible.cs" />
     <Compile Include="IJobAcknowledgmentService.cs" />
     <Compile Include="IJobCompletionService.cs" />
+    <Compile Include="IJobQueryCountService.cs" />
     <Compile Include="MongoJobAcknowledgmentService.cs" />
+    <Compile Include="MongoJobQueryCountService.cs" />
     <Compile Include="MongoJobReportService.cs" />
     <Compile Include="Peek\IJobPeekNextService.cs" />
     <Compile Include="IJobQueryService.cs" />
