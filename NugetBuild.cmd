@@ -2,7 +2,7 @@
 Setlocal EnableDelayedExpansion
 
 SET /p apiKey=Enter API Key: %=%
-.nuget\nuget setApiKey !apiKey!
+.nuget\nuget setApiKey !apiKey! -source https://www.nuget.org
 
 SET /p deployMonJobs=Would you like to deploy the Core MonJobs Project? (y/n) %=%
 IF (!deployMonJobs!) EQU (y) (
@@ -11,7 +11,7 @@ IF (!deployMonJobs!) EQU (y) (
 
 	SET /p monJobsVersion=Enter MonJobs Package Version? %=%
 	@ECHO Publishing MonJobs.!monJobsVersion!.nupkg
-	.nuget\nuget push MonJobs.!monJobsVersion!.nupkg
+	.nuget\nuget push MonJobs.!monJobsVersion!.nupkg -Source https://www.nuget.org/api/v2/package
 )
 
 @ECHO on
