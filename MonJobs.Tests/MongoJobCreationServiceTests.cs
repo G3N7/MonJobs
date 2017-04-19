@@ -13,6 +13,8 @@ namespace MonJobs.Tests
             var exampleQueueId = QueueId.Parse(Guid.NewGuid().ToString("N"));
             var exampleAttributes = new JobAttributes { { "name", "Thing ToDo" } };
 
+            Assert.That(exampleAttributes.Count, Is.GreaterThan(0), "Expected data in exampleAttributes but found none");
+
             await RunInMongoLand(async database =>
             {
                 var sut = new MongoJobCreationService(database);
